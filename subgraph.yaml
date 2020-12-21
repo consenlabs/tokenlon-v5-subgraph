@@ -1,0 +1,23 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PMM
+    network: mainnet
+    source:
+      address: "0x9BC56a5cF1DAA664349764016B4fD8b8Ba767609"
+      abi: PMM
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      entities:
+        - FillOrder
+      abis:
+        - name: PMM
+          file: ./abis/PMM.json
+      eventHandlers:
+        - event: FillOrder(string,indexed bytes32,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint16)
+          handler: handleFillOrder
+      file: ./src/mapping.ts
