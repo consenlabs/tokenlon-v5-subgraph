@@ -1,27 +1,34 @@
 import { BigInt } from "@graphprotocol/graph-ts"
-import { PMM, FillOrder } from "../generated/PMM/PMM"
-import { ExampleEntity } from "../generated/schema"
+import { log } from '@graphprotocol/graph-ts'
+import { PMM, FillOrder as FillOrderEvent } from "../generated/PMM/PMM"
+import { FillOrder } from "../generated/schema"
 
-export function handleFillOrder(event: FillOrder): void {
+export function handleFillOrder(event: FillOrderEvent): void {
   // Entities can be loaded from the store using a string ID; this ID
   // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
+  let entity = FillOrder.load(event.transaction.hash.toHex())
 
   // Entities only exist after they have been saved to the store;
   // `null` checks allow to create entities on demand
   if (entity == null) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
-
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
+    entity = new FillOrder(event.transaction.hash.toHex())
   }
-
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
 
   // Entity fields can be set based on event parameters
   entity.source = event.params.source
   entity.transactionHash = event.params.transactionHash
+  entity.orderHash = event.params.orderHash
+  entity.userAddr = event.params.userAddr
+  entity.takerAssetAddr = event.params.takerAssetAddr
+  entity.takerAssetAmount = event.params.takerAssetAmount
+  entity.makerAddr = event.params.makerAddr
+  entity.makerAssetAddr = event.params.makerAssetAddr
+  entity.makerAssetAmount = event.params.makerAssetAmount
+  entity.receiverAddr = event.params.receiverAddr
+  entity.settleAmount = event.params.settleAmount
+  entity.feeFactor = event.params.feeFactor
+
+  log.info(entity.transactionHash.toHex(), null)
 
   // Entities can be written to the store with `.save()`
   entity.save()

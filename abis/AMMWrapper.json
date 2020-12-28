@@ -7,6 +7,11 @@
                 "type": "address"
             },
             {
+                "internalType": "uint256",
+                "name": "_subsidyFactor",
+                "type": "uint256"
+            },
+            {
                 "internalType": "address",
                 "name": "_userProxy",
                 "type": "address"
@@ -22,13 +27,8 @@
                 "type": "address"
             },
             {
-                "internalType": "contract IZeroExchange",
-                "name": "_zeroExchange",
-                "type": "address"
-            },
-            {
                 "internalType": "address",
-                "name": "_zxERC20Proxy",
+                "name": "_uniswap_v2_router",
                 "type": "address"
             }
         ],
@@ -48,12 +48,6 @@
                 "indexed": true,
                 "internalType": "bytes32",
                 "name": "transactionHash",
-                "type": "bytes32"
-            },
-            {
-                "indexed": true,
-                "internalType": "bytes32",
-                "name": "orderHash",
                 "type": "bytes32"
             },
             {
@@ -106,17 +100,55 @@
             },
             {
                 "indexed": false,
+                "internalType": "uint256",
+                "name": "receivedAmount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
                 "internalType": "uint16",
                 "name": "feeFactor",
                 "type": "uint16"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint16",
+                "name": "subsidyFactor",
+                "type": "uint16"
             }
         ],
-        "name": "FillOrder",
+        "name": "Swapped",
         "type": "event"
     },
     {
         "inputs": [],
-        "name": "EIP712_DOMAIN_HASH",
+        "name": "EIP191_HEADER",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "EIP712_DOMAIN_NAME",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "EIP712_DOMAIN_SEPARATOR",
         "outputs": [
             {
                 "internalType": "bytes32",
@@ -129,12 +161,38 @@
     },
     {
         "inputs": [],
-        "name": "SOURCE",
+        "name": "EIP712_DOMAIN_VERSION",
         "outputs": [
             {
                 "internalType": "string",
                 "name": "",
                 "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "TRADE_WITH_PERMIT_TYPEHASH",
+        "outputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "UNISWAP_V2_ROUTER_02_ADDRESS",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -159,32 +217,44 @@
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "depositETH",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "userSalt",
-                "type": "uint256"
+                "internalType": "address",
+                "name": "_signerAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_hash",
+                "type": "bytes32"
             },
             {
                 "internalType": "bytes",
-                "name": "data",
+                "name": "_data",
                 "type": "bytes"
             },
             {
                 "internalType": "bytes",
-                "name": "userSignature",
+                "name": "_sig",
                 "type": "bytes"
             }
         ],
-        "name": "fill",
+        "name": "isValidSignature",
         "outputs": [
             {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
+                "internalType": "bool",
+                "name": "isValid",
+                "type": "bool"
             }
         ],
-        "stateMutability": "payable",
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -232,6 +302,19 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_subsidyFactor",
+                "type": "uint256"
+            }
+        ],
+        "name": "setSubsidyFactor",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "spender",
         "outputs": [
@@ -242,6 +325,88 @@
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "subsidyFactor",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_makerAddr",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_takerAssetAddr",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_makerAssetAddr",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_takerAssetAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_makerAssetAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_feeFactor",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_userAddr",
+                "type": "address"
+            },
+            {
+                "internalType": "address payable",
+                "name": "_receiverAddr",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_salt",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_deadline",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bytes",
+                "name": "_sig",
+                "type": "bytes"
+            }
+        ],
+        "name": "trade",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -278,32 +443,6 @@
                 "internalType": "string",
                 "name": "",
                 "type": "string"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "zeroExchange",
-        "outputs": [
-            {
-                "internalType": "contract IZeroExchange",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "zxERC20Proxy",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
             }
         ],
         "stateMutability": "view",

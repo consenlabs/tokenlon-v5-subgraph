@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: PMM
@@ -17,11 +17,12 @@ dataSources:
         - FillOrder
       abis:
         - name: PMM
-          file: ./abis/PMM.json
+          file: PMM/abis/PMM.json
       eventHandlers:
-        - event: FillOrder(string,indexed bytes32,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint16)
+        - event: FillOrder(string,indexed bytes32,indexed bytes32,indexed
+            address,address,uint256,address,address,uint256,address,uint256,uint16)
           handler: handleFillOrder
-      file: ./src/mapping_pmm.ts
+      file: PMM/PMM.wasm
   - kind: ethereum/contract
     name: AMMWrapper
     network: mainnet
@@ -37,8 +38,9 @@ dataSources:
         - Swapped
       abis:
         - name: AMMWrapper
-          file: ./abis/AMMWrapper.json
+          file: AMMWrapper/abis/AMMWrapper.json
       eventHandlers:
-        - event: Swapped(string,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
+        - event: Swapped(string,indexed bytes32,indexed
+            address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
           handler: handleSwapped
-      file: ./src/mapping_ammwrapper.ts
+      file: AMMWrapper/AMMWrapper.wasm
