@@ -298,3 +298,151 @@ export class Swapped extends Entity {
     this.set("subsidyFactor", Value.fromI32(value));
   }
 }
+
+export class SubsidizedSwapped extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save SubsidizedSwapped entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SubsidizedSwapped entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SubsidizedSwapped", id.toString(), this);
+  }
+
+  static load(id: string): SubsidizedSwapped | null {
+    return store.get("SubsidizedSwapped", id) as SubsidizedSwapped | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get source(): string {
+    let value = this.get("source");
+    return value.toString();
+  }
+
+  set source(value: string) {
+    this.set("source", Value.fromString(value));
+  }
+
+  get transactionHash(): Bytes {
+    let value = this.get("transactionHash");
+    return value.toBytes();
+  }
+
+  set transactionHash(value: Bytes) {
+    this.set("transactionHash", Value.fromBytes(value));
+  }
+
+  get userAddr(): Bytes {
+    let value = this.get("userAddr");
+    return value.toBytes();
+  }
+
+  set userAddr(value: Bytes) {
+    this.set("userAddr", Value.fromBytes(value));
+  }
+
+  get takerAssetAddr(): Bytes {
+    let value = this.get("takerAssetAddr");
+    return value.toBytes();
+  }
+
+  set takerAssetAddr(value: Bytes) {
+    this.set("takerAssetAddr", Value.fromBytes(value));
+  }
+
+  get takerAssetAmount(): BigInt {
+    let value = this.get("takerAssetAmount");
+    return value.toBigInt();
+  }
+
+  set takerAssetAmount(value: BigInt) {
+    this.set("takerAssetAmount", Value.fromBigInt(value));
+  }
+
+  get makerAddr(): Bytes {
+    let value = this.get("makerAddr");
+    return value.toBytes();
+  }
+
+  set makerAddr(value: Bytes) {
+    this.set("makerAddr", Value.fromBytes(value));
+  }
+
+  get makerAssetAddr(): Bytes {
+    let value = this.get("makerAssetAddr");
+    return value.toBytes();
+  }
+
+  set makerAssetAddr(value: Bytes) {
+    this.set("makerAssetAddr", Value.fromBytes(value));
+  }
+
+  get makerAssetAmount(): BigInt {
+    let value = this.get("makerAssetAmount");
+    return value.toBigInt();
+  }
+
+  set makerAssetAmount(value: BigInt) {
+    this.set("makerAssetAmount", Value.fromBigInt(value));
+  }
+
+  get receiverAddr(): Bytes {
+    let value = this.get("receiverAddr");
+    return value.toBytes();
+  }
+
+  set receiverAddr(value: Bytes) {
+    this.set("receiverAddr", Value.fromBytes(value));
+  }
+
+  get settleAmount(): BigInt {
+    let value = this.get("settleAmount");
+    return value.toBigInt();
+  }
+
+  set settleAmount(value: BigInt) {
+    this.set("settleAmount", Value.fromBigInt(value));
+  }
+
+  get receivedAmount(): BigInt {
+    let value = this.get("receivedAmount");
+    return value.toBigInt();
+  }
+
+  set receivedAmount(value: BigInt) {
+    this.set("receivedAmount", Value.fromBigInt(value));
+  }
+
+  get feeFactor(): i32 {
+    let value = this.get("feeFactor");
+    return value.toI32();
+  }
+
+  set feeFactor(value: i32) {
+    this.set("feeFactor", Value.fromI32(value));
+  }
+
+  get subsidyFactor(): i32 {
+    let value = this.get("subsidyFactor");
+    return value.toI32();
+  }
+
+  set subsidyFactor(value: i32) {
+    this.set("subsidyFactor", Value.fromI32(value));
+  }
+}

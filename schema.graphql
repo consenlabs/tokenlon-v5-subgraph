@@ -30,3 +30,20 @@ type Swapped @entity {
   feeFactor: Int! # uin16 < uint32
   subsidyFactor: Int! # uin16 < uint32
 }
+
+type SubsidizedSwapped @entity {
+  id: ID!
+  source: String! # string
+  transactionHash: Bytes! # bytes32
+  userAddr: Bytes! # bytes32
+  takerAssetAddr: Bytes! # bytes32
+  takerAssetAmount: BigInt! # uint256
+  makerAddr: Bytes! # bytes32
+  makerAssetAddr: Bytes! # bytes32
+  makerAssetAmount: BigInt! # uint256
+  receiverAddr: Bytes! # bytes32
+  settleAmount: BigInt! # uint256
+  receivedAmount: BigInt! # uint256
+  feeFactor: Int! # uin16 < uint32
+  subsidyFactor: Int! # uin16 < uint32
+}
