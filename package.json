@@ -5,6 +5,7 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ benjaminlu/tokenlon-v5-subgraph",
+    "deploy-staging": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ $SUBGRAPH_REPO",
     "create-local": "graph create --node http://localhost:8020/ benjaminlu/tokenlon-v5-subgraph",
     "remove-local": "graph remove --node http://localhost:8020/ benjaminlu/tokenlon-v5-subgraph",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 benjaminlu/tokenlon-v5-subgraph"
