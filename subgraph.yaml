@@ -42,3 +42,85 @@ dataSources:
         - event: Swapped(string,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
           handler: handleSwapped
       file: ./src/mapping_ammwrapper.ts
+  
+  - kind: ethereum/contract
+    name: AMMWrapper2
+    network: mainnet
+    source:
+      address: "0x904144473FdE753dc0729608CfeEA6F4A8B275E6"
+      abi: AMMWrapper
+      startBlock: 11689699
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swapped
+      abis:
+        - name: AMMWrapper
+          file: ./abis/AMMWrapper.json
+      eventHandlers:
+        - event: Swapped(string,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
+          handler: handleSwapped
+      file: ./src/mapping_ammwrapper.ts
+
+  # Uniswap V2
+  - kind: ethereum/contract
+    name: Factory
+    network: mainnet
+    source:
+      address: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
+      abi: Factory
+      startBlock: 10000834
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/uniswap/factory.ts
+      entities:
+        - Pair
+        - Token
+      abis:
+        - name: Factory
+          file: ./abis/uniswap/factory.json
+        - name: ERC20
+          file: ./abis/uniswap/ERC20.json
+        - name: ERC20SymbolBytes
+          file: ./abis/uniswap/ERC20SymbolBytes.json
+        - name: ERC20NameBytes
+          file: ./abis/uniswap/ERC20NameBytes.json
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleNewPair
+
+#Uniswap V2
+templates:
+  - kind: ethereum/contract
+    name: Pair
+    network: mainnet
+    source:
+      abi: Pair
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/uniswap/core.ts
+      entities:
+        - Pair
+        - Token
+      abis:
+        - name: Pair
+          file: ./abis/uniswap/pair.json
+        - name: Factory
+          file: ./abis/uniswap/factory.json
+      eventHandlers:
+        # - event: Mint(indexed address,uint256,uint256)
+        #   handler: handleMint
+        # - event: Burn(indexed address,uint256,uint256,indexed address)
+        #   handler: handleBurn
+        # - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+        #   handler: handleSwap
+        # - event: Transfer(indexed address,indexed address,uint256)
+        #   handler: handleTransfer
+        - event: Sync(uint112,uint112)
+          handler: handleSync

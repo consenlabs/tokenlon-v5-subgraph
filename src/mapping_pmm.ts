@@ -1,7 +1,7 @@
 import { BigInt } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { PMM, FillOrder as FillOrderEvent } from "../generated/PMM/PMM"
-import { FillOrder } from "../generated/schema"
+import { FillOrder, Token } from "../generated/schema"
 
 export function handleFillOrder(event: FillOrderEvent): void {
   // Entities can be loaded from the store using a string ID; this ID
@@ -13,6 +13,8 @@ export function handleFillOrder(event: FillOrderEvent): void {
   if (entity == null) {
     entity = new FillOrder(event.transaction.hash.toHex())
   }
+  let takerToken = Token.load(entity.takerAssetAddr.toHex())
+  let makerToken = Token.load(entity.makerAssetAddr.toHex())
 
   // Entity fields can be set based on event parameters
   entity.source = event.params.source
@@ -27,6 +29,12 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.receiverAddr = event.params.receiverAddr
   entity.settleAmount = event.params.settleAmount
   entity.feeFactor = event.params.feeFactor
+  if (takerToken != null) {
+    entity.takerAssetEthPrice = takerToken.derivedETH
+  }
+  if (takerToken != null) {
+    entity.makerAssetEthPrice = makerToken.derivedETH
+  }
 
   log.info(entity.transactionHash.toHex(), null)
 

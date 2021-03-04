@@ -1,7 +1,8 @@
 import { BigInt } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { AMMWrapper, Swapped as SwappedEvent } from "../generated/AMMWrapper/AMMWrapper"
-import { Swapped, SubsidizedSwapped } from "../generated/schema"
+import { Swapped, SubsidizedSwapped, Token } from "../generated/schema"
+import { getEthPriceInUSD } from './uniswap/pricing'
 
 export function handleSwapped(event: SwappedEvent): void {
   // Entities can be loaded from the store using a string ID; this ID
@@ -13,6 +14,8 @@ export function handleSwapped(event: SwappedEvent): void {
   if (entity == null) {
     entity = new Swapped(event.transaction.hash.toHex())
   }
+  let takerToken = Token.load(entity.takerAssetAddr.toHex())
+  let makerToken = Token.load(entity.makerAssetAddr.toHex())
 
   // Entity fields can be set based on event parameters
   entity.source = event.params.source
@@ -28,6 +31,13 @@ export function handleSwapped(event: SwappedEvent): void {
   entity.receivedAmount = event.params.receivedAmount
   entity.feeFactor = event.params.feeFactor
   entity.subsidyFactor = event.params.subsidyFactor
+  entity.ethPrice = getEthPriceInUSD()
+  if (takerToken != null) {
+    entity.takerAssetEthPrice = takerToken.derivedETH
+  }
+  if (takerToken != null) {
+    entity.makerAssetEthPrice = makerToken.derivedETH
+  }
 
   log.info(entity.transactionHash.toHex(), null)
 
