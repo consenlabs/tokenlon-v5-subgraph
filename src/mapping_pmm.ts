@@ -32,7 +32,7 @@ export function handleFillOrder(event: FillOrderEvent): void {
   if (takerToken != null) {
     entity.takerAssetEthPrice = takerToken.derivedETH
   }
-  if (takerToken != null) {
+  if (makerToken != null) {
     entity.makerAssetEthPrice = makerToken.derivedETH
   }
 

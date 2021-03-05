@@ -35,7 +35,7 @@ export function handleSwapped(event: SwappedEvent): void {
   if (takerToken != null) {
     entity.takerAssetEthPrice = takerToken.derivedETH
   }
-  if (takerToken != null) {
+  if (makerToken != null) {
     entity.makerAssetEthPrice = makerToken.derivedETH
   }
 
