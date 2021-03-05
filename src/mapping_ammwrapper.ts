@@ -39,16 +39,15 @@ export function handleSwapped(event: SwappedEvent): void {
   if (makerToken != null) {
     entity.makerAssetEth = makerToken.derivedETH
     entity.makerAssetPrice = entity.ethPrice.times(makerToken.derivedETH as BigDecimal)
+    // ((received amount - settle amount) * derived eth - (gas * gas price))
+    let ra = new BigDecimal(entity.receivedAmount)
+    let sa = new BigDecimal(entity.settleAmount)
+    let minerFee = new BigDecimal(event.transaction.gasUsed.times(event.transaction.gasPrice))
+    entity.feeEth = ra.minus(sa)
+                    .times(makerToken.derivedETH as BigDecimal)
+                    .minus(minerFee)
+    entity.feePrice = entity.feeEth.times(entity.ethPrice)
   }
-  // ((maker asset amount - settle amount) * derived eth - (gas * gas price))
-  let maa = new BigDecimal(entity.makerAssetAmount)
-  let sa = new BigDecimal(entity.settleAmount)
-  let minerFee = new BigDecimal(event.transaction.gasUsed.times(event.transaction.gasPrice))
-  entity.feeEth = maa.minus(sa)
-                  .minus(minerFee)
-  entity.feePrice = entity.feeEth.times(entity.ethPrice)
-  
-  // isRelayerValid https://etherscan.io/address/0x0485C25A5E8D7d0c5676D0E6D3Bfc4aA597Ba0B0#readContract
 
   log.info(entity.transactionHash.toHex(), null)
 
