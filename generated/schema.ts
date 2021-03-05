@@ -159,8 +159,26 @@ export class FillOrder extends Entity {
     this.set("ethPrice", Value.fromBigDecimal(value));
   }
 
-  get takerAssetEthPrice(): BigDecimal | null {
-    let value = this.get("takerAssetEthPrice");
+  get feeEth(): BigDecimal {
+    let value = this.get("feeEth");
+    return value.toBigDecimal();
+  }
+
+  set feeEth(value: BigDecimal) {
+    this.set("feeEth", Value.fromBigDecimal(value));
+  }
+
+  get feePrice(): BigDecimal {
+    let value = this.get("feePrice");
+    return value.toBigDecimal();
+  }
+
+  set feePrice(value: BigDecimal) {
+    this.set("feePrice", Value.fromBigDecimal(value));
+  }
+
+  get takerAssetEth(): BigDecimal | null {
+    let value = this.get("takerAssetEth");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -168,16 +186,16 @@ export class FillOrder extends Entity {
     }
   }
 
-  set takerAssetEthPrice(value: BigDecimal | null) {
+  set takerAssetEth(value: BigDecimal | null) {
     if (value === null) {
-      this.unset("takerAssetEthPrice");
+      this.unset("takerAssetEth");
     } else {
-      this.set("takerAssetEthPrice", Value.fromBigDecimal(value as BigDecimal));
+      this.set("takerAssetEth", Value.fromBigDecimal(value as BigDecimal));
     }
   }
 
-  get makerAssetEthPrice(): BigDecimal | null {
-    let value = this.get("makerAssetEthPrice");
+  get takerAssetPrice(): BigDecimal | null {
+    let value = this.get("takerAssetPrice");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -185,11 +203,45 @@ export class FillOrder extends Entity {
     }
   }
 
-  set makerAssetEthPrice(value: BigDecimal | null) {
+  set takerAssetPrice(value: BigDecimal | null) {
     if (value === null) {
-      this.unset("makerAssetEthPrice");
+      this.unset("takerAssetPrice");
     } else {
-      this.set("makerAssetEthPrice", Value.fromBigDecimal(value as BigDecimal));
+      this.set("takerAssetPrice", Value.fromBigDecimal(value as BigDecimal));
+    }
+  }
+
+  get makerAssetEth(): BigDecimal | null {
+    let value = this.get("makerAssetEth");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set makerAssetEth(value: BigDecimal | null) {
+    if (value === null) {
+      this.unset("makerAssetEth");
+    } else {
+      this.set("makerAssetEth", Value.fromBigDecimal(value as BigDecimal));
+    }
+  }
+
+  get makerAssetPrice(): BigDecimal | null {
+    let value = this.get("makerAssetPrice");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set makerAssetPrice(value: BigDecimal | null) {
+    if (value === null) {
+      this.unset("makerAssetPrice");
+    } else {
+      this.set("makerAssetPrice", Value.fromBigDecimal(value as BigDecimal));
     }
   }
 }
@@ -350,8 +402,26 @@ export class Swapped extends Entity {
     this.set("ethPrice", Value.fromBigDecimal(value));
   }
 
-  get takerAssetEthPrice(): BigDecimal | null {
-    let value = this.get("takerAssetEthPrice");
+  get feeEth(): BigDecimal {
+    let value = this.get("feeEth");
+    return value.toBigDecimal();
+  }
+
+  set feeEth(value: BigDecimal) {
+    this.set("feeEth", Value.fromBigDecimal(value));
+  }
+
+  get feePrice(): BigDecimal {
+    let value = this.get("feePrice");
+    return value.toBigDecimal();
+  }
+
+  set feePrice(value: BigDecimal) {
+    this.set("feePrice", Value.fromBigDecimal(value));
+  }
+
+  get takerAssetEth(): BigDecimal | null {
+    let value = this.get("takerAssetEth");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -359,16 +429,16 @@ export class Swapped extends Entity {
     }
   }
 
-  set takerAssetEthPrice(value: BigDecimal | null) {
+  set takerAssetEth(value: BigDecimal | null) {
     if (value === null) {
-      this.unset("takerAssetEthPrice");
+      this.unset("takerAssetEth");
     } else {
-      this.set("takerAssetEthPrice", Value.fromBigDecimal(value as BigDecimal));
+      this.set("takerAssetEth", Value.fromBigDecimal(value as BigDecimal));
     }
   }
 
-  get makerAssetEthPrice(): BigDecimal | null {
-    let value = this.get("makerAssetEthPrice");
+  get takerAssetPrice(): BigDecimal | null {
+    let value = this.get("takerAssetPrice");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -376,11 +446,45 @@ export class Swapped extends Entity {
     }
   }
 
-  set makerAssetEthPrice(value: BigDecimal | null) {
+  set takerAssetPrice(value: BigDecimal | null) {
     if (value === null) {
-      this.unset("makerAssetEthPrice");
+      this.unset("takerAssetPrice");
     } else {
-      this.set("makerAssetEthPrice", Value.fromBigDecimal(value as BigDecimal));
+      this.set("takerAssetPrice", Value.fromBigDecimal(value as BigDecimal));
+    }
+  }
+
+  get makerAssetEth(): BigDecimal | null {
+    let value = this.get("makerAssetEth");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set makerAssetEth(value: BigDecimal | null) {
+    if (value === null) {
+      this.unset("makerAssetEth");
+    } else {
+      this.set("makerAssetEth", Value.fromBigDecimal(value as BigDecimal));
+    }
+  }
+
+  get makerAssetPrice(): BigDecimal | null {
+    let value = this.get("makerAssetPrice");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set makerAssetPrice(value: BigDecimal | null) {
+    if (value === null) {
+      this.unset("makerAssetPrice");
+    } else {
+      this.set("makerAssetPrice", Value.fromBigDecimal(value as BigDecimal));
     }
   }
 }
@@ -530,15 +634,6 @@ export class SubsidizedSwapped extends Entity {
 
   set subsidyFactor(value: i32) {
     this.set("subsidyFactor", Value.fromI32(value));
-  }
-
-  get ethPrice(): BigDecimal {
-    let value = this.get("ethPrice");
-    return value.toBigDecimal();
-  }
-
-  set ethPrice(value: BigDecimal) {
-    this.set("ethPrice", Value.fromBigDecimal(value));
   }
 }
 

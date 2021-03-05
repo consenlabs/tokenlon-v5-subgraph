@@ -1,7 +1,8 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigDecimal } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { PMM, FillOrder as FillOrderEvent } from "../generated/PMM/PMM"
 import { FillOrder, Token } from "../generated/schema"
+import { getEthPriceInUSD } from "./uniswap/pricing"
 
 export function handleFillOrder(event: FillOrderEvent): void {
   // Entities can be loaded from the store using a string ID; this ID
@@ -29,12 +30,22 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.receiverAddr = event.params.receiverAddr
   entity.settleAmount = event.params.settleAmount
   entity.feeFactor = event.params.feeFactor
+  entity.ethPrice = getEthPriceInUSD()
   if (takerToken != null) {
-    entity.takerAssetEthPrice = takerToken.derivedETH
+    entity.takerAssetEth = takerToken.derivedETH
+    entity.takerAssetPrice = entity.ethPrice.times(takerToken.derivedETH as BigDecimal)
   }
   if (makerToken != null) {
-    entity.makerAssetEthPrice = makerToken.derivedETH
+    entity.makerAssetEth = makerToken.derivedETH
+    entity.makerAssetPrice = entity.ethPrice.times(makerToken.derivedETH as BigDecimal)
   }
+  // ((maker asset amount - settle amount) * derived eth - (gas * gas price))
+  let maa = new BigDecimal(entity.makerAssetAmount)
+  let sa = new BigDecimal(entity.settleAmount)
+  let minerFee = new BigDecimal(event.transaction.gasUsed.times(event.transaction.gasPrice))
+  entity.feeEth = maa.minus(sa)
+                  .minus(minerFee)
+  entity.feePrice = entity.feeEth.times(entity.ethPrice)
 
   log.info(entity.transactionHash.toHex(), null)
 

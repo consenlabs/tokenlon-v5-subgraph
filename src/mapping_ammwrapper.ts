@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigDecimal } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { AMMWrapper, Swapped as SwappedEvent } from "../generated/AMMWrapper/AMMWrapper"
 import { Swapped, SubsidizedSwapped, Token } from "../generated/schema"
@@ -33,11 +33,22 @@ export function handleSwapped(event: SwappedEvent): void {
   entity.subsidyFactor = event.params.subsidyFactor
   entity.ethPrice = getEthPriceInUSD()
   if (takerToken != null) {
-    entity.takerAssetEthPrice = takerToken.derivedETH
+    entity.takerAssetEth = takerToken.derivedETH
+    entity.takerAssetPrice = entity.ethPrice.times(takerToken.derivedETH as BigDecimal)
   }
   if (makerToken != null) {
-    entity.makerAssetEthPrice = makerToken.derivedETH
+    entity.makerAssetEth = makerToken.derivedETH
+    entity.makerAssetPrice = entity.ethPrice.times(makerToken.derivedETH as BigDecimal)
   }
+  // ((maker asset amount - settle amount) * derived eth - (gas * gas price))
+  let maa = new BigDecimal(entity.makerAssetAmount)
+  let sa = new BigDecimal(entity.settleAmount)
+  let minerFee = new BigDecimal(event.transaction.gasUsed.times(event.transaction.gasPrice))
+  entity.feeEth = maa.minus(sa)
+                  .minus(minerFee)
+  entity.feePrice = entity.feeEth.times(entity.ethPrice)
+  
+  // isRelayerValid https://etherscan.io/address/0x0485C25A5E8D7d0c5676D0E6D3Bfc4aA597Ba0B0#readContract
 
   log.info(entity.transactionHash.toHex(), null)
 

@@ -13,8 +13,12 @@ type FillOrder @entity {
   settleAmount: BigInt! # uint256
   feeFactor: Int! # uin16 < uint32
   ethPrice: BigDecimal! # price of ETH
-  takerAssetEthPrice: BigDecimal # price of taker ETH
-  makerAssetEthPrice: BigDecimal # price of maker ETH
+  feeEth: BigDecimal! # fee eth
+  feePrice: BigDecimal! # fee in USD
+  takerAssetEth: BigDecimal # price of taker in ETH
+  takerAssetPrice: BigDecimal # price of taker in USD
+  makerAssetEth: BigDecimal # price of maker in ETH
+  makerAssetPrice: BigDecimal # price of maker in USD
 }
 
 type Swapped @entity {
@@ -33,8 +37,12 @@ type Swapped @entity {
   feeFactor: Int! # uin16 < uint32
   subsidyFactor: Int! # uin16 < uint32
   ethPrice: BigDecimal! # price of ETH
-  takerAssetEthPrice: BigDecimal # price of taker ETH
-  makerAssetEthPrice: BigDecimal # price of maker ETH
+  feeEth: BigDecimal! # fee eth
+  feePrice: BigDecimal! # fee in USD
+  takerAssetEth: BigDecimal # price of taker in ETH
+  takerAssetPrice: BigDecimal # price of taker in USD
+  makerAssetEth: BigDecimal # price of maker in ETH
+  makerAssetPrice: BigDecimal # price of maker in USD
 }
 
 type SubsidizedSwapped @entity {
@@ -52,7 +60,6 @@ type SubsidizedSwapped @entity {
   receivedAmount: BigInt! # uint256
   feeFactor: Int! # uin16 < uint32
   subsidyFactor: Int! # uin16 < uint32
-  ethPrice: BigDecimal! # price of ETH
 }
 
 # Uniswapv2
