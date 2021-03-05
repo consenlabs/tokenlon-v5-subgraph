@@ -27,6 +27,9 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.receiverAddr = event.params.receiverAddr
   entity.settleAmount = event.params.settleAmount
   entity.feeFactor = event.params.feeFactor
+  entity.gasUsed = event.transaction.gasUsed
+  entity.gasPrice = event.transaction.gasPrice
+  entity.blockNumber = event.block.number
 
   log.info(entity.transactionHash.toHex(), null)
 

@@ -28,6 +28,9 @@ export function handleSwapped(event: SwappedEvent): void {
   entity.receivedAmount = event.params.receivedAmount
   entity.feeFactor = event.params.feeFactor
   entity.subsidyFactor = event.params.subsidyFactor
+  entity.gasUsed = event.transaction.gasUsed
+  entity.gasPrice = event.transaction.gasPrice
+  entity.blockNumber = event.block.number
 
   log.info(entity.transactionHash.toHex(), null)
 

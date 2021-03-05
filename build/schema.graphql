@@ -12,6 +12,9 @@ type FillOrder @entity {
   receiverAddr: Bytes! # bytes32
   settleAmount: BigInt! # uint256
   feeFactor: Int! # uin16 < uint32
+  gasUsed: BigInt! # uint256
+  gasPrice: BigInt! # uint256
+  blockNumber: BigInt! # uint256
 }
 
 type Swapped @entity {
@@ -29,6 +32,9 @@ type Swapped @entity {
   receivedAmount: BigInt! # uint256
   feeFactor: Int! # uin16 < uint32
   subsidyFactor: Int! # uin16 < uint32
+  gasUsed: BigInt! # uint256
+  gasPrice: BigInt! # uint256
+  blockNumber: BigInt! # uint256
 }
 
 type SubsidizedSwapped @entity {
