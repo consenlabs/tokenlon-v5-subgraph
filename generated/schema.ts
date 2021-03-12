@@ -42,6 +42,33 @@ export class FillOrder extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get from(): Bytes {
+    let value = this.get("from");
+    return value.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get to(): Bytes {
+    let value = this.get("to");
+    return value.toBytes();
+  }
+
+  set to(value: Bytes) {
+    this.set("to", Value.fromBytes(value));
+  }
+
+  get txNumber(): BigInt {
+    let value = this.get("txNumber");
+    return value.toBigInt();
+  }
+
+  set txNumber(value: BigInt) {
+    this.set("txNumber", Value.fromBigInt(value));
+  }
+
   get source(): string {
     let value = this.get("source");
     return value.toString();
@@ -51,13 +78,22 @@ export class FillOrder extends Entity {
     this.set("source", Value.fromString(value));
   }
 
-  get transactionHash(): Bytes {
+  get transactionHash(): string {
     let value = this.get("transactionHash");
+    return value.toString();
+  }
+
+  set transactionHash(value: string) {
+    this.set("transactionHash", Value.fromString(value));
+  }
+
+  get executeTxHash(): Bytes {
+    let value = this.get("executeTxHash");
     return value.toBytes();
   }
 
-  set transactionHash(value: Bytes) {
-    this.set("transactionHash", Value.fromBytes(value));
+  set executeTxHash(value: Bytes) {
+    this.set("executeTxHash", Value.fromBytes(value));
   }
 
   get orderHash(): Bytes {
@@ -150,13 +186,31 @@ export class FillOrder extends Entity {
     this.set("feeFactor", Value.fromI32(value));
   }
 
-  get gasUsed(): BigInt {
-    let value = this.get("gasUsed");
+  get blockNumber(): BigInt {
+    let value = this.get("blockNumber");
     return value.toBigInt();
   }
 
-  set gasUsed(value: BigInt) {
-    this.set("gasUsed", Value.fromBigInt(value));
+  set blockNumber(value: BigInt) {
+    this.set("blockNumber", Value.fromBigInt(value));
+  }
+
+  get logIndex(): BigInt {
+    let value = this.get("logIndex");
+    return value.toBigInt();
+  }
+
+  set logIndex(value: BigInt) {
+    this.set("logIndex", Value.fromBigInt(value));
+  }
+
+  get eventAddr(): Bytes {
+    let value = this.get("eventAddr");
+    return value.toBytes();
+  }
+
+  set eventAddr(value: Bytes) {
+    this.set("eventAddr", Value.fromBytes(value));
   }
 
   get gasPrice(): BigInt {
@@ -166,15 +220,6 @@ export class FillOrder extends Entity {
 
   set gasPrice(value: BigInt) {
     this.set("gasPrice", Value.fromBigInt(value));
-  }
-
-  get blockNumber(): BigInt {
-    let value = this.get("blockNumber");
-    return value.toBigInt();
-  }
-
-  set blockNumber(value: BigInt) {
-    this.set("blockNumber", Value.fromBigInt(value));
   }
 }
 
@@ -208,6 +253,33 @@ export class Swapped extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get from(): Bytes {
+    let value = this.get("from");
+    return value.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get to(): Bytes {
+    let value = this.get("to");
+    return value.toBytes();
+  }
+
+  set to(value: Bytes) {
+    this.set("to", Value.fromBytes(value));
+  }
+
+  get txNumber(): BigInt {
+    let value = this.get("txNumber");
+    return value.toBigInt();
+  }
+
+  set txNumber(value: BigInt) {
+    this.set("txNumber", Value.fromBigInt(value));
+  }
+
   get source(): string {
     let value = this.get("source");
     return value.toString();
@@ -217,13 +289,22 @@ export class Swapped extends Entity {
     this.set("source", Value.fromString(value));
   }
 
-  get transactionHash(): Bytes {
+  get transactionHash(): string {
     let value = this.get("transactionHash");
+    return value.toString();
+  }
+
+  set transactionHash(value: string) {
+    this.set("transactionHash", Value.fromString(value));
+  }
+
+  get executeTxHash(): Bytes {
+    let value = this.get("executeTxHash");
     return value.toBytes();
   }
 
-  set transactionHash(value: Bytes) {
-    this.set("transactionHash", Value.fromBytes(value));
+  set executeTxHash(value: Bytes) {
+    this.set("executeTxHash", Value.fromBytes(value));
   }
 
   get userAddr(): Bytes {
@@ -325,13 +406,31 @@ export class Swapped extends Entity {
     this.set("subsidyFactor", Value.fromI32(value));
   }
 
-  get gasUsed(): BigInt {
-    let value = this.get("gasUsed");
+  get blockNumber(): BigInt {
+    let value = this.get("blockNumber");
     return value.toBigInt();
   }
 
-  set gasUsed(value: BigInt) {
-    this.set("gasUsed", Value.fromBigInt(value));
+  set blockNumber(value: BigInt) {
+    this.set("blockNumber", Value.fromBigInt(value));
+  }
+
+  get logIndex(): BigInt {
+    let value = this.get("logIndex");
+    return value.toBigInt();
+  }
+
+  set logIndex(value: BigInt) {
+    this.set("logIndex", Value.fromBigInt(value));
+  }
+
+  get eventAddr(): Bytes {
+    let value = this.get("eventAddr");
+    return value.toBytes();
+  }
+
+  set eventAddr(value: Bytes) {
+    this.set("eventAddr", Value.fromBytes(value));
   }
 
   get gasPrice(): BigInt {
@@ -342,14 +441,85 @@ export class Swapped extends Entity {
   set gasPrice(value: BigInt) {
     this.set("gasPrice", Value.fromBigInt(value));
   }
+}
 
-  get blockNumber(): BigInt {
-    let value = this.get("blockNumber");
+export class SwappedTotal extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save SwappedTotal entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SwappedTotal entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SwappedTotal", id.toString(), this);
+  }
+
+  static load(id: string): SwappedTotal | null {
+    return store.get("SwappedTotal", id) as SwappedTotal | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get total(): BigInt {
+    let value = this.get("total");
     return value.toBigInt();
   }
 
-  set blockNumber(value: BigInt) {
-    this.set("blockNumber", Value.fromBigInt(value));
+  set total(value: BigInt) {
+    this.set("total", Value.fromBigInt(value));
+  }
+}
+
+export class FillOrderTotal extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save FillOrderTotal entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save FillOrderTotal entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("FillOrderTotal", id.toString(), this);
+  }
+
+  static load(id: string): FillOrderTotal | null {
+    return store.get("FillOrderTotal", id) as FillOrderTotal | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get total(): BigInt {
+    let value = this.get("total");
+    return value.toBigInt();
+  }
+
+  set total(value: BigInt) {
+    this.set("total", Value.fromBigInt(value));
   }
 }
 
@@ -383,6 +553,24 @@ export class SubsidizedSwapped extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get from(): Bytes {
+    let value = this.get("from");
+    return value.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get to(): Bytes {
+    let value = this.get("to");
+    return value.toBytes();
+  }
+
+  set to(value: Bytes) {
+    this.set("to", Value.fromBytes(value));
+  }
+
   get source(): string {
     let value = this.get("source");
     return value.toString();
@@ -392,13 +580,22 @@ export class SubsidizedSwapped extends Entity {
     this.set("source", Value.fromString(value));
   }
 
-  get transactionHash(): Bytes {
+  get transactionHash(): string {
     let value = this.get("transactionHash");
+    return value.toString();
+  }
+
+  set transactionHash(value: string) {
+    this.set("transactionHash", Value.fromString(value));
+  }
+
+  get executeTxHash(): Bytes {
+    let value = this.get("executeTxHash");
     return value.toBytes();
   }
 
-  set transactionHash(value: Bytes) {
-    this.set("transactionHash", Value.fromBytes(value));
+  set executeTxHash(value: Bytes) {
+    this.set("executeTxHash", Value.fromBytes(value));
   }
 
   get userAddr(): Bytes {
@@ -498,5 +695,41 @@ export class SubsidizedSwapped extends Entity {
 
   set subsidyFactor(value: i32) {
     this.set("subsidyFactor", Value.fromI32(value));
+  }
+
+  get blockNumber(): BigInt {
+    let value = this.get("blockNumber");
+    return value.toBigInt();
+  }
+
+  set blockNumber(value: BigInt) {
+    this.set("blockNumber", Value.fromBigInt(value));
+  }
+
+  get logIndex(): BigInt {
+    let value = this.get("logIndex");
+    return value.toBigInt();
+  }
+
+  set logIndex(value: BigInt) {
+    this.set("logIndex", Value.fromBigInt(value));
+  }
+
+  get eventAddr(): Bytes {
+    let value = this.get("eventAddr");
+    return value.toBytes();
+  }
+
+  set eventAddr(value: Bytes) {
+    this.set("eventAddr", Value.fromBytes(value));
+  }
+
+  get gasPrice(): BigInt {
+    let value = this.get("gasPrice");
+    return value.toBigInt();
+  }
+
+  set gasPrice(value: BigInt) {
+    this.set("gasPrice", Value.fromBigInt(value));
   }
 }

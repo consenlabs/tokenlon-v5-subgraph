@@ -1,7 +1,11 @@
 type FillOrder @entity {
   id: ID!
+  from: Bytes!
+  to: Bytes!
+  txNumber: BigInt! # uint256
   source: String! # string
-  transactionHash: Bytes! # bytes32
+  transactionHash: String!
+  executeTxHash: Bytes!
   orderHash: Bytes! # bytes32
   userAddr: Bytes! # bytes32
   takerAssetAddr: Bytes! # bytes32
@@ -12,15 +16,20 @@ type FillOrder @entity {
   receiverAddr: Bytes! # bytes32
   settleAmount: BigInt! # uint256
   feeFactor: Int! # uin16 < uint32
-  gasUsed: BigInt! # uint256
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
-  blockNumber: BigInt! # uint256
 }
 
 type Swapped @entity {
   id: ID!
+  from: Bytes!
+  to: Bytes!
+  txNumber: BigInt! # uint256
   source: String! # string
-  transactionHash: Bytes! # bytes32
+  transactionHash: String!
+  executeTxHash: Bytes!
   userAddr: Bytes! # bytes32
   takerAssetAddr: Bytes! # bytes32
   takerAssetAmount: BigInt! # uint256
@@ -32,15 +41,29 @@ type Swapped @entity {
   receivedAmount: BigInt! # uint256
   feeFactor: Int! # uin16 < uint32
   subsidyFactor: Int! # uin16 < uint32
-  gasUsed: BigInt! # uint256
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
-  blockNumber: BigInt! # uint256
+}
+
+type SwappedTotal @entity {
+  id: ID!
+  total: BigInt!
+}
+
+type FillOrderTotal @entity {
+  id: ID!
+  total: BigInt!
 }
 
 type SubsidizedSwapped @entity {
   id: ID!
+  from: Bytes!
+  to: Bytes!
   source: String! # string
-  transactionHash: Bytes! # bytes32
+  transactionHash: String!
+  executeTxHash: Bytes!
   userAddr: Bytes! # bytes32
   takerAssetAddr: Bytes! # bytes32
   takerAssetAmount: BigInt! # uint256
@@ -52,4 +75,8 @@ type SubsidizedSwapped @entity {
   receivedAmount: BigInt! # uint256
   feeFactor: Int! # uin16 < uint32
   subsidyFactor: Int! # uin16 < uint32
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
 }
