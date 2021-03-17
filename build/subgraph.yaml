@@ -24,7 +24,11 @@ dataSources:
           handler: handleFillOrder
       file: PMM/PMM.wasm
   - kind: ethereum/contract
+<<<<<<< HEAD
     name: AMMWrapper
+=======
+    name: AMMWrapper1
+>>>>>>> Update to kovan testnet
     network: kovan
     source:
       address: "0xBeB3E2e3942745eB41be281AE0C5699f0f7061B9"
@@ -43,6 +47,7 @@ dataSources:
         - event: Swapped(string,indexed bytes32,indexed
             address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
           handler: handleSwapped
+<<<<<<< HEAD
       file: AMMWrapper/AMMWrapper.wasm
   - kind: ethereum/contract
     name: AMMWrapper2
@@ -113,3 +118,6 @@ dataSources:
         - event: Redeem(indexed address,uint256,uint256)
           handler: handleRedeem
       file: LonStaking/LonStaking.wasm
+=======
+      file: AMMWrapper1/AMMWrapper1.wasm
+>>>>>>> Update to kovan testnet
