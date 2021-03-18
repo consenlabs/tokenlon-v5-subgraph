@@ -80,3 +80,68 @@ type SubsidizedSwapped @entity {
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
 }
+
+type BuyBack @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  feeToken: Bytes!
+  feeTokenAmount: BigInt! # uint256
+  swappedLonAmount: BigInt! # uint256
+  LFactor: BigInt! # uint256
+  RFactor: BigInt! # uint256
+  minBuy: BigInt! # uint256
+  maxBuy: BigInt! # uint256
+}
+
+type DistributeLon @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  treasuryAmount: BigInt! # uint256
+  lonStakingAmount: BigInt! # uint256
+}
+
+type MintLon @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  mintedAmount: BigInt! # uint256
+}
+
+type BuyBackDayData @entity {
+  id: ID! # timestamp rounded to current day by dividing by 86400
+  date: Int!
+
+  dailyTreasuryAmount: BigInt!
+  dailyLonStakingAmount: BigInt!
+  dailyMintedAmount: BigInt!
+
+  totalTreasuryAmount: BigInt!
+  totalLonStakingAmount: BigInt!
+  totalMintedAmount: BigInt!
+  apy: BigInt!
+}
+
+type BuyBackTotal @entity {
+  id: ID!
+
+  totalTreasuryAmount: BigInt!
+  totalLonStakingAmount: BigInt!
+  totalMintedAmount: BigInt!
+}

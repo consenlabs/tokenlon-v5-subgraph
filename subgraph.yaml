@@ -4,7 +4,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: PMM
-    network: mainnet
+    network: kovan
     source:
       address: "0x8D90113A1e286a5aB3e496fbD1853F265e5913c6"
       abi: PMM
@@ -24,7 +24,7 @@ dataSources:
       file: ./src/mapping_pmm.ts
   - kind: ethereum/contract
     name: AMMWrapper1
-    network: mainnet
+    network: kovan
     source:
       address: "0x11be6f5520FEE8E867e20AF9C9D2c8A09b909B83"
       abi: AMMWrapper
@@ -44,7 +44,7 @@ dataSources:
       file: ./src/mapping_ammwrapper.ts
   - kind: ethereum/contract
     name: AMMWrapper2
-    network: mainnet
+    network: kovan
     source:
       address: "0x904144473FdE753dc0729608CfeEA6F4A8B275E6"
       abi: AMMWrapper
@@ -62,3 +62,27 @@ dataSources:
         - event: Swapped(string,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
           handler: handleSwapped
       file: ./src/mapping_ammwrapper.ts
+  - kind: ethereum/contract
+    name: RewardDistributor
+    network: kovan
+    source:
+      address: "0x90c8bCe2c1C27dB341BB2470D85d9Ad02bb89381"
+      abi: RewardDistributor
+      startBlock: 23959907
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - RewardDistributor
+      abis:
+        - name: RewardDistributor
+          file: ./abis/RewardDistributor.json
+      eventHandlers:
+        - event: BuyBack(address,uint256,uint256,uint256,uint256,uint256,uint256)
+          handler: handleBuyBack
+        - event: DistributeLon(uint256,uint256)
+          handler: handleDistributeLon
+        - event: MintLon(uint256)
+          handler: handleMintLon
+      file: ./src/mapping_buyback.ts

@@ -733,3 +733,536 @@ export class SubsidizedSwapped extends Entity {
     this.set("gasPrice", Value.fromBigInt(value));
   }
 }
+
+export class BuyBack extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save BuyBack entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save BuyBack entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("BuyBack", id.toString(), this);
+  }
+
+  static load(id: string): BuyBack | null {
+    return store.get("BuyBack", id) as BuyBack | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get to(): Bytes {
+    let value = this.get("to");
+    return value.toBytes();
+  }
+
+  set to(value: Bytes) {
+    this.set("to", Value.fromBytes(value));
+  }
+
+  get transactionHash(): string {
+    let value = this.get("transactionHash");
+    return value.toString();
+  }
+
+  set transactionHash(value: string) {
+    this.set("transactionHash", Value.fromString(value));
+  }
+
+  get blockNumber(): BigInt {
+    let value = this.get("blockNumber");
+    return value.toBigInt();
+  }
+
+  set blockNumber(value: BigInt) {
+    this.set("blockNumber", Value.fromBigInt(value));
+  }
+
+  get logIndex(): BigInt {
+    let value = this.get("logIndex");
+    return value.toBigInt();
+  }
+
+  set logIndex(value: BigInt) {
+    this.set("logIndex", Value.fromBigInt(value));
+  }
+
+  get eventAddr(): Bytes {
+    let value = this.get("eventAddr");
+    return value.toBytes();
+  }
+
+  set eventAddr(value: Bytes) {
+    this.set("eventAddr", Value.fromBytes(value));
+  }
+
+  get gasPrice(): BigInt {
+    let value = this.get("gasPrice");
+    return value.toBigInt();
+  }
+
+  set gasPrice(value: BigInt) {
+    this.set("gasPrice", Value.fromBigInt(value));
+  }
+
+  get feeToken(): Bytes {
+    let value = this.get("feeToken");
+    return value.toBytes();
+  }
+
+  set feeToken(value: Bytes) {
+    this.set("feeToken", Value.fromBytes(value));
+  }
+
+  get feeTokenAmount(): BigInt {
+    let value = this.get("feeTokenAmount");
+    return value.toBigInt();
+  }
+
+  set feeTokenAmount(value: BigInt) {
+    this.set("feeTokenAmount", Value.fromBigInt(value));
+  }
+
+  get swappedLonAmount(): BigInt {
+    let value = this.get("swappedLonAmount");
+    return value.toBigInt();
+  }
+
+  set swappedLonAmount(value: BigInt) {
+    this.set("swappedLonAmount", Value.fromBigInt(value));
+  }
+
+  get LFactor(): BigInt {
+    let value = this.get("LFactor");
+    return value.toBigInt();
+  }
+
+  set LFactor(value: BigInt) {
+    this.set("LFactor", Value.fromBigInt(value));
+  }
+
+  get RFactor(): BigInt {
+    let value = this.get("RFactor");
+    return value.toBigInt();
+  }
+
+  set RFactor(value: BigInt) {
+    this.set("RFactor", Value.fromBigInt(value));
+  }
+
+  get minBuy(): BigInt {
+    let value = this.get("minBuy");
+    return value.toBigInt();
+  }
+
+  set minBuy(value: BigInt) {
+    this.set("minBuy", Value.fromBigInt(value));
+  }
+
+  get maxBuy(): BigInt {
+    let value = this.get("maxBuy");
+    return value.toBigInt();
+  }
+
+  set maxBuy(value: BigInt) {
+    this.set("maxBuy", Value.fromBigInt(value));
+  }
+}
+
+export class DistributeLon extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save DistributeLon entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save DistributeLon entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("DistributeLon", id.toString(), this);
+  }
+
+  static load(id: string): DistributeLon | null {
+    return store.get("DistributeLon", id) as DistributeLon | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get to(): Bytes {
+    let value = this.get("to");
+    return value.toBytes();
+  }
+
+  set to(value: Bytes) {
+    this.set("to", Value.fromBytes(value));
+  }
+
+  get transactionHash(): string {
+    let value = this.get("transactionHash");
+    return value.toString();
+  }
+
+  set transactionHash(value: string) {
+    this.set("transactionHash", Value.fromString(value));
+  }
+
+  get blockNumber(): BigInt {
+    let value = this.get("blockNumber");
+    return value.toBigInt();
+  }
+
+  set blockNumber(value: BigInt) {
+    this.set("blockNumber", Value.fromBigInt(value));
+  }
+
+  get logIndex(): BigInt {
+    let value = this.get("logIndex");
+    return value.toBigInt();
+  }
+
+  set logIndex(value: BigInt) {
+    this.set("logIndex", Value.fromBigInt(value));
+  }
+
+  get eventAddr(): Bytes {
+    let value = this.get("eventAddr");
+    return value.toBytes();
+  }
+
+  set eventAddr(value: Bytes) {
+    this.set("eventAddr", Value.fromBytes(value));
+  }
+
+  get gasPrice(): BigInt {
+    let value = this.get("gasPrice");
+    return value.toBigInt();
+  }
+
+  set gasPrice(value: BigInt) {
+    this.set("gasPrice", Value.fromBigInt(value));
+  }
+
+  get treasuryAmount(): BigInt {
+    let value = this.get("treasuryAmount");
+    return value.toBigInt();
+  }
+
+  set treasuryAmount(value: BigInt) {
+    this.set("treasuryAmount", Value.fromBigInt(value));
+  }
+
+  get lonStakingAmount(): BigInt {
+    let value = this.get("lonStakingAmount");
+    return value.toBigInt();
+  }
+
+  set lonStakingAmount(value: BigInt) {
+    this.set("lonStakingAmount", Value.fromBigInt(value));
+  }
+}
+
+export class MintLon extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save MintLon entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save MintLon entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("MintLon", id.toString(), this);
+  }
+
+  static load(id: string): MintLon | null {
+    return store.get("MintLon", id) as MintLon | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get to(): Bytes {
+    let value = this.get("to");
+    return value.toBytes();
+  }
+
+  set to(value: Bytes) {
+    this.set("to", Value.fromBytes(value));
+  }
+
+  get transactionHash(): string {
+    let value = this.get("transactionHash");
+    return value.toString();
+  }
+
+  set transactionHash(value: string) {
+    this.set("transactionHash", Value.fromString(value));
+  }
+
+  get blockNumber(): BigInt {
+    let value = this.get("blockNumber");
+    return value.toBigInt();
+  }
+
+  set blockNumber(value: BigInt) {
+    this.set("blockNumber", Value.fromBigInt(value));
+  }
+
+  get logIndex(): BigInt {
+    let value = this.get("logIndex");
+    return value.toBigInt();
+  }
+
+  set logIndex(value: BigInt) {
+    this.set("logIndex", Value.fromBigInt(value));
+  }
+
+  get eventAddr(): Bytes {
+    let value = this.get("eventAddr");
+    return value.toBytes();
+  }
+
+  set eventAddr(value: Bytes) {
+    this.set("eventAddr", Value.fromBytes(value));
+  }
+
+  get gasPrice(): BigInt {
+    let value = this.get("gasPrice");
+    return value.toBigInt();
+  }
+
+  set gasPrice(value: BigInt) {
+    this.set("gasPrice", Value.fromBigInt(value));
+  }
+
+  get mintedAmount(): BigInt {
+    let value = this.get("mintedAmount");
+    return value.toBigInt();
+  }
+
+  set mintedAmount(value: BigInt) {
+    this.set("mintedAmount", Value.fromBigInt(value));
+  }
+}
+
+export class BuyBackDayData extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save BuyBackDayData entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save BuyBackDayData entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("BuyBackDayData", id.toString(), this);
+  }
+
+  static load(id: string): BuyBackDayData | null {
+    return store.get("BuyBackDayData", id) as BuyBackDayData | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get date(): i32 {
+    let value = this.get("date");
+    return value.toI32();
+  }
+
+  set date(value: i32) {
+    this.set("date", Value.fromI32(value));
+  }
+
+  get dailyTreasuryAmount(): BigInt {
+    let value = this.get("dailyTreasuryAmount");
+    return value.toBigInt();
+  }
+
+  set dailyTreasuryAmount(value: BigInt) {
+    this.set("dailyTreasuryAmount", Value.fromBigInt(value));
+  }
+
+  get dailyLonStakingAmount(): BigInt {
+    let value = this.get("dailyLonStakingAmount");
+    return value.toBigInt();
+  }
+
+  set dailyLonStakingAmount(value: BigInt) {
+    this.set("dailyLonStakingAmount", Value.fromBigInt(value));
+  }
+
+  get dailyMintedAmount(): BigInt {
+    let value = this.get("dailyMintedAmount");
+    return value.toBigInt();
+  }
+
+  set dailyMintedAmount(value: BigInt) {
+    this.set("dailyMintedAmount", Value.fromBigInt(value));
+  }
+
+  get totalTreasuryAmount(): BigInt {
+    let value = this.get("totalTreasuryAmount");
+    return value.toBigInt();
+  }
+
+  set totalTreasuryAmount(value: BigInt) {
+    this.set("totalTreasuryAmount", Value.fromBigInt(value));
+  }
+
+  get totalLonStakingAmount(): BigInt {
+    let value = this.get("totalLonStakingAmount");
+    return value.toBigInt();
+  }
+
+  set totalLonStakingAmount(value: BigInt) {
+    this.set("totalLonStakingAmount", Value.fromBigInt(value));
+  }
+
+  get totalMintedAmount(): BigInt {
+    let value = this.get("totalMintedAmount");
+    return value.toBigInt();
+  }
+
+  set totalMintedAmount(value: BigInt) {
+    this.set("totalMintedAmount", Value.fromBigInt(value));
+  }
+
+  get apy(): BigInt {
+    let value = this.get("apy");
+    return value.toBigInt();
+  }
+
+  set apy(value: BigInt) {
+    this.set("apy", Value.fromBigInt(value));
+  }
+}
+
+export class BuyBackTotal extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save BuyBackTotal entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save BuyBackTotal entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("BuyBackTotal", id.toString(), this);
+  }
+
+  static load(id: string): BuyBackTotal | null {
+    return store.get("BuyBackTotal", id) as BuyBackTotal | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get totalTreasuryAmount(): BigInt {
+    let value = this.get("totalTreasuryAmount");
+    return value.toBigInt();
+  }
+
+  set totalTreasuryAmount(value: BigInt) {
+    this.set("totalTreasuryAmount", Value.fromBigInt(value));
+  }
+
+  get totalLonStakingAmount(): BigInt {
+    let value = this.get("totalLonStakingAmount");
+    return value.toBigInt();
+  }
+
+  set totalLonStakingAmount(value: BigInt) {
+    this.set("totalLonStakingAmount", Value.fromBigInt(value));
+  }
+
+  get totalMintedAmount(): BigInt {
+    let value = this.get("totalMintedAmount");
+    return value.toBigInt();
+  }
+
+  set totalMintedAmount(value: BigInt) {
+    this.set("totalMintedAmount", Value.fromBigInt(value));
+  }
+}
