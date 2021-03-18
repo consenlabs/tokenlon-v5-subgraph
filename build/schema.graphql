@@ -125,7 +125,7 @@ type MintLon @entity {
 }
 
 type BuyBackDayData @entity {
-  id: ID! # timestamp rounded to current day by dividing by 86400
+  id: ID!
   date: Int!
 
   dailyTreasuryAmount: BigInt!
@@ -135,7 +135,6 @@ type BuyBackDayData @entity {
   totalTreasuryAmount: BigInt!
   totalLonStakingAmount: BigInt!
   totalMintedAmount: BigInt!
-  apy: BigInt!
 }
 
 type BuyBackTotal @entity {
@@ -144,4 +143,56 @@ type BuyBackTotal @entity {
   totalTreasuryAmount: BigInt!
   totalLonStakingAmount: BigInt!
   totalMintedAmount: BigInt!
+}
+
+type Staked @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  user: Bytes!
+  amount: BigInt! # uint256
+  share: BigInt! # uint256
+}
+
+type Redeem @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  user: Bytes!
+  amount: BigInt! # uint256
+  share: BigInt! # uint256
+}
+
+type StakedDayData @entity {
+  id: ID!
+  date: Int!
+
+  dailyStakedAmount: BigInt!
+
+  totalStakedAmount: BigInt!
+
+  apy: BigDecimal!
+}
+
+type StakedChange @entity {
+  id: ID!
+
+  stakedAmount: BigInt!
+  added: Boolean!
+}
+
+type StakedTotal @entity {
+  id: ID!
+
+  totalStakedAmount: BigInt!
 }

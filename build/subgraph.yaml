@@ -24,7 +24,7 @@ dataSources:
           handler: handleFillOrder
       file: PMM/PMM.wasm
   - kind: ethereum/contract
-    name: AMMWrapper1
+    name: AMMWrapper
     network: kovan
     source:
       address: "0x11be6f5520FEE8E867e20AF9C9D2c8A09b909B83"
@@ -38,12 +38,12 @@ dataSources:
         - Swapped
       abis:
         - name: AMMWrapper
-          file: AMMWrapper1/abis/AMMWrapper.json
+          file: AMMWrapper/abis/AMMWrapper.json
       eventHandlers:
         - event: Swapped(string,indexed bytes32,indexed
             address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
           handler: handleSwapped
-      file: AMMWrapper1/AMMWrapper1.wasm
+      file: AMMWrapper/AMMWrapper.wasm
   - kind: ethereum/contract
     name: AMMWrapper2
     network: kovan
@@ -64,7 +64,7 @@ dataSources:
         - event: Swapped(string,indexed bytes32,indexed
             address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
           handler: handleSwapped
-      file: AMMWrapper1/AMMWrapper1.wasm
+      file: AMMWrapper/AMMWrapper.wasm
   - kind: ethereum/contract
     name: RewardDistributor
     network: kovan
@@ -89,3 +89,25 @@ dataSources:
         - event: MintLon(uint256)
           handler: handleMintLon
       file: RewardDistributor/RewardDistributor.wasm
+  - kind: ethereum/contract
+    name: LonStaking
+    network: kovan
+    source:
+      address: "0x7b957900bcf5dee8099c7b53841747ef0edcf212"
+      abi: LonStaking
+      startBlock: 23958935
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - LonStaking
+      abis:
+        - name: LonStaking
+          file: LonStaking/abis/LonStaking.json
+      eventHandlers:
+        - event: Staked(indexed address,uint256,uint256)
+          handler: handleStaked
+        - event: Redeem(indexed address,uint256,uint256)
+          handler: handleRedeem
+      file: LonStaking/LonStaking.wasm

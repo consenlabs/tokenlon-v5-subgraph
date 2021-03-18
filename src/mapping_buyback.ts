@@ -2,10 +2,10 @@ import { BigInt, Bytes } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { BuyBack as BuyBackEvent, DistributeLon as DistributeLonEvent, MintLon as MintLonEvent } from "../generated/RewardDistributor/RewardDistributor"
 import { BuyBack, DistributeLon, MintLon, BuyBackDayData, BuyBackTotal } from "../generated/schema"
+import { ZERO } from './helper'
 
 export function handleBuyBack(event: BuyBackEvent): void {
 
-  let ZERO = BigInt.fromI32(0)
   let entity = BuyBack.load(event.transaction.hash.toHex())
   if (entity == null) {
     entity = new BuyBack(event.transaction.hash.toHex())
@@ -34,7 +34,6 @@ export function handleBuyBack(event: BuyBackEvent): void {
 
 export function handleDistributeLon(event: DistributeLonEvent): void {
 
-  let ZERO = BigInt.fromI32(0)
   let txHash = event.transaction.hash.toHex()
   let entity = DistributeLon.load(txHash)
   if (entity == null) {
@@ -59,7 +58,6 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
 
 export function handleMintLon(event: MintLonEvent): void {
 
-  let ZERO = BigInt.fromI32(0)
   let txHash = event.transaction.hash.toHex()
   let entity = MintLon.load(txHash)
   if (entity == null) {
