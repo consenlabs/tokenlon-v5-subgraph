@@ -28,6 +28,7 @@ export function handleStaked(event: StakedEvent): void {
   entity.logIndex = event.logIndex
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
+  entity.user = event.params.user
   entity.amount = event.params.amount
   entity.share = event.params.share
 
@@ -62,6 +63,7 @@ export function handleRedeem(event: RedeemEvent): void {
   entity.logIndex = event.logIndex
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
+  entity.user = event.params.user
   entity.amount = event.params.amount
   entity.share = event.params.share
 
