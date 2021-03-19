@@ -93,7 +93,7 @@ dataSources:
     name: LonStaking
     network: kovan
     source:
-      address: "0x7b957900bcf5dee8099c7b53841747ef0edcf212"
+      address: "0x085a5f35da59e1799132247aede7f3746580e331"
       abi: LonStaking
       startBlock: 23958935
     mapping:
