@@ -1171,33 +1171,6 @@ export class BuyBackDayData extends Entity {
   set dailyMintedAmount(value: BigInt) {
     this.set("dailyMintedAmount", Value.fromBigInt(value));
   }
-
-  get totalTreasuryAmount(): BigInt {
-    let value = this.get("totalTreasuryAmount");
-    return value.toBigInt();
-  }
-
-  set totalTreasuryAmount(value: BigInt) {
-    this.set("totalTreasuryAmount", Value.fromBigInt(value));
-  }
-
-  get totalLonStakingAmount(): BigInt {
-    let value = this.get("totalLonStakingAmount");
-    return value.toBigInt();
-  }
-
-  set totalLonStakingAmount(value: BigInt) {
-    this.set("totalLonStakingAmount", Value.fromBigInt(value));
-  }
-
-  get totalMintedAmount(): BigInt {
-    let value = this.get("totalMintedAmount");
-    return value.toBigInt();
-  }
-
-  set totalMintedAmount(value: BigInt) {
-    this.set("totalMintedAmount", Value.fromBigInt(value));
-  }
 }
 
 export class BuyBackTotal extends Entity {
@@ -1548,22 +1521,22 @@ export class StakedDayData extends Entity {
     this.set("dailyStakedAmount", Value.fromBigInt(value));
   }
 
-  get totalStakedAmount(): BigInt {
-    let value = this.get("totalStakedAmount");
+  get apy(): BigInt {
+    let value = this.get("apy");
     return value.toBigInt();
   }
 
-  set totalStakedAmount(value: BigInt) {
-    this.set("totalStakedAmount", Value.fromBigInt(value));
+  set apy(value: BigInt) {
+    this.set("apy", Value.fromBigInt(value));
   }
 
-  get apy(): BigDecimal {
-    let value = this.get("apy");
-    return value.toBigDecimal();
+  get txCount(): BigInt {
+    let value = this.get("txCount");
+    return value.toBigInt();
   }
 
-  set apy(value: BigDecimal) {
-    this.set("apy", Value.fromBigDecimal(value));
+  set txCount(value: BigInt) {
+    this.set("txCount", Value.fromBigInt(value));
   }
 }
 
@@ -1597,6 +1570,15 @@ export class StakedChange extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get date(): i32 {
+    let value = this.get("date");
+    return value.toI32();
+  }
+
+  set date(value: i32) {
+    this.set("date", Value.fromI32(value));
+  }
+
   get stakedAmount(): BigInt {
     let value = this.get("stakedAmount");
     return value.toBigInt();
@@ -1604,6 +1586,15 @@ export class StakedChange extends Entity {
 
   set stakedAmount(value: BigInt) {
     this.set("stakedAmount", Value.fromBigInt(value));
+  }
+
+  get apy(): BigInt {
+    let value = this.get("apy");
+    return value.toBigInt();
+  }
+
+  set apy(value: BigInt) {
+    this.set("apy", Value.fromBigInt(value));
   }
 
   get added(): boolean {

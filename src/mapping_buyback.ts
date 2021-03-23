@@ -1,11 +1,12 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { Bytes } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { BuyBack as BuyBackEvent, DistributeLon as DistributeLonEvent, MintLon as MintLonEvent } from "../generated/RewardDistributor/RewardDistributor"
-import { BuyBack, DistributeLon, MintLon, BuyBackDayData, BuyBackTotal } from "../generated/schema"
-import { ZERO } from './helper'
+import { BuyBack, DistributeLon, MintLon, BuyBackDayData, BuyBackTotal, StakedChange } from "../generated/schema"
+import { ZERO, updateStakedData } from './helper'
 
 export function handleBuyBack(event: BuyBackEvent): void {
 
+  // update buyback
   let entity = BuyBack.load(event.transaction.hash.toHex())
   if (entity == null) {
     entity = new BuyBack(event.transaction.hash.toHex())
@@ -34,6 +35,7 @@ export function handleBuyBack(event: BuyBackEvent): void {
 
 export function handleDistributeLon(event: DistributeLonEvent): void {
 
+  // update distribute lon
   let txHash = event.transaction.hash.toHex()
   let entity = DistributeLon.load(txHash)
   if (entity == null) {
@@ -58,6 +60,7 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
 
 export function handleMintLon(event: MintLonEvent): void {
 
+  // update minted lon
   let txHash = event.transaction.hash.toHex()
   let entity = MintLon.load(txHash)
   if (entity == null) {
@@ -83,7 +86,7 @@ export function handleMintLon(event: MintLonEvent): void {
     log.error(`couldn't load the dristributeLon in transaction: ${txHash}`, null)
   }
 
-  // update buyBackDayData
+  // update buyback day data
   let timestamp = event.block.timestamp.toI32()
   let dayID = timestamp / 86400
   let dayStartTimestamp = dayID * 86400
@@ -91,6 +94,7 @@ export function handleMintLon(event: MintLonEvent): void {
   let treasuryAmount = distributeLon.treasuryAmount
   let lonStakingAmount = distributeLon.lonStakingAmount
   let mintedAmount = entity.mintedAmount
+
   let buyBackDayData = BuyBackDayData.load(buyBackDayID)
   if (buyBackDayData == null) {
     buyBackDayData = new BuyBackDayData(buyBackDayID)
@@ -98,19 +102,13 @@ export function handleMintLon(event: MintLonEvent): void {
     buyBackDayData.dailyTreasuryAmount = ZERO
     buyBackDayData.dailyLonStakingAmount = ZERO
     buyBackDayData.dailyMintedAmount = ZERO
-    buyBackDayData.totalTreasuryAmount = ZERO
-    buyBackDayData.totalLonStakingAmount = ZERO
-    buyBackDayData.totalMintedAmount = ZERO
   }
   buyBackDayData.dailyTreasuryAmount = buyBackDayData.dailyTreasuryAmount.plus(treasuryAmount)
   buyBackDayData.dailyLonStakingAmount = buyBackDayData.dailyLonStakingAmount.plus(lonStakingAmount)
   buyBackDayData.dailyMintedAmount = buyBackDayData.dailyMintedAmount.plus(mintedAmount)
-  buyBackDayData.totalTreasuryAmount = buyBackDayData.totalTreasuryAmount.plus(treasuryAmount)
-  buyBackDayData.totalLonStakingAmount = buyBackDayData.totalLonStakingAmount.plus(lonStakingAmount)
-  buyBackDayData.totalMintedAmount = buyBackDayData.totalMintedAmount.plus(mintedAmount)
-  // update apy
   buyBackDayData.save()
-  // update buyBackTotal
+
+  // update buyback total
   let buyBackTotal = BuyBackTotal.load("1")
   if (buyBackTotal == null) {
     buyBackTotal = new BuyBackTotal("1")
@@ -121,6 +119,18 @@ export function handleMintLon(event: MintLonEvent): void {
   buyBackTotal.totalTreasuryAmount = buyBackTotal.totalTreasuryAmount.plus(treasuryAmount)
   buyBackTotal.totalLonStakingAmount = buyBackTotal.totalLonStakingAmount.plus(lonStakingAmount)
   buyBackTotal.totalMintedAmount = buyBackTotal.totalMintedAmount.plus(mintedAmount)
-  // update apy
   buyBackTotal.save()
+
+  // update staked change
+  let stakedChange = StakedChange.load(txHash)
+  if (stakedChange == null) {
+    stakedChange = new StakedChange(txHash)
+    stakedChange.stakedAmount = lonStakingAmount
+    stakedChange.date = 0
+    stakedChange.apy = ZERO
+    stakedChange.added = true
+    stakedChange.save()
+  }
+
+  updateStakedData(event)
 }

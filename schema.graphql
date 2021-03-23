@@ -131,10 +131,6 @@ type BuyBackDayData @entity {
   dailyTreasuryAmount: BigInt!
   dailyLonStakingAmount: BigInt!
   dailyMintedAmount: BigInt!
-
-  totalTreasuryAmount: BigInt!
-  totalLonStakingAmount: BigInt!
-  totalMintedAmount: BigInt!
 }
 
 type BuyBackTotal @entity {
@@ -176,23 +172,20 @@ type Redeem @entity {
 type StakedDayData @entity {
   id: ID!
   date: Int!
-
   dailyStakedAmount: BigInt!
-
-  totalStakedAmount: BigInt!
-
-  apy: BigDecimal!
+  apy: BigInt!
+  txCount: BigInt!
 }
 
 type StakedChange @entity {
   id: ID!
-
+  date: Int!
   stakedAmount: BigInt!
+  apy: BigInt!
   added: Boolean!
 }
 
 type StakedTotal @entity {
   id: ID!
-
   totalStakedAmount: BigInt!
 }
