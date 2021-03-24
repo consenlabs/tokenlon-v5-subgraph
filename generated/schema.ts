@@ -1324,6 +1324,15 @@ export class Staked extends Entity {
     this.set("gasPrice", Value.fromBigInt(value));
   }
 
+  get date(): i32 {
+    let value = this.get("date");
+    return value.toI32();
+  }
+
+  set date(value: i32) {
+    this.set("date", Value.fromI32(value));
+  }
+
   get user(): Bytes {
     let value = this.get("user");
     return value.toBytes();
@@ -1445,6 +1454,15 @@ export class Redeem extends Entity {
     this.set("gasPrice", Value.fromBigInt(value));
   }
 
+  get date(): i32 {
+    let value = this.get("date");
+    return value.toI32();
+  }
+
+  set date(value: i32) {
+    this.set("date", Value.fromI32(value));
+  }
+
   get user(): Bytes {
     let value = this.get("user");
     return value.toBytes();
@@ -1521,13 +1539,13 @@ export class StakedDayData extends Entity {
     this.set("dailyStakedAmount", Value.fromBigInt(value));
   }
 
-  get apy(): BigInt {
+  get apy(): BigDecimal {
     let value = this.get("apy");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set apy(value: BigInt) {
-    this.set("apy", Value.fromBigInt(value));
+  set apy(value: BigDecimal) {
+    this.set("apy", Value.fromBigDecimal(value));
   }
 
   get txCount(): BigInt {
@@ -1588,13 +1606,13 @@ export class StakedChange extends Entity {
     this.set("stakedAmount", Value.fromBigInt(value));
   }
 
-  get apy(): BigInt {
+  get apy(): BigDecimal {
     let value = this.get("apy");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set apy(value: BigInt) {
-    this.set("apy", Value.fromBigInt(value));
+  set apy(value: BigDecimal) {
+    this.set("apy", Value.fromBigDecimal(value));
   }
 
   get added(): boolean {

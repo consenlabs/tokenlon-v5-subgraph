@@ -150,6 +150,7 @@ type Staked @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
+  date: Int!
   user: Bytes!
   amount: BigInt! # uint256
   share: BigInt! # uint256
@@ -164,6 +165,7 @@ type Redeem @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
+  date: Int!
   user: Bytes!
   amount: BigInt! # uint256
   share: BigInt! # uint256
@@ -173,7 +175,7 @@ type StakedDayData @entity {
   id: ID!
   date: Int!
   dailyStakedAmount: BigInt!
-  apy: BigInt!
+  apy: BigDecimal!
   txCount: BigInt!
 }
 
@@ -181,7 +183,7 @@ type StakedChange @entity {
   id: ID!
   date: Int!
   stakedAmount: BigInt!
-  apy: BigInt!
+  apy: BigDecimal!
   added: Boolean!
 }
 

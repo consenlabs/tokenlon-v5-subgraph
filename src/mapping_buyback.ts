@@ -2,7 +2,7 @@ import { Bytes } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { BuyBack as BuyBackEvent, DistributeLon as DistributeLonEvent, MintLon as MintLonEvent } from "../generated/RewardDistributor/RewardDistributor"
 import { BuyBack, DistributeLon, MintLon, BuyBackDayData, BuyBackTotal, StakedChange } from "../generated/schema"
-import { ZERO, updateStakedData } from './helper'
+import { ZERO, ZERO_BD, updateStakedData } from './helper'
 
 export function handleBuyBack(event: BuyBackEvent): void {
 
@@ -127,7 +127,7 @@ export function handleMintLon(event: MintLonEvent): void {
     stakedChange = new StakedChange(txHash)
     stakedChange.stakedAmount = lonStakingAmount
     stakedChange.date = 0
-    stakedChange.apy = ZERO
+    stakedChange.apy = ZERO_BD
     stakedChange.added = true
     stakedChange.save()
   }
