@@ -11,6 +11,7 @@ export let ZERO = BigInt.fromI32(0)
 export let ZERO_BD = BigDecimal.fromString('0')
 export let ONE = BigInt.fromI32(1)
 export let ONE_BD = BigDecimal.fromString('1')
+export let LonStakingContract = LonStaking.bind(Address.fromString(STAKING_ADDRESS))
 
 export function updateStakedData(event: ethereum.Event): void {
   let stakedChange = StakedChange.load(event.transaction.hash.toHex())
@@ -53,8 +54,7 @@ export function updateStakedData(event: ethereum.Event): void {
 
   // update apy
   let lon = LonStaking.bind(Address.fromString(LON_ADDRESS))
-  let lonStaking = LonStaking.bind(Address.fromString(STAKING_ADDRESS))
-  let totalSupply = new BigDecimal(lonStaking.totalSupply())
+  let totalSupply = new BigDecimal(LonStakingContract.totalSupply())
   if (totalSupply.gt(ZERO_BD)) {
     let lonBalance = new BigDecimal(lon.balanceOf(Address.fromString(STAKING_ADDRESS)))
     let currApy = lonBalance.div(totalSupply).minus(ONE_BD)

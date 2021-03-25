@@ -1775,4 +1775,13 @@ export class Cooldown extends Entity {
   set user(value: Bytes) {
     this.set("user", Value.fromBytes(value));
   }
+
+  get cooldownSeconds(): BigInt {
+    let value = this.get("cooldownSeconds");
+    return value.toBigInt();
+  }
+
+  set cooldownSeconds(value: BigInt) {
+    this.set("cooldownSeconds", Value.fromBigInt(value));
+  }
 }

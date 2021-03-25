@@ -203,4 +203,5 @@ type Cooldown @entity {
   gasPrice: BigInt! # uint256
   date: Int!
   user: Bytes!
+  cooldownSeconds: BigInt!
 }

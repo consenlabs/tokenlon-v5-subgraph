@@ -2,7 +2,7 @@ import { Bytes } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { Staked as StakedEvent, Redeem as RedeemEvent, Transfer as TransferEvent, Cooldown as CooldownEvent } from "../generated/LonStaking/LonStaking"
 import { Staked, Redeem, StakedChange, Cooldown } from "../generated/schema"
-import { ZERO, ZERO_BD, updateStakedData } from './helper'
+import { ZERO, ZERO_BD, updateStakedData, LonStakingContract } from './helper'
 
 export function handleStaked(event: StakedEvent): void {
 
@@ -102,6 +102,7 @@ export function handleCooldown(event: CooldownEvent): void {
   entity.gasPrice = event.transaction.gasPrice
   entity.date = event.block.timestamp.toI32()
   entity.user = event.params.user
+  entity.cooldownSeconds = LonStakingContract.COOLDOWN_SECONDS()
 
   log.info(entity.transactionHash, null)
   entity.save()
