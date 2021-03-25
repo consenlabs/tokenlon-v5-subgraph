@@ -109,4 +109,6 @@ dataSources:
           handler: handleStaked
         - event: Redeem(indexed address,uint256,uint256)
           handler: handleRedeem
+        - event: Cooldown(indexed address)
+          handler: handleCooldown
       file: ./src/mapping_staking.ts

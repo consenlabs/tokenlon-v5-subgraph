@@ -191,3 +191,16 @@ type StakedTotal @entity {
   id: ID!
   totalStakedAmount: BigInt!
 }
+
+type Cooldown @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  date: Int!
+  user: Bytes!
+}
