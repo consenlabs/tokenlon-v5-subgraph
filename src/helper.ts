@@ -6,7 +6,6 @@ import { StakedDayData, StakedTotal, StakedChange } from "../generated/schema"
 
 export const STAKING_ADDRESS = '0x085a5F35da59E1799132247AEde7f3746580E331'
 export const LON_ADDRESS = '0x0712629ced85a3a62e5bca96303b8fdd06cbf8dd'
-export const BUY_ADDRESS = '0x90c8bCe2c1C27dB341BB2470D85d9Ad02bb89381'
 export let ZERO = BigInt.fromI32(0)
 export let ZERO_BD = BigDecimal.fromString('0')
 export let ONE = BigInt.fromI32(1)
@@ -57,7 +56,7 @@ export function updateStakedData(event: ethereum.Event): void {
   let totalSupply = new BigDecimal(LonStakingContract.totalSupply())
   if (totalSupply.gt(ZERO_BD)) {
     let lonBalance = new BigDecimal(lon.balanceOf(Address.fromString(STAKING_ADDRESS)))
-    let currApy = lonBalance.div(totalSupply).minus(ONE_BD)
+    let currApy = lonBalance.div(totalSupply).minus(ONE_BD).times(BigDecimal.fromString('100'))
     stakedDayData.apy = stakedDayData.apy.times(new BigDecimal(oriTxCount)).plus(currApy).div(new BigDecimal(stakedDayData.txCount))
     stakedChange.apy = currApy
   }
