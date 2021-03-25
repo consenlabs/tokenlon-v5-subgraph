@@ -54,7 +54,7 @@ export function handleRedeem(event: RedeemEvent): void {
   let stakedChange = StakedChange.load(event.transaction.hash.toHex())
   if (stakedChange == null) {
     stakedChange = new StakedChange(event.transaction.hash.toHex())
-    stakedChange.stakedAmount = event.params.redeemAmount
+    stakedChange.stakedAmount = event.params.amount
     stakedChange.date = 0
     stakedChange.penalty = ZERO
     stakedChange.added = false
@@ -82,11 +82,11 @@ export function handleRedeem(event: RedeemEvent): void {
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
   entity.user = event.params.user
-  entity.amount = event.params.redeemAmount
+  entity.amount = event.params.amount
   entity.share = event.params.share
   entity.timestamp = event.block.timestamp.toI32()
-  entity.penalty = event.params.penaltyAmount
   entity.date = dayStartTimestamp
+  entity.penalty = ZERO
 
   log.info(entity.transactionHash, null)
   entity.save()

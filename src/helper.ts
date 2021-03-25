@@ -3,9 +3,8 @@ import { BigInt, BigDecimal, ethereum, Address } from '@graphprotocol/graph-ts'
 import { log } from '@graphprotocol/graph-ts'
 import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { StakedDayData, StakedTotal, StakedChange, BuyBackTotal } from "../generated/schema"
-
-export const STAKING_ADDRESS = '0x413ecce5d56204962090eef1dead4c0a247e289b'
-export const LON_ADDRESS = '0x0000000000095413afc295d19edeb1ad7b71c952'
+export const STAKING_ADDRESS = '0xF7E60c4c899d0D4d1d758CB8C2EF3E15202da1eF'
+export const LON_ADDRESS = '0x0712629ced85a3a62e5bca96303b8fdd06cbf8dd'
 export let ZERO = BigInt.fromI32(0)
 export let ZERO_BD = BigDecimal.fromString('0')
 export let ONE = BigInt.fromI32(1)

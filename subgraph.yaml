@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: PMM
-    network: mainnet
+    network: kovan
     source:
-      address: "0x8D90113A1e286a5aB3e496fbD1853F265e5913c6"
+      address: "0xAAF49aE635019717b7B3c76889283f87D3c1498F"
       abi: PMM
-      startBlock: 11463019
+      startBlock: 24035385
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -26,11 +26,11 @@ dataSources:
       file: ./src/mapping_pmm.ts
   - kind: ethereum/contract
     name: AMMWrapper
-    network: mainnet
+    network: kovan
     source:
-      address: "0x11be6f5520FEE8E867e20AF9C9D2c8A09b909B83"
+      address: "0x842243D636241C39f98c6BA4380A59Da23420983"
       abi: AMMWrapper
-      startBlock: 11463016
+      startBlock: 24035370
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -47,32 +47,12 @@ dataSources:
           handler: handleSwapped
       file: ./src/mapping_ammwrapper.ts
   - kind: ethereum/contract
-    name: AMMWrapper2
-    network: mainnet
-    source:
-      address: "0x904144473FdE753dc0729608CfeEA6F4A8B275E6"
-      abi: AMMWrapper
-      startBlock: 11689699
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - Swapped
-      abis:
-        - name: AMMWrapper
-          file: ./abis/AMMWrapper.json
-      eventHandlers:
-        - event: Swapped(string,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
-          handler: handleSwapped
-      file: ./src/mapping_ammwrapper.ts
-  - kind: ethereum/contract
     name: RewardDistributor
-    network: mainnet
+    network: kovan
     source:
-      address: "0xbF1C2c17CC77e7Dec3466B96F46f93c09f02aB07"
+      address: "0xDc631670204814fF6935E094b71F55C7BF98d321"
       abi: RewardDistributor
-      startBlock: 12133461
+      startBlock: 24045757
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -100,11 +80,11 @@ dataSources:
       file: ./src/mapping_buyback.ts
   - kind: ethereum/contract
     name: LonStaking
-    network: mainnet
+    network: kovan
     source:
-      address: "0x413ecce5d56204962090eef1dead4c0a247e289b"
+      address: "0xF7E60c4c899d0D4d1d758CB8C2EF3E15202da1eF"
       abi: LonStaking
-      startBlock: 12133376
+      startBlock: 24045709
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -117,7 +97,7 @@ dataSources:
       eventHandlers:
         - event: Staked(indexed address,uint256,uint256)
           handler: handleStaked
-        - event: Redeem(indexed address,uint256,uint256,uint256)
+        - event: Redeem(indexed address,uint256,uint256)
           handler: handleRedeem
         - event: Cooldown(indexed address)
           handler: handleCooldown
