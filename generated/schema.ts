@@ -1548,6 +1548,15 @@ export class StakedDayData extends Entity {
     this.set("apy", Value.fromBigDecimal(value));
   }
 
+  get scaleIndex(): BigDecimal {
+    let value = this.get("scaleIndex");
+    return value.toBigDecimal();
+  }
+
+  set scaleIndex(value: BigDecimal) {
+    this.set("scaleIndex", Value.fromBigDecimal(value));
+  }
+
   get txCount(): BigInt {
     let value = this.get("txCount");
     return value.toBigInt();
@@ -1613,6 +1622,15 @@ export class StakedChange extends Entity {
 
   set apy(value: BigDecimal) {
     this.set("apy", Value.fromBigDecimal(value));
+  }
+
+  get scaleIndex(): BigDecimal {
+    let value = this.get("scaleIndex");
+    return value.toBigDecimal();
+  }
+
+  set scaleIndex(value: BigDecimal) {
+    this.set("scaleIndex", Value.fromBigDecimal(value));
   }
 
   get added(): boolean {

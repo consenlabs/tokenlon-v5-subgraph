@@ -13,6 +13,7 @@ export function handleStaked(event: StakedEvent): void {
     stakedChange.stakedAmount = event.params.amount
     stakedChange.date = 0
     stakedChange.apy = ZERO_BD
+    stakedChange.scaleIndex = ZERO_BD
     stakedChange.added = true
     stakedChange.save()
   }
@@ -53,6 +54,7 @@ export function handleRedeem(event: RedeemEvent): void {
     stakedChange.stakedAmount = event.params.amount
     stakedChange.date = 0
     stakedChange.apy = ZERO_BD
+    stakedChange.scaleIndex = ZERO_BD
     stakedChange.added = false
     stakedChange.save()
   }

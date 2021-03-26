@@ -176,6 +176,7 @@ type StakedDayData @entity {
   date: Int!
   dailyStakedAmount: BigInt!
   apy: BigDecimal!
+  scaleIndex: BigDecimal!
   txCount: BigInt!
 }
 
@@ -184,6 +185,7 @@ type StakedChange @entity {
   date: Int!
   stakedAmount: BigInt!
   apy: BigDecimal!
+  scaleIndex: BigDecimal!
   added: Boolean!
 }
 

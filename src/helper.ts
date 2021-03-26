@@ -37,6 +37,7 @@ export function updateStakedData(event: ethereum.Event): void {
     stakedDayData.date = dayStartTimestamp
     stakedDayData.dailyStakedAmount = ZERO
     stakedDayData.apy = ZERO_BD
+    stakedDayData.scaleIndex = ZERO_BD
     stakedDayData.txCount = ZERO
   }
 
@@ -56,8 +57,11 @@ export function updateStakedData(event: ethereum.Event): void {
   let totalSupply = new BigDecimal(LonStakingContract.totalSupply())
   if (totalSupply.gt(ZERO_BD)) {
     let lonBalance = new BigDecimal(lon.balanceOf(Address.fromString(STAKING_ADDRESS)))
-    let currApy = lonBalance.div(totalSupply).minus(ONE_BD).times(BigDecimal.fromString('100'))
+    let scaleIndex = lonBalance.div(totalSupply)
+    let currApy = scaleIndex.minus(ONE_BD).times(BigDecimal.fromString('100'))
+    stakedDayData.scaleIndex = scaleIndex
     stakedDayData.apy = stakedDayData.apy.times(new BigDecimal(oriTxCount)).plus(currApy).div(new BigDecimal(stakedDayData.txCount))
+    stakedChange.scaleIndex = scaleIndex
     stakedChange.apy = currApy
   }
   stakedChange.date = timestamp
