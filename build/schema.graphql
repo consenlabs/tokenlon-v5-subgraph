@@ -259,3 +259,12 @@ type FeeToken @entity {
   maxBuy: BigInt!
   enabled: Boolean!
 }
+
+type TradedToken @entity {
+  id: ID!
+  address: Bytes! # bytes32
+  decimals: Int!
+  startDate: Int!
+  symbol: String!
+  name: String!
+}

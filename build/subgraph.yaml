@@ -18,6 +18,8 @@ dataSources:
       abis:
         - name: PMM
           file: PMM/abis/PMM.json
+        - name: ERC20
+          file: PMM/abis/ERC20.json
       eventHandlers:
         - event: FillOrder(string,indexed bytes32,indexed bytes32,indexed
             address,address,uint256,address,address,uint256,address,uint256,uint16)
@@ -39,6 +41,8 @@ dataSources:
       abis:
         - name: AMMWrapper
           file: AMMWrapper/abis/AMMWrapper.json
+        - name: ERC20
+          file: AMMWrapper/abis/ERC20.json
       eventHandlers:
         - event: Swapped(string,indexed bytes32,indexed
             address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
@@ -62,6 +66,8 @@ dataSources:
           file: RewardDistributor/abis/RewardDistributor.json
         - name: LonStaking
           file: RewardDistributor/abis/LonStaking.json
+        - name: ERC20
+          file: RewardDistributor/abis/ERC20.json
       eventHandlers:
         - event: BuyBack(address,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleBuyBack

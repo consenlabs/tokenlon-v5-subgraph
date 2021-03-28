@@ -1,7 +1,9 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { PMM, FillOrder as FillOrderEvent } from "../generated/PMM/PMM"
-import { FillOrder, FillOrderTotal } from "../generated/schema"
+import { ERC20 } from "../generated/PMM/ERC20"
+import { isETH, WETH_ADDRESS } from "./helper"
+import { FillOrder, FillOrderTotal, TradedToken } from "../generated/schema"
 
 export function handleFillOrder(event: FillOrderEvent): void {
   // Entities can be loaded from the store using a string ID; this ID
@@ -41,6 +43,44 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.logIndex = event.logIndex
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
+
+  let takerAddr = entity.takerAssetAddr.toHex()
+  if (isETH(takerAddr)) {
+    takerAddr = WETH_ADDRESS
+  }
+  // check whether token is in the traded token
+  let takerTradedToken = TradedToken.load(takerAddr)
+  if (takerTradedToken == null) {
+    let takerTradedTokenContract = ERC20.bind(Address.fromString(takerAddr))
+    if (!takerTradedTokenContract.try_decimals().reverted) {
+      takerTradedToken = new TradedToken(takerAddr)
+      takerTradedToken.address = entity.takerAssetAddr
+      takerTradedToken.startDate = event.block.timestamp.toI32()
+      takerTradedToken.decimals = takerTradedTokenContract.decimals()
+      takerTradedToken.name = takerTradedTokenContract.name()
+      takerTradedToken.symbol = takerTradedTokenContract.symbol()
+      takerTradedToken.save()
+    }
+  }
+
+  let makerAddr = entity.makerAssetAddr.toHex()
+  if (isETH(makerAddr)) {
+    makerAddr = WETH_ADDRESS
+  }
+  // check whether token is in the traded token
+  let makerTradedToken = TradedToken.load(makerAddr)
+  if (makerTradedToken == null) {
+    let makerTradedTokenContract = ERC20.bind(Address.fromString(makerAddr))
+    if (!makerTradedTokenContract.try_decimals().reverted) {
+      makerTradedToken = new TradedToken(makerAddr)
+      makerTradedToken.address = entity.makerAssetAddr
+      makerTradedToken.startDate = event.block.timestamp.toI32()
+      makerTradedToken.decimals = makerTradedTokenContract.decimals()
+      makerTradedToken.name = makerTradedTokenContract.name()
+      makerTradedToken.symbol = makerTradedTokenContract.symbol()
+      makerTradedToken.save()
+    }
+  }
 
   log.info(entity.transactionHash, null)
 

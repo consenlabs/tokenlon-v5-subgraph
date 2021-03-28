@@ -11,6 +11,9 @@ export let ZERO_BD = BigDecimal.fromString('0')
 export let ONE = BigInt.fromI32(1)
 export let ONE_BD = BigDecimal.fromString('1')
 export let LonStakingContract = LonStaking.bind(Address.fromString(STAKING_ADDRESS))
+export let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+export let ETH_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
+export let WETH_ADDRESS = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
 
 export function updateStakedData(event: ethereum.Event): void {
   let stakedChange = StakedChange.load(event.transaction.hash.toHex())
@@ -51,4 +54,8 @@ export function updateStakedData(event: ethereum.Event): void {
   stakedTotal.save()
   stakedChange.save()
   stakedDayData.save()
+}
+
+export let isETH = (assetAddr: string): boolean => {
+  return (assetAddr === ZERO_ADDRESS) || (assetAddr === ETH_ADDRESS) || (assetAddr === WETH_ADDRESS)
 }
