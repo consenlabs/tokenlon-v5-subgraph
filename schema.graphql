@@ -169,6 +169,7 @@ type Redeem @entity {
   user: Bytes!
   amount: BigInt! # uint256
   share: BigInt! # uint256
+  penalty: BigDecimal!
 }
 
 type StakedDayData @entity {
@@ -177,6 +178,7 @@ type StakedDayData @entity {
   dailyStakedAmount: BigInt!
   apy: BigDecimal!
   scaleIndex: BigDecimal!
+  penalty: BigDecimal!
   txCount: BigInt!
 }
 
@@ -186,6 +188,7 @@ type StakedChange @entity {
   stakedAmount: BigInt!
   apy: BigDecimal!
   scaleIndex: BigDecimal!
+  penalty: BigDecimal!
   added: Boolean!
 }
 

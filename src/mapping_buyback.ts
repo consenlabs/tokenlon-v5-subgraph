@@ -129,6 +129,7 @@ export function handleMintLon(event: MintLonEvent): void {
     stakedChange.date = 0
     stakedChange.apy = ZERO_BD
     stakedChange.scaleIndex = ZERO_BD
+    stakedChange.penalty = ZERO_BD
     stakedChange.added = true
     stakedChange.save()
   }
