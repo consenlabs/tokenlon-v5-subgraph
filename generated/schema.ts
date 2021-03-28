@@ -1489,6 +1489,15 @@ export class Redeem extends Entity {
   set share(value: BigInt) {
     this.set("share", Value.fromBigInt(value));
   }
+
+  get penalty(): BigDecimal {
+    let value = this.get("penalty");
+    return value.toBigDecimal();
+  }
+
+  set penalty(value: BigDecimal) {
+    this.set("penalty", Value.fromBigDecimal(value));
+  }
 }
 
 export class StakedDayData extends Entity {
@@ -1555,6 +1564,15 @@ export class StakedDayData extends Entity {
 
   set scaleIndex(value: BigDecimal) {
     this.set("scaleIndex", Value.fromBigDecimal(value));
+  }
+
+  get penalty(): BigDecimal {
+    let value = this.get("penalty");
+    return value.toBigDecimal();
+  }
+
+  set penalty(value: BigDecimal) {
+    this.set("penalty", Value.fromBigDecimal(value));
   }
 
   get txCount(): BigInt {
@@ -1631,6 +1649,15 @@ export class StakedChange extends Entity {
 
   set scaleIndex(value: BigDecimal) {
     this.set("scaleIndex", Value.fromBigDecimal(value));
+  }
+
+  get penalty(): BigDecimal {
+    let value = this.get("penalty");
+    return value.toBigDecimal();
+  }
+
+  set penalty(value: BigDecimal) {
+    this.set("penalty", Value.fromBigDecimal(value));
   }
 
   get added(): boolean {

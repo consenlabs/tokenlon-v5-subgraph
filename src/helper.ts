@@ -19,7 +19,7 @@ export function updateStakedData(event: ethereum.Event): void {
     return
   }
 
-  // staked total
+  // staked total, TODO: minus penalty?
   let stakedTotal = StakedTotal.load("1")
   if (stakedTotal == null) {
     stakedTotal = new StakedTotal("1")
@@ -38,6 +38,7 @@ export function updateStakedData(event: ethereum.Event): void {
     stakedDayData.dailyStakedAmount = ZERO
     stakedDayData.apy = ZERO_BD
     stakedDayData.scaleIndex = ZERO_BD
+    stakedDayData.penalty = ZERO_BD
     stakedDayData.txCount = ZERO
   }
 

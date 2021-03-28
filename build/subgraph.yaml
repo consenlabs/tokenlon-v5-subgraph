@@ -3,6 +3,48 @@ schema:
   file: schema.graphql
 dataSources:
   - kind: ethereum/contract
+    name: PMM
+    network: kovan
+    source:
+      address: "0xE37eEffEb99caE6a04e399bfBAF0870F9B399D34"
+      abi: PMM
+      startBlock: 23955901
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - FillOrder
+      abis:
+        - name: PMM
+          file: PMM/abis/PMM.json
+      eventHandlers:
+        - event: FillOrder(string,indexed bytes32,indexed bytes32,indexed
+            address,address,uint256,address,address,uint256,address,uint256,uint16)
+          handler: handleFillOrder
+      file: PMM/PMM.wasm
+  - kind: ethereum/contract
+    name: AMMWrapper
+    network: kovan
+    source:
+      address: "0xBeB3E2e3942745eB41be281AE0C5699f0f7061B9"
+      abi: AMMWrapper
+      startBlock: 23955901
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swapped
+      abis:
+        - name: AMMWrapper
+          file: AMMWrapper/abis/AMMWrapper.json
+      eventHandlers:
+        - event: Swapped(string,indexed bytes32,indexed
+            address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
+          handler: handleSwapped
+      file: AMMWrapper/AMMWrapper.wasm
+  - kind: ethereum/contract
     name: RewardDistributor
     network: kovan
     source:

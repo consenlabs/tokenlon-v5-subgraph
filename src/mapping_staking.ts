@@ -14,6 +14,7 @@ export function handleStaked(event: StakedEvent): void {
     stakedChange.date = 0
     stakedChange.apy = ZERO_BD
     stakedChange.scaleIndex = ZERO_BD
+    stakedChange.penalty = ZERO_BD
     stakedChange.added = true
     stakedChange.save()
   }
@@ -55,6 +56,7 @@ export function handleRedeem(event: RedeemEvent): void {
     stakedChange.date = 0
     stakedChange.apy = ZERO_BD
     stakedChange.scaleIndex = ZERO_BD
+    stakedChange.penalty = ZERO_BD
     stakedChange.added = false
     stakedChange.save()
   }
@@ -67,6 +69,7 @@ export function handleRedeem(event: RedeemEvent): void {
     entity.date = 0
     entity.amount = ZERO
     entity.share = ZERO
+    entity.penalty = ZERO_BD
   }
   entity.from = event.transaction.from as Bytes
   entity.to = event.transaction.to as Bytes
@@ -79,6 +82,7 @@ export function handleRedeem(event: RedeemEvent): void {
   entity.user = event.params.user
   entity.amount = event.params.amount
   entity.share = event.params.share
+  // TODO: update smart contract
 
   log.info(entity.transactionHash, null)
   entity.save()
