@@ -197,8 +197,7 @@ function getFeeToken(address: string): FeeToken | null {
   if (feeToken == null) {
     feeToken = new FeeToken(address)
     feeToken.exchangeIndex = ZERO
-    // feeToken.path = event.params.path as [Bytes]
-    // feeToken.path = []
+    feeToken.path = []
     feeToken.LFactor = ZERO
     feeToken.RFactor = ZERO
     feeToken.minBuy = ZERO
@@ -256,8 +255,7 @@ export function handleSetFeeToken(event: SetFeeTokenEvent): void {
   entity.gasPrice = event.transaction.gasPrice
   entity.feeToken = event.params.feeToken
   entity.exchangeIndex = event.params.exchangeIndex
-  // entity.path = event.params.path as [Bytes]
-  // entity.path = []
+  entity.path = event.params.path as Array<Bytes>
   entity.LFactor = event.params.LFactor
   entity.RFactor = event.params.RFactor
   entity.minBuy = event.params.minBuy
@@ -267,8 +265,7 @@ export function handleSetFeeToken(event: SetFeeTokenEvent): void {
   // update fee token
   let feeToken = getFeeToken(event.params.feeToken.toHex())
   feeToken.exchangeIndex = event.params.exchangeIndex
-  // feeToken.path = event.params.path as [Bytes]
-  // feeToken.path = []
+  feeToken.path = event.params.path as Array<Bytes>
   feeToken.LFactor = event.params.LFactor
   feeToken.RFactor = event.params.RFactor
   feeToken.minBuy = event.params.minBuy

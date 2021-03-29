@@ -1987,6 +1987,15 @@ export class SetFeeToken extends Entity {
     this.set("exchangeIndex", Value.fromBigInt(value));
   }
 
+  get path(): Array<Bytes> {
+    let value = this.get("path");
+    return value.toBytesArray();
+  }
+
+  set path(value: Array<Bytes>) {
+    this.set("path", Value.fromBytesArray(value));
+  }
+
   get LFactor(): BigInt {
     let value = this.get("LFactor");
     return value.toBigInt();
@@ -2173,6 +2182,15 @@ export class FeeToken extends Entity {
 
   set exchangeIndex(value: BigInt) {
     this.set("exchangeIndex", Value.fromBigInt(value));
+  }
+
+  get path(): Array<Bytes> {
+    let value = this.get("path");
+    return value.toBytesArray();
+  }
+
+  set path(value: Array<Bytes>) {
+    this.set("path", Value.fromBytesArray(value));
   }
 
   get LFactor(): BigInt {

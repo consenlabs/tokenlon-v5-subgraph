@@ -229,7 +229,7 @@ type SetFeeToken @entity {
   gasPrice: BigInt! # uint256
   feeToken: Bytes! # bytes32
   exchangeIndex: BigInt!
-  #path: [Bytes]! # bytes32
+  path: [Bytes!]!
   LFactor: BigInt!
   RFactor: BigInt!
   minBuy: BigInt!
@@ -252,7 +252,7 @@ type EnableFeeToken @entity {
 type FeeToken @entity {
   id: ID!
   exchangeIndex: BigInt!
-  #path: [Bytes]! # bytes32
+  path: [Bytes!]!
   LFactor: BigInt!
   RFactor: BigInt!
   minBuy: BigInt!
