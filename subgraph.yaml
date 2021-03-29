@@ -67,6 +67,10 @@ dataSources:
           handler: handleDistributeLon
         - event: MintLon(uint256)
           handler: handleMintLon
+        - event: SetFeeToken(address,uint256,address[],uint256,uint256,uint256,uint256)
+          handler: handleSetFeeToken
+        - event: EnableFeeToken(address,bool)
+          handler: handleEnableFeeToken
       file: ./src/mapping_buyback.ts
   - kind: ethereum/contract
     name: LonStaking

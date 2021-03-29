@@ -69,6 +69,10 @@ dataSources:
           handler: handleDistributeLon
         - event: MintLon(uint256)
           handler: handleMintLon
+        - event: SetFeeToken(address,uint256,address[],uint256,uint256,uint256,uint256)
+          handler: handleSetFeeToken
+        - event: EnableFeeToken(address,bool)
+          handler: handleEnableFeeToken
       file: RewardDistributor/RewardDistributor.wasm
   - kind: ethereum/contract
     name: LonStaking
