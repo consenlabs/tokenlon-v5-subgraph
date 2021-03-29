@@ -22,7 +22,6 @@ export function handleStaked(event: StakedEvent): void {
   if (entity == null) {
     entity = new Staked(event.transaction.hash.toHex())
     entity.gasPrice = ZERO
-    entity.date = 0
     entity.amount = ZERO
     entity.share = ZERO
   }
@@ -33,10 +32,10 @@ export function handleStaked(event: StakedEvent): void {
   entity.logIndex = event.logIndex
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
-  entity.date = event.block.timestamp.toI32()
   entity.user = event.params.user
   entity.amount = event.params.amount
   entity.share = event.params.share
+  entity.timestamp = event.block.timestamp.toI32()
 
   log.info(entity.transactionHash, null)
   entity.save()
@@ -62,7 +61,6 @@ export function handleRedeem(event: RedeemEvent): void {
   if (entity == null) {
     entity = new Redeem(event.transaction.hash.toHex())
     entity.gasPrice = ZERO
-    entity.date = 0
     entity.amount = ZERO
     entity.share = ZERO
     entity.penalty = ZERO_BD
@@ -74,10 +72,10 @@ export function handleRedeem(event: RedeemEvent): void {
   entity.logIndex = event.logIndex
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
-  entity.date = event.block.timestamp.toI32()
   entity.user = event.params.user
   entity.amount = event.params.amount
   entity.share = event.params.share
+  entity.timestamp = event.block.timestamp.toI32()
   // TODO: update redeem event from smart contract
 
   log.info(entity.transactionHash, null)
@@ -93,7 +91,6 @@ export function handleCooldown(event: CooldownEvent): void {
   if (entity == null) {
     entity = new Cooldown(event.transaction.hash.toHex())
     entity.gasPrice = ZERO
-    entity.date = 0
   }
   entity.from = event.transaction.from as Bytes
   entity.to = event.transaction.to as Bytes
@@ -102,9 +99,9 @@ export function handleCooldown(event: CooldownEvent): void {
   entity.logIndex = event.logIndex
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
-  entity.date = event.block.timestamp.toI32()
   entity.user = event.params.user
   entity.cooldownSeconds = LonStakingContract.COOLDOWN_SECONDS()
+  entity.timestamp = event.block.timestamp.toI32()
 
   log.info(entity.transactionHash, null)
   entity.save()

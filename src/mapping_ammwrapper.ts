@@ -42,6 +42,7 @@ export function handleSwapped(event: SwappedEvent): void {
   entity.logIndex = event.logIndex
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
+  entity.timestamp = event.block.timestamp.toI32()
 
   let takerAddr = entity.takerAssetAddr.toHex()
   if (isETH(takerAddr)) {
@@ -119,6 +120,7 @@ const processSubsidizedEvent = (event: SwappedEvent): void => {
     entity.logIndex = event.logIndex
     entity.eventAddr = event.address
     entity.gasPrice = event.transaction.gasPrice
+    entity.timestamp = event.block.timestamp.toI32()
 
     log.info(entity.transactionHash, null)
     entity.save()

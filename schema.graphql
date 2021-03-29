@@ -20,6 +20,7 @@ type FillOrder @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
+  timestamp: Int!
 }
 
 type Swapped @entity {
@@ -45,6 +46,7 @@ type Swapped @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
+  timestamp: Int!
 }
 
 type SwappedTotal @entity {
@@ -79,6 +81,7 @@ type SubsidizedSwapped @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
+  timestamp: Int!
 }
 
 type BuyBack @entity {
@@ -97,6 +100,7 @@ type BuyBack @entity {
   RFactor: BigInt! # uint256
   minBuy: BigInt! # uint256
   maxBuy: BigInt! # uint256
+  timestamp: Int!
 }
 
 type DistributeLon @entity {
@@ -110,6 +114,7 @@ type DistributeLon @entity {
   gasPrice: BigInt! # uint256
   treasuryAmount: BigInt! # uint256
   lonStakingAmount: BigInt! # uint256
+  timestamp: Int!
 }
 
 type MintLon @entity {
@@ -122,6 +127,7 @@ type MintLon @entity {
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
   mintedAmount: BigInt! # uint256
+  timestamp: Int!
 }
 
 type BuyBackDayData @entity {
@@ -134,8 +140,8 @@ type BuyBackDayData @entity {
 
   lastUpdatedAt: Int!
   currApy: BigDecimal!
-  averageApy: BigDecimal!
-  lastScaleIndex: BigDecimal!
+  apy: BigDecimal!
+  scaleIndex: BigDecimal!
   txCount: BigInt!
 }
 
@@ -148,8 +154,8 @@ type BuyBackTotal @entity {
 
   lastUpdatedAt: Int!
   currApy: BigDecimal!
-  averageApy: BigDecimal!
-  lastScaleIndex: BigDecimal!
+  apy: BigDecimal!
+  scaleIndex: BigDecimal!
   txCount: BigInt!
 }
 
@@ -162,10 +168,10 @@ type Staked @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
-  date: Int!
   user: Bytes!
   amount: BigInt! # uint256
   share: BigInt! # uint256
+  timestamp: Int!
 }
 
 type Redeem @entity {
@@ -177,11 +183,11 @@ type Redeem @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
-  date: Int!
   user: Bytes!
   amount: BigInt! # uint256
   share: BigInt! # uint256
   penalty: BigDecimal!
+  timestamp: Int!
 }
 
 type StakedDayData @entity {
@@ -213,9 +219,9 @@ type Cooldown @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
-  date: Int!
   user: Bytes!
   cooldownSeconds: BigInt!
+  timestamp: Int!
 }
 
 type SetFeeToken @entity {
@@ -234,6 +240,7 @@ type SetFeeToken @entity {
   RFactor: BigInt!
   minBuy: BigInt!
   maxBuy: BigInt!
+  timestamp: Int!
 }
 
 type EnableFeeToken @entity {
@@ -247,6 +254,7 @@ type EnableFeeToken @entity {
   gasPrice: BigInt! # uint256
   feeToken: Bytes! # bytes32
   enabled: Boolean!
+  timestamp: Int!
 }
 
 type FeeToken @entity {

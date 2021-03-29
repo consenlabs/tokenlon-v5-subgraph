@@ -30,6 +30,7 @@ export function handleBuyBack(event: BuyBackEvent): void {
   entity.RFactor = event.params.RFactor
   entity.minBuy = event.params.minBuy
   entity.maxBuy = event.params.maxBuy
+  entity.timestamp = event.block.timestamp.toI32()
 
   log.info(entity.transactionHash, null)
   entity.save()
@@ -55,6 +56,7 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   entity.gasPrice = event.transaction.gasPrice
   entity.treasuryAmount = event.params.treasuryAmount
   entity.lonStakingAmount = event.params.lonStakingAmount
+  entity.timestamp = event.block.timestamp.toI32()
 
   log.info(entity.transactionHash, null)
   entity.save()
@@ -75,9 +77,9 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
     buyBackTotal.totalLonStakingAmount = ZERO
     buyBackTotal.totalMintedAmount = ZERO
     buyBackTotal.txCount = ZERO
-    buyBackTotal.averageApy = ZERO_BD
+    buyBackTotal.apy = ZERO_BD
     buyBackTotal.currApy = ZERO_BD
-    buyBackTotal.lastScaleIndex = ZERO_BD
+    buyBackTotal.scaleIndex = ZERO_BD
     buyBackTotal.lastUpdatedAt = 0
   }
 
@@ -94,12 +96,12 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   }
   let oriTxCount = buyBackTotal.txCount
   let timeInterval = new BigDecimal(BigInt.fromI32(timestamp - buyBackTotal.lastUpdatedAt))
-  let scaleIndexDiff = scaleIndex.minus(buyBackTotal.lastScaleIndex)
+  let scaleIndexDiff = scaleIndex.minus(buyBackTotal.scaleIndex)
   let currApy = scaleIndexDiff.div(timeInterval).times(BigDecimal.fromString('86400')).times(BigDecimal.fromString('365')).times(BigDecimal.fromString('100'))
   buyBackTotal.txCount = buyBackTotal.txCount.plus(ONE)
   buyBackTotal.currApy = currApy
-  buyBackTotal.averageApy = buyBackTotal.averageApy.times(new BigDecimal(oriTxCount)).plus(currApy).div(new BigDecimal(buyBackTotal.txCount))
-  buyBackTotal.lastScaleIndex = scaleIndex
+  buyBackTotal.apy = buyBackTotal.apy.times(new BigDecimal(oriTxCount)).plus(currApy).div(new BigDecimal(buyBackTotal.txCount))
+  buyBackTotal.scaleIndex = scaleIndex
   buyBackTotal.lastUpdatedAt = timestamp
   buyBackTotal.totalTreasuryAmount = buyBackTotal.totalTreasuryAmount.plus(treasuryAmount)
   buyBackTotal.totalLonStakingAmount = buyBackTotal.totalLonStakingAmount.plus(lonStakingAmount)
@@ -113,16 +115,16 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
     buyBackDayData.dailyLonStakingAmount = ZERO
     buyBackDayData.dailyMintedAmount = ZERO
     buyBackDayData.txCount = ZERO
-    buyBackDayData.averageApy = ZERO_BD
+    buyBackDayData.apy = ZERO_BD
     buyBackDayData.currApy = ZERO_BD
-    buyBackDayData.lastScaleIndex = ZERO_BD
+    buyBackDayData.scaleIndex = ZERO_BD
     buyBackDayData.lastUpdatedAt = 0
   }
   oriTxCount = buyBackDayData.txCount
   buyBackDayData.txCount = buyBackDayData.txCount.plus(ONE)
   buyBackDayData.currApy = currApy
-  buyBackDayData.averageApy = buyBackDayData.averageApy.times(new BigDecimal(oriTxCount)).plus(currApy).div(new BigDecimal(buyBackDayData.txCount))
-  buyBackDayData.lastScaleIndex = scaleIndex
+  buyBackDayData.apy = buyBackDayData.apy.times(new BigDecimal(oriTxCount)).plus(currApy).div(new BigDecimal(buyBackDayData.txCount))
+  buyBackDayData.scaleIndex = scaleIndex
   buyBackDayData.lastUpdatedAt = timestamp
   buyBackDayData.dailyTreasuryAmount = buyBackDayData.dailyTreasuryAmount.plus(treasuryAmount)
   buyBackDayData.dailyLonStakingAmount = buyBackDayData.dailyLonStakingAmount.plus(lonStakingAmount)
@@ -160,6 +162,7 @@ export function handleMintLon(event: MintLonEvent): void {
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
   entity.mintedAmount = event.params.mintedAmount
+  entity.timestamp = event.block.timestamp.toI32()
 
   log.info(entity.transactionHash, null)
   entity.save()
@@ -226,6 +229,7 @@ export function handleEnableFeeToken(event: EnableFeeTokenEvent): void {
   entity.gasPrice = event.transaction.gasPrice
   entity.feeToken = event.params.feeToken
   entity.enabled = event.params.enable
+  entity.timestamp = event.block.timestamp.toI32()
   entity.save()
 
   // update fee token
@@ -260,6 +264,7 @@ export function handleSetFeeToken(event: SetFeeTokenEvent): void {
   entity.RFactor = event.params.RFactor
   entity.minBuy = event.params.minBuy
   entity.maxBuy = event.params.maxBuy
+  entity.timestamp = event.block.timestamp.toI32()
   entity.save()
 
   // update fee token

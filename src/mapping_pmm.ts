@@ -43,6 +43,7 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.logIndex = event.logIndex
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
+  entity.timestamp = event.block.timestamp.toI32()
 
   let takerAddr = entity.takerAssetAddr.toHex()
   if (isETH(takerAddr)) {

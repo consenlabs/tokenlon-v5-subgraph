@@ -221,6 +221,15 @@ export class FillOrder extends Entity {
   set gasPrice(value: BigInt) {
     this.set("gasPrice", Value.fromBigInt(value));
   }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
+  }
 }
 
 export class Swapped extends Entity {
@@ -440,6 +449,15 @@ export class Swapped extends Entity {
 
   set gasPrice(value: BigInt) {
     this.set("gasPrice", Value.fromBigInt(value));
+  }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
   }
 }
 
@@ -732,6 +750,15 @@ export class SubsidizedSwapped extends Entity {
   set gasPrice(value: BigInt) {
     this.set("gasPrice", Value.fromBigInt(value));
   }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
+  }
 }
 
 export class BuyBack extends Entity {
@@ -889,6 +916,15 @@ export class BuyBack extends Entity {
   set maxBuy(value: BigInt) {
     this.set("maxBuy", Value.fromBigInt(value));
   }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
+  }
 }
 
 export class DistributeLon extends Entity {
@@ -1001,6 +1037,15 @@ export class DistributeLon extends Entity {
   set lonStakingAmount(value: BigInt) {
     this.set("lonStakingAmount", Value.fromBigInt(value));
   }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
+  }
 }
 
 export class MintLon extends Entity {
@@ -1104,6 +1149,15 @@ export class MintLon extends Entity {
   set mintedAmount(value: BigInt) {
     this.set("mintedAmount", Value.fromBigInt(value));
   }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
+  }
 }
 
 export class BuyBackDayData extends Entity {
@@ -1190,22 +1244,22 @@ export class BuyBackDayData extends Entity {
     this.set("currApy", Value.fromBigDecimal(value));
   }
 
-  get averageApy(): BigDecimal {
-    let value = this.get("averageApy");
+  get apy(): BigDecimal {
+    let value = this.get("apy");
     return value.toBigDecimal();
   }
 
-  set averageApy(value: BigDecimal) {
-    this.set("averageApy", Value.fromBigDecimal(value));
+  set apy(value: BigDecimal) {
+    this.set("apy", Value.fromBigDecimal(value));
   }
 
-  get lastScaleIndex(): BigDecimal {
-    let value = this.get("lastScaleIndex");
+  get scaleIndex(): BigDecimal {
+    let value = this.get("scaleIndex");
     return value.toBigDecimal();
   }
 
-  set lastScaleIndex(value: BigDecimal) {
-    this.set("lastScaleIndex", Value.fromBigDecimal(value));
+  set scaleIndex(value: BigDecimal) {
+    this.set("scaleIndex", Value.fromBigDecimal(value));
   }
 
   get txCount(): BigInt {
@@ -1293,22 +1347,22 @@ export class BuyBackTotal extends Entity {
     this.set("currApy", Value.fromBigDecimal(value));
   }
 
-  get averageApy(): BigDecimal {
-    let value = this.get("averageApy");
+  get apy(): BigDecimal {
+    let value = this.get("apy");
     return value.toBigDecimal();
   }
 
-  set averageApy(value: BigDecimal) {
-    this.set("averageApy", Value.fromBigDecimal(value));
+  set apy(value: BigDecimal) {
+    this.set("apy", Value.fromBigDecimal(value));
   }
 
-  get lastScaleIndex(): BigDecimal {
-    let value = this.get("lastScaleIndex");
+  get scaleIndex(): BigDecimal {
+    let value = this.get("scaleIndex");
     return value.toBigDecimal();
   }
 
-  set lastScaleIndex(value: BigDecimal) {
-    this.set("lastScaleIndex", Value.fromBigDecimal(value));
+  set scaleIndex(value: BigDecimal) {
+    this.set("scaleIndex", Value.fromBigDecimal(value));
   }
 
   get txCount(): BigInt {
@@ -1414,15 +1468,6 @@ export class Staked extends Entity {
     this.set("gasPrice", Value.fromBigInt(value));
   }
 
-  get date(): i32 {
-    let value = this.get("date");
-    return value.toI32();
-  }
-
-  set date(value: i32) {
-    this.set("date", Value.fromI32(value));
-  }
-
   get user(): Bytes {
     let value = this.get("user");
     return value.toBytes();
@@ -1448,6 +1493,15 @@ export class Staked extends Entity {
 
   set share(value: BigInt) {
     this.set("share", Value.fromBigInt(value));
+  }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
   }
 }
 
@@ -1544,15 +1598,6 @@ export class Redeem extends Entity {
     this.set("gasPrice", Value.fromBigInt(value));
   }
 
-  get date(): i32 {
-    let value = this.get("date");
-    return value.toI32();
-  }
-
-  set date(value: i32) {
-    this.set("date", Value.fromI32(value));
-  }
-
   get user(): Bytes {
     let value = this.get("user");
     return value.toBytes();
@@ -1587,6 +1632,15 @@ export class Redeem extends Entity {
 
   set penalty(value: BigDecimal) {
     this.set("penalty", Value.fromBigDecimal(value));
+  }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
   }
 }
 
@@ -1848,15 +1902,6 @@ export class Cooldown extends Entity {
     this.set("gasPrice", Value.fromBigInt(value));
   }
 
-  get date(): i32 {
-    let value = this.get("date");
-    return value.toI32();
-  }
-
-  set date(value: i32) {
-    this.set("date", Value.fromI32(value));
-  }
-
   get user(): Bytes {
     let value = this.get("user");
     return value.toBytes();
@@ -1873,6 +1918,15 @@ export class Cooldown extends Entity {
 
   set cooldownSeconds(value: BigInt) {
     this.set("cooldownSeconds", Value.fromBigInt(value));
+  }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
   }
 }
 
@@ -2031,6 +2085,15 @@ export class SetFeeToken extends Entity {
   set maxBuy(value: BigInt) {
     this.set("maxBuy", Value.fromBigInt(value));
   }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
+  }
 }
 
 export class EnableFeeToken extends Entity {
@@ -2142,6 +2205,15 @@ export class EnableFeeToken extends Entity {
 
   set enabled(value: boolean) {
     this.set("enabled", Value.fromBoolean(value));
+  }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
   }
 }
 
