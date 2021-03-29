@@ -131,6 +131,12 @@ type BuyBackDayData @entity {
   dailyTreasuryAmount: BigInt!
   dailyLonStakingAmount: BigInt!
   dailyMintedAmount: BigInt!
+
+  lastUpdatedAt: Int!
+  currApy: BigDecimal!
+  averageApy: BigDecimal!
+  lastScaleIndex: BigDecimal!
+  txCount: BigInt!
 }
 
 type BuyBackTotal @entity {
@@ -141,7 +147,7 @@ type BuyBackTotal @entity {
   totalMintedAmount: BigInt!
 
   lastUpdatedAt: Int!
-  lastApy: BigDecimal!
+  currApy: BigDecimal!
   averageApy: BigDecimal!
   lastScaleIndex: BigDecimal!
   txCount: BigInt!

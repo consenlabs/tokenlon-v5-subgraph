@@ -4,6 +4,7 @@ import { BuyBack as BuyBackEvent, DistributeLon as DistributeLonEvent, MintLon a
 import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { BuyBack, DistributeLon, MintLon, BuyBackDayData, BuyBackTotal, StakedChange, SetFeeToken, EnableFeeToken, FeeToken } from "../generated/schema"
 import { ZERO, ZERO_BD, ONE, updateStakedData, LonStakingContract, LON_ADDRESS, STAKING_ADDRESS } from './helper'
+const START_TIMESTAMP = 1617206400
 
 export function handleBuyBack(event: BuyBackEvent): void {
 
@@ -66,18 +67,6 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   let treasuryAmount = entity.treasuryAmount
   let lonStakingAmount = entity.lonStakingAmount
 
-  let buyBackDayData = BuyBackDayData.load(buyBackDayID)
-  if (buyBackDayData == null) {
-    buyBackDayData = new BuyBackDayData(buyBackDayID)
-    buyBackDayData.date = dayStartTimestamp
-    buyBackDayData.dailyTreasuryAmount = ZERO
-    buyBackDayData.dailyLonStakingAmount = ZERO
-    buyBackDayData.dailyMintedAmount = ZERO
-  }
-  buyBackDayData.dailyTreasuryAmount = buyBackDayData.dailyTreasuryAmount.plus(treasuryAmount)
-  buyBackDayData.dailyLonStakingAmount = buyBackDayData.dailyLonStakingAmount.plus(lonStakingAmount)
-  buyBackDayData.save()
-
   // update buyback total
   let buyBackTotal = BuyBackTotal.load("1")
   if (buyBackTotal == null) {
@@ -85,42 +74,59 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
     buyBackTotal.totalTreasuryAmount = ZERO
     buyBackTotal.totalLonStakingAmount = ZERO
     buyBackTotal.totalMintedAmount = ZERO
-    buyBackTotal.lastApy = ZERO_BD
-    buyBackTotal.lastScaleIndex = ZERO_BD
-    buyBackTotal.lastUpdatedAt = 0
     buyBackTotal.txCount = ZERO
     buyBackTotal.averageApy = ZERO_BD
+    buyBackTotal.currApy = ZERO_BD
+    buyBackTotal.lastScaleIndex = ZERO_BD
+    buyBackTotal.lastUpdatedAt = 0
   }
 
-  // update apy
   let lon = LonStaking.bind(Address.fromString(LON_ADDRESS))
   let totalSupply = new BigDecimal(LonStakingContract.totalSupply())
+  let lonBalance = ZERO_BD
+  let scaleIndex = ZERO_BD
   if (totalSupply.gt(ZERO_BD)) {
-    let lonBalance = new BigDecimal(lon.balanceOf(Address.fromString(STAKING_ADDRESS)))
-    let scaleIndex = lonBalance.div(totalSupply)
-
-    if (buyBackTotal.lastUpdatedAt > 0) {
-      let oriTxCount = buyBackTotal.txCount
-      let timeInterval = new BigDecimal(BigInt.fromI32(timestamp - buyBackTotal.lastUpdatedAt))
-      let scaleIndexDiff = scaleIndex.minus(buyBackTotal.lastScaleIndex)
-      let currApy = scaleIndexDiff.div(timeInterval).times(BigDecimal.fromString('86400')).times(BigDecimal.fromString('100'))
-      buyBackTotal.txCount = buyBackTotal.txCount.plus(ONE)
-      buyBackTotal.lastApy = currApy
-      buyBackTotal.averageApy = buyBackTotal.averageApy.times(new BigDecimal(oriTxCount)).plus(currApy).div(new BigDecimal(buyBackTotal.txCount))
-      buyBackTotal.lastScaleIndex = scaleIndex
-      buyBackTotal.lastUpdatedAt = timestamp
-    } else {
-      buyBackTotal.txCount = buyBackTotal.txCount.plus(ONE)
-      buyBackTotal.lastApy = ZERO_BD
-      buyBackTotal.averageApy = ZERO_BD
-      buyBackTotal.lastScaleIndex = scaleIndex
-      buyBackTotal.lastUpdatedAt = timestamp
-    }
-    // buyBackTotal.save()
+    lonBalance = new BigDecimal(lon.balanceOf(Address.fromString(STAKING_ADDRESS)))
+    scaleIndex = lonBalance.div(totalSupply)
   }
+  if (buyBackTotal.lastUpdatedAt == 0) {
+    buyBackTotal.lastUpdatedAt = START_TIMESTAMP
+  }
+  let oriTxCount = buyBackTotal.txCount
+  let timeInterval = new BigDecimal(BigInt.fromI32(timestamp - buyBackTotal.lastUpdatedAt))
+  let scaleIndexDiff = scaleIndex.minus(buyBackTotal.lastScaleIndex)
+  let currApy = scaleIndexDiff.div(timeInterval).times(BigDecimal.fromString('86400')).times(BigDecimal.fromString('365')).times(BigDecimal.fromString('100'))
+  buyBackTotal.txCount = buyBackTotal.txCount.plus(ONE)
+  buyBackTotal.currApy = currApy
+  buyBackTotal.averageApy = buyBackTotal.averageApy.times(new BigDecimal(oriTxCount)).plus(currApy).div(new BigDecimal(buyBackTotal.txCount))
+  buyBackTotal.lastScaleIndex = scaleIndex
+  buyBackTotal.lastUpdatedAt = timestamp
   buyBackTotal.totalTreasuryAmount = buyBackTotal.totalTreasuryAmount.plus(treasuryAmount)
   buyBackTotal.totalLonStakingAmount = buyBackTotal.totalLonStakingAmount.plus(lonStakingAmount)
   buyBackTotal.save()
+
+  let buyBackDayData = BuyBackDayData.load(buyBackDayID)
+  if (buyBackDayData == null) {
+    buyBackDayData = new BuyBackDayData(buyBackDayID)
+    buyBackDayData.date = dayStartTimestamp
+    buyBackDayData.dailyTreasuryAmount = ZERO
+    buyBackDayData.dailyLonStakingAmount = ZERO
+    buyBackDayData.dailyMintedAmount = ZERO
+    buyBackDayData.txCount = ZERO
+    buyBackDayData.averageApy = ZERO_BD
+    buyBackDayData.currApy = ZERO_BD
+    buyBackDayData.lastScaleIndex = ZERO_BD
+    buyBackDayData.lastUpdatedAt = 0
+  }
+  oriTxCount = buyBackDayData.txCount
+  buyBackDayData.txCount = buyBackDayData.txCount.plus(ONE)
+  buyBackDayData.currApy = currApy
+  buyBackDayData.averageApy = buyBackDayData.averageApy.times(new BigDecimal(oriTxCount)).plus(currApy).div(new BigDecimal(buyBackDayData.txCount))
+  buyBackDayData.lastScaleIndex = scaleIndex
+  buyBackDayData.lastUpdatedAt = timestamp
+  buyBackDayData.dailyTreasuryAmount = buyBackDayData.dailyTreasuryAmount.plus(treasuryAmount)
+  buyBackDayData.dailyLonStakingAmount = buyBackDayData.dailyLonStakingAmount.plus(lonStakingAmount)
+  buyBackDayData.save()
 
   // update staked change
   let stakedChange = StakedChange.load(txHash)
