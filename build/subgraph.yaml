@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: PMM
-    network: kovan
+    network: mainnet
     source:
-      address: "0xE37eEffEb99caE6a04e399bfBAF0870F9B399D34"
+      address: "0x8D90113A1e286a5aB3e496fbD1853F265e5913c6"
       abi: PMM
-      startBlock: 23955901
+      startBlock: 11463019
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -27,11 +27,11 @@ dataSources:
       file: PMM/PMM.wasm
   - kind: ethereum/contract
     name: AMMWrapper
-    network: kovan
+    network: mainnet
     source:
-      address: "0xBeB3E2e3942745eB41be281AE0C5699f0f7061B9"
+      address: "0x11be6f5520FEE8E867e20AF9C9D2c8A09b909B83"
       abi: AMMWrapper
-      startBlock: 23955901
+      startBlock: 11463016
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -49,12 +49,33 @@ dataSources:
           handler: handleSwapped
       file: AMMWrapper/AMMWrapper.wasm
   - kind: ethereum/contract
-    name: RewardDistributor
-    network: kovan
+    name: AMMWrapper2
+    network: mainnet
     source:
-      address: "0x90c8bCe2c1C27dB341BB2470D85d9Ad02bb89381"
+      address: "0x904144473FdE753dc0729608CfeEA6F4A8B275E6"
+      abi: AMMWrapper
+      startBlock: 11689699
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swapped
+      abis:
+        - name: AMMWrapper
+          file: AMMWrapper2/abis/AMMWrapper.json
+      eventHandlers:
+        - event: Swapped(string,indexed bytes32,indexed
+            address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
+          handler: handleSwapped
+      file: AMMWrapper/AMMWrapper.wasm
+  - kind: ethereum/contract
+    name: RewardDistributor
+    network: mainnet
+    source:
+      address: "0xbF1C2c17CC77e7Dec3466B96F46f93c09f02aB07"
       abi: RewardDistributor
-      startBlock: 23959907
+      startBlock: 12133461
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -82,11 +103,11 @@ dataSources:
       file: RewardDistributor/RewardDistributor.wasm
   - kind: ethereum/contract
     name: LonStaking
-    network: kovan
+    network: mainnet
     source:
-      address: "0x085a5f35da59e1799132247aede7f3746580e331"
+      address: "0x413ecce5d56204962090eef1dead4c0a247e289b"
       abi: LonStaking
-      startBlock: 23958935
+      startBlock: 12133376
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

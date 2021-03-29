@@ -4,8 +4,8 @@ import { log } from '@graphprotocol/graph-ts'
 import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { StakedDayData, StakedTotal, StakedChange, BuyBackTotal } from "../generated/schema"
 
-export const STAKING_ADDRESS = '0x085a5F35da59E1799132247AEde7f3746580E331'
-export const LON_ADDRESS = '0x0712629ced85a3a62e5bca96303b8fdd06cbf8dd'
+export const STAKING_ADDRESS = '0x413ecce5d56204962090eef1dead4c0a247e289b'
+export const LON_ADDRESS = '0x0000000000095413afc295d19edeb1ad7b71c952'
 export let ZERO = BigInt.fromI32(0)
 export let ZERO_BD = BigDecimal.fromString('0')
 export let ONE = BigInt.fromI32(1)

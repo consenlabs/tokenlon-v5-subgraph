@@ -1,7 +1,7 @@
 import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { AMMWrapper, Swapped as SwappedEvent } from "../generated/AMMWrapper/AMMWrapper"
-import { ERC20 } from "../generated/AMMWrapper2/ERC20"
+import { ERC20 } from "../generated/AMMWrapper/ERC20"
 import { isETH, WETH_ADDRESS } from "./helper"
 import { Swapped, SubsidizedSwapped, SwappedTotal, TradedToken } from "../generated/schema"
 
