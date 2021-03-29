@@ -119,7 +119,13 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "redeemAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "penaltyAmount",
         "type": "uint256"
       }
     ],
@@ -430,6 +436,11 @@
   {
     "inputs": [
       {
+        "internalType": "contract ILon",
+        "name": "_lonToken",
+        "type": "address"
+      },
+      {
         "internalType": "address",
         "name": "_owner",
         "type": "address"
@@ -609,12 +620,12 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "penalty",
+        "name": "receiveAmount",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "lonAmountReceive",
+        "name": "penaltyAmount",
         "type": "uint256"
       }
     ],
@@ -664,19 +675,6 @@
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "scaleIndex",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {

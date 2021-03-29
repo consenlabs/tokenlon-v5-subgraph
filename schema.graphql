@@ -186,7 +186,7 @@ type Redeem @entity {
   user: Bytes!
   amount: BigInt! # uint256
   share: BigInt! # uint256
-  penalty: BigDecimal!
+  penalty: BigInt!
   timestamp: Int!
 }
 
@@ -194,14 +194,14 @@ type StakedDayData @entity {
   id: ID!
   date: Int!
   dailyStakedAmount: BigInt!
-  penalty: BigDecimal!
+  penalty: BigInt!
 }
 
 type StakedChange @entity {
   id: ID!
   date: Int!
   stakedAmount: BigInt!
-  penalty: BigDecimal!
+  penalty: BigInt!
   added: Boolean!
 }
 

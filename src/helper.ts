@@ -39,7 +39,7 @@ export function updateStakedData(event: ethereum.Event): void {
     stakedDayData = new StakedDayData(stakedDayID)
     stakedDayData.date = dayStartTimestamp
     stakedDayData.dailyStakedAmount = ZERO
-    stakedDayData.penalty = ZERO_BD
+    stakedDayData.penalty = ZERO
   }
 
   // update staked amount

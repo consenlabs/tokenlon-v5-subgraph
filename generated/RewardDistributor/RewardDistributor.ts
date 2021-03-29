@@ -202,6 +202,28 @@ export class Paused__Params {
   }
 }
 
+export class Recovered extends ethereum.Event {
+  get params(): Recovered__Params {
+    return new Recovered__Params(this);
+  }
+}
+
+export class Recovered__Params {
+  _event: Recovered;
+
+  constructor(event: Recovered) {
+    this._event = event;
+  }
+
+  get token(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
 export class SetBuybackInterval extends ethereum.Event {
   get params(): SetBuybackInterval__Params {
     return new SetBuybackInterval__Params(this);
@@ -398,6 +420,10 @@ export class SetOperator__Params {
   get operator(): Address {
     return this._event.parameters[0].value.toAddress();
   }
+
+  get enable(): boolean {
+    return this._event.parameters[1].value.toBoolean();
+  }
 }
 
 export class SetStrategy extends ethereum.Event {
@@ -459,20 +485,20 @@ export class Unpaused__Params {
 }
 
 export class RewardDistributor__feeTokensResult {
-  value0: BigInt;
-  value1: BigInt;
-  value2: BigInt;
-  value3: boolean;
-  value4: BigInt;
+  value0: i32;
+  value1: i32;
+  value2: i32;
+  value3: BigInt;
+  value4: boolean;
   value5: BigInt;
   value6: BigInt;
 
   constructor(
-    value0: BigInt,
-    value1: BigInt,
-    value2: BigInt,
-    value3: boolean,
-    value4: BigInt,
+    value0: i32,
+    value1: i32,
+    value2: i32,
+    value3: BigInt,
+    value4: boolean,
     value5: BigInt,
     value6: BigInt
   ) {
@@ -487,11 +513,20 @@ export class RewardDistributor__feeTokensResult {
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
-    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
-    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
-    map.set("value3", ethereum.Value.fromBoolean(this.value3));
-    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
+    map.set(
+      "value0",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value0))
+    );
+    map.set(
+      "value1",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value1))
+    );
+    map.set(
+      "value2",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value2))
+    );
+    map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
+    map.set("value4", ethereum.Value.fromBoolean(this.value4));
     map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
     map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
     return map;
@@ -594,16 +629,16 @@ export class RewardDistributor extends ethereum.SmartContract {
   feeTokens(param0: Address): RewardDistributor__feeTokensResult {
     let result = super.call(
       "feeTokens",
-      "feeTokens(address):(uint256,uint256,uint256,bool,uint256,uint256,uint256)",
+      "feeTokens(address):(uint8,uint8,uint8,uint32,bool,uint256,uint256)",
       [ethereum.Value.fromAddress(param0)]
     );
 
     return new RewardDistributor__feeTokensResult(
-      result[0].toBigInt(),
-      result[1].toBigInt(),
-      result[2].toBigInt(),
-      result[3].toBoolean(),
-      result[4].toBigInt(),
+      result[0].toI32(),
+      result[1].toI32(),
+      result[2].toI32(),
+      result[3].toBigInt(),
+      result[4].toBoolean(),
       result[5].toBigInt(),
       result[6].toBigInt()
     );
@@ -614,7 +649,7 @@ export class RewardDistributor extends ethereum.SmartContract {
   ): ethereum.CallResult<RewardDistributor__feeTokensResult> {
     let result = super.tryCall(
       "feeTokens",
-      "feeTokens(address):(uint256,uint256,uint256,bool,uint256,uint256,uint256)",
+      "feeTokens(address):(uint8,uint8,uint8,uint32,bool,uint256,uint256)",
       [ethereum.Value.fromAddress(param0)]
     );
     if (result.reverted) {
@@ -623,15 +658,59 @@ export class RewardDistributor extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(
       new RewardDistributor__feeTokensResult(
-        value[0].toBigInt(),
-        value[1].toBigInt(),
-        value[2].toBigInt(),
-        value[3].toBoolean(),
-        value[4].toBigInt(),
+        value[0].toI32(),
+        value[1].toI32(),
+        value[2].toI32(),
+        value[3].toBigInt(),
+        value[4].toBoolean(),
         value[5].toBigInt(),
         value[6].toBigInt()
       )
     );
+  }
+
+  getFeeTokenPath(_feeTokenAddr: Address): Array<Address> {
+    let result = super.call(
+      "getFeeTokenPath",
+      "getFeeTokenPath(address):(address[])",
+      [ethereum.Value.fromAddress(_feeTokenAddr)]
+    );
+
+    return result[0].toAddressArray();
+  }
+
+  try_getFeeTokenPath(
+    _feeTokenAddr: Address
+  ): ethereum.CallResult<Array<Address>> {
+    let result = super.tryCall(
+      "getFeeTokenPath",
+      "getFeeTokenPath(address):(address[])",
+      [ethereum.Value.fromAddress(_feeTokenAddr)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddressArray());
+  }
+
+  isOperator(param0: Address): boolean {
+    let result = super.call("isOperator", "isOperator(address):(bool)", [
+      ethereum.Value.fromAddress(param0)
+    ]);
+
+    return result[0].toBoolean();
+  }
+
+  try_isOperator(param0: Address): ethereum.CallResult<boolean> {
+    let result = super.tryCall("isOperator", "isOperator(address):(bool)", [
+      ethereum.Value.fromAddress(param0)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   lonStaking(): Address {
@@ -740,21 +819,6 @@ export class RewardDistributor extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
-  operator(): Address {
-    let result = super.call("operator", "operator():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_operator(): ethereum.CallResult<Address> {
-    let result = super.tryCall("operator", "operator():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   owner(): Address {
     let result = super.call("owner", "owner():(address)", []);
 
@@ -841,36 +905,40 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get _owner(): Address {
+  get _LON_TOKEN_ADDR(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _operator(): Address {
+  get _owner(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
+  get _operator(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
   get _buyBackInterval(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
+    return this._call.inputValues[3].value.toBigInt();
   }
 
   get _miningFactor(): i32 {
-    return this._call.inputValues[3].value.toI32();
+    return this._call.inputValues[4].value.toI32();
   }
 
   get _treasury(): Address {
-    return this._call.inputValues[4].value.toAddress();
-  }
-
-  get _lonStaking(): Address {
     return this._call.inputValues[5].value.toAddress();
   }
 
-  get _miningTreasury(): Address {
+  get _lonStaking(): Address {
     return this._call.inputValues[6].value.toAddress();
   }
 
-  get _feeTokenRecipient(): Address {
+  get _miningTreasury(): Address {
     return this._call.inputValues[7].value.toAddress();
+  }
+
+  get _feeTokenRecipient(): Address {
+    return this._call.inputValues[8].value.toAddress();
   }
 }
 
@@ -1108,6 +1176,40 @@ export class PauseCall__Outputs {
   }
 }
 
+export class RecoverERC20Call extends ethereum.Call {
+  get inputs(): RecoverERC20Call__Inputs {
+    return new RecoverERC20Call__Inputs(this);
+  }
+
+  get outputs(): RecoverERC20Call__Outputs {
+    return new RecoverERC20Call__Outputs(this);
+  }
+}
+
+export class RecoverERC20Call__Inputs {
+  _call: RecoverERC20Call;
+
+  constructor(call: RecoverERC20Call) {
+    this._call = call;
+  }
+
+  get _tokenAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _tokenAmount(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+}
+
+export class RecoverERC20Call__Outputs {
+  _call: RecoverERC20Call;
+
+  constructor(call: RecoverERC20Call) {
+    this._call = call;
+  }
+}
+
 export class RenounceOwnershipCall extends ethereum.Call {
   get inputs(): RenounceOwnershipCall__Inputs {
     return new RenounceOwnershipCall__Inputs(this);
@@ -1219,20 +1321,20 @@ export class SetFeeTokenCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _exchangeIndex(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
+  get _exchangeIndex(): i32 {
+    return this._call.inputValues[1].value.toI32();
   }
 
   get _path(): Array<Address> {
     return this._call.inputValues[2].value.toAddressArray();
   }
 
-  get _LFactor(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
+  get _LFactor(): i32 {
+    return this._call.inputValues[3].value.toI32();
   }
 
-  get _RFactor(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
+  get _RFactor(): i32 {
+    return this._call.inputValues[4].value.toI32();
   }
 
   get _enable(): boolean {
@@ -1307,20 +1409,20 @@ export class SetFeeTokensCall__Inputs {
     return this._call.inputValues[0].value.toAddressArray();
   }
 
-  get _exchangeIndex(): Array<BigInt> {
-    return this._call.inputValues[1].value.toBigIntArray();
+  get _exchangeIndex(): Array<i32> {
+    return this._call.inputValues[1].value.toI32Array();
   }
 
   get _path(): Array<Address> {
     return this._call.inputValues[2].value.toAddressArray();
   }
 
-  get _LFactor(): Array<BigInt> {
-    return this._call.inputValues[3].value.toBigIntArray();
+  get _LFactor(): Array<i32> {
+    return this._call.inputValues[3].value.toI32Array();
   }
 
-  get _RFactor(): Array<BigInt> {
-    return this._call.inputValues[4].value.toBigIntArray();
+  get _RFactor(): Array<i32> {
+    return this._call.inputValues[4].value.toI32Array();
   }
 
   get _enable(): Array<boolean> {
@@ -1453,6 +1555,10 @@ export class SetOperatorCall__Inputs {
 
   get _operator(): Address {
     return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _enable(): boolean {
+    return this._call.inputValues[1].value.toBoolean();
   }
 }
 

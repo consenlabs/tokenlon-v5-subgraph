@@ -12,7 +12,7 @@ export function handleStaked(event: StakedEvent): void {
     stakedChange = new StakedChange(event.transaction.hash.toHex())
     stakedChange.stakedAmount = event.params.amount
     stakedChange.date = 0
-    stakedChange.penalty = ZERO_BD
+    stakedChange.penalty = ZERO
     stakedChange.added = true
     stakedChange.save()
   }
@@ -49,9 +49,9 @@ export function handleRedeem(event: RedeemEvent): void {
   let stakedChange = StakedChange.load(event.transaction.hash.toHex())
   if (stakedChange == null) {
     stakedChange = new StakedChange(event.transaction.hash.toHex())
-    stakedChange.stakedAmount = event.params.amount
+    stakedChange.stakedAmount = event.params.redeemAmount
     stakedChange.date = 0
-    stakedChange.penalty = ZERO_BD
+    stakedChange.penalty = ZERO
     stakedChange.added = false
     stakedChange.save()
   }
@@ -63,7 +63,7 @@ export function handleRedeem(event: RedeemEvent): void {
     entity.gasPrice = ZERO
     entity.amount = ZERO
     entity.share = ZERO
-    entity.penalty = ZERO_BD
+    entity.penalty = ZERO
   }
   entity.from = event.transaction.from as Bytes
   entity.to = event.transaction.to as Bytes
@@ -73,10 +73,10 @@ export function handleRedeem(event: RedeemEvent): void {
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
   entity.user = event.params.user
-  entity.amount = event.params.amount
+  entity.amount = event.params.redeemAmount
   entity.share = event.params.share
   entity.timestamp = event.block.timestamp.toI32()
-  // TODO: update redeem event from smart contract
+  entity.penalty = event.params.penaltyAmount
 
   log.info(entity.transactionHash, null)
   entity.save()

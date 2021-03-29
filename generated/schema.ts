@@ -1625,13 +1625,13 @@ export class Redeem extends Entity {
     this.set("share", Value.fromBigInt(value));
   }
 
-  get penalty(): BigDecimal {
+  get penalty(): BigInt {
     let value = this.get("penalty");
-    return value.toBigDecimal();
+    return value.toBigInt();
   }
 
-  set penalty(value: BigDecimal) {
-    this.set("penalty", Value.fromBigDecimal(value));
+  set penalty(value: BigInt) {
+    this.set("penalty", Value.fromBigInt(value));
   }
 
   get timestamp(): i32 {
@@ -1692,13 +1692,13 @@ export class StakedDayData extends Entity {
     this.set("dailyStakedAmount", Value.fromBigInt(value));
   }
 
-  get penalty(): BigDecimal {
+  get penalty(): BigInt {
     let value = this.get("penalty");
-    return value.toBigDecimal();
+    return value.toBigInt();
   }
 
-  set penalty(value: BigDecimal) {
-    this.set("penalty", Value.fromBigDecimal(value));
+  set penalty(value: BigInt) {
+    this.set("penalty", Value.fromBigInt(value));
   }
 }
 
@@ -1750,13 +1750,13 @@ export class StakedChange extends Entity {
     this.set("stakedAmount", Value.fromBigInt(value));
   }
 
-  get penalty(): BigDecimal {
+  get penalty(): BigInt {
     let value = this.get("penalty");
-    return value.toBigDecimal();
+    return value.toBigInt();
   }
 
-  set penalty(value: BigDecimal) {
-    this.set("penalty", Value.fromBigDecimal(value));
+  set penalty(value: BigInt) {
+    this.set("penalty", Value.fromBigInt(value));
   }
 
   get added(): boolean {

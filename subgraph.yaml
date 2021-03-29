@@ -117,7 +117,7 @@ dataSources:
       eventHandlers:
         - event: Staked(indexed address,uint256,uint256)
           handler: handleStaked
-        - event: Redeem(indexed address,uint256,uint256)
+        - event: Redeem(indexed address,uint256,uint256,uint256)
           handler: handleRedeem
         - event: Cooldown(indexed address)
           handler: handleCooldown

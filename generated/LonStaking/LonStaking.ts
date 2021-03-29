@@ -155,8 +155,12 @@ export class Redeem__Params {
     return this._event.parameters[1].value.toBigInt();
   }
 
-  get amount(): BigInt {
+  get redeemAmount(): BigInt {
     return this._event.parameters[2].value.toBigInt();
+  }
+
+  get penaltyAmount(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
@@ -685,21 +689,6 @@ export class LonStaking extends ethereum.SmartContract {
     );
   }
 
-  scaleIndex(): BigInt {
-    let result = super.call("scaleIndex", "scaleIndex():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_scaleIndex(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("scaleIndex", "scaleIndex():(uint256)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
   stakersCooldowns(param0: Address): BigInt {
     let result = super.call(
       "stakersCooldowns",
@@ -970,16 +959,20 @@ export class InitializeCall__Inputs {
     this._call = call;
   }
 
-  get _owner(): Address {
+  get _lonToken(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
+  get _owner(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
   get _COOLDOWN_IN_DAYS(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
+    return this._call.inputValues[2].value.toBigInt();
   }
 
   get _BPS_RAGE_EXIT_PENALTY(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
+    return this._call.inputValues[3].value.toBigInt();
   }
 }
 

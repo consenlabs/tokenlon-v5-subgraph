@@ -45,43 +45,43 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.gasPrice = event.transaction.gasPrice
   entity.timestamp = event.block.timestamp.toI32()
 
-  let takerAddr = entity.takerAssetAddr.toHex()
-  if (isETH(takerAddr)) {
-    takerAddr = WETH_ADDRESS
-  }
-  // check whether token is in the traded token
-  let takerTradedToken = TradedToken.load(takerAddr)
-  if (takerTradedToken == null) {
-    let takerTradedTokenContract = ERC20.bind(Address.fromString(takerAddr))
-    if (!takerTradedTokenContract.try_decimals().reverted) {
-      takerTradedToken = new TradedToken(takerAddr)
-      takerTradedToken.address = entity.takerAssetAddr
-      takerTradedToken.startDate = event.block.timestamp.toI32()
-      takerTradedToken.decimals = takerTradedTokenContract.decimals()
-      takerTradedToken.name = takerTradedTokenContract.name()
-      takerTradedToken.symbol = takerTradedTokenContract.symbol()
-      takerTradedToken.save()
-    }
-  }
+  // let takerAddr = entity.takerAssetAddr.toHex()
+  // if (isETH(takerAddr)) {
+  //   takerAddr = WETH_ADDRESS
+  // }
+  // // check whether token is in the traded token
+  // let takerTradedToken = TradedToken.load(takerAddr)
+  // if (takerTradedToken == null) {
+  //   let takerTradedTokenContract = ERC20.bind(Address.fromString(takerAddr))
+  //   if (!takerTradedTokenContract.try_decimals().reverted) {
+  //     takerTradedToken = new TradedToken(takerAddr)
+  //     takerTradedToken.address = entity.takerAssetAddr
+  //     takerTradedToken.startDate = event.block.timestamp.toI32()
+  //     takerTradedToken.decimals = takerTradedTokenContract.decimals()
+  //     takerTradedToken.name = takerTradedTokenContract.name()
+  //     takerTradedToken.symbol = takerTradedTokenContract.symbol()
+  //     takerTradedToken.save()
+  //   }
+  // }
 
-  let makerAddr = entity.makerAssetAddr.toHex()
-  if (isETH(makerAddr)) {
-    makerAddr = WETH_ADDRESS
-  }
-  // check whether token is in the traded token
-  let makerTradedToken = TradedToken.load(makerAddr)
-  if (makerTradedToken == null) {
-    let makerTradedTokenContract = ERC20.bind(Address.fromString(makerAddr))
-    if (!makerTradedTokenContract.try_decimals().reverted) {
-      makerTradedToken = new TradedToken(makerAddr)
-      makerTradedToken.address = entity.makerAssetAddr
-      makerTradedToken.startDate = event.block.timestamp.toI32()
-      makerTradedToken.decimals = makerTradedTokenContract.decimals()
-      makerTradedToken.name = makerTradedTokenContract.name()
-      makerTradedToken.symbol = makerTradedTokenContract.symbol()
-      makerTradedToken.save()
-    }
-  }
+  // let makerAddr = entity.makerAssetAddr.toHex()
+  // if (isETH(makerAddr)) {
+  //   makerAddr = WETH_ADDRESS
+  // }
+  // // check whether token is in the traded token
+  // let makerTradedToken = TradedToken.load(makerAddr)
+  // if (makerTradedToken == null) {
+  //   let makerTradedTokenContract = ERC20.bind(Address.fromString(makerAddr))
+  //   if (!makerTradedTokenContract.try_decimals().reverted) {
+  //     makerTradedToken = new TradedToken(makerAddr)
+  //     makerTradedToken.address = entity.makerAssetAddr
+  //     makerTradedToken.startDate = event.block.timestamp.toI32()
+  //     makerTradedToken.decimals = makerTradedTokenContract.decimals()
+  //     makerTradedToken.name = makerTradedTokenContract.name()
+  //     makerTradedToken.symbol = makerTradedTokenContract.symbol()
+  //     makerTradedToken.save()
+  //   }
+  // }
 
   log.info(entity.transactionHash, null)
 

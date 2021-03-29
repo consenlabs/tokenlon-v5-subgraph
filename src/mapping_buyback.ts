@@ -136,7 +136,7 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
     stakedChange = new StakedChange(txHash)
     stakedChange.stakedAmount = lonStakingAmount
     stakedChange.date = 0
-    stakedChange.penalty = ZERO_BD
+    stakedChange.penalty = ZERO
     stakedChange.added = true
     stakedChange.save()
   }
