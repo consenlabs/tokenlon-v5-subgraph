@@ -135,6 +135,14 @@ type MintLon @entity {
   timestamp: Int!
 }
 
+type BuyBackDayScaleIndex @entity {
+  id: ID!
+  date: Int!
+  timestamp: Int!
+
+  scaleIndex: BigDecimal!
+}
+
 type BuyBackDayData @entity {
   id: ID!
   date: Int!
