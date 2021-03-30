@@ -58,9 +58,6 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   entity.lonStakingAmount = event.params.lonStakingAmount
   entity.timestamp = event.block.timestamp.toI32()
 
-  log.info(entity.transactionHash, null)
-  entity.save()
-
   // update buyback day data
   let timestamp = event.block.timestamp.toI32()
   let dayID = timestamp / 86400
@@ -107,6 +104,12 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   buyBackTotal.totalLonStakingAmount = buyBackTotal.totalLonStakingAmount.plus(lonStakingAmount)
   buyBackTotal.save()
 
+  entity.apy = currApy
+  entity.scaleIndex = scaleIndex
+  entity.txCount = oriTxCount
+  entity.timeInterval = timeInterval
+  entity.save()
+
   let buyBackDayData = BuyBackDayData.load(buyBackDayID)
   if (buyBackDayData == null) {
     buyBackDayData = new BuyBackDayData(buyBackDayID)
@@ -140,6 +143,8 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
     stakedChange.added = true
     stakedChange.save()
   }
+
+  log.info(entity.transactionHash, null)
 
   updateStakedData(event)
 }

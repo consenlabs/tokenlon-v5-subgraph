@@ -115,6 +115,11 @@ type DistributeLon @entity {
   treasuryAmount: BigInt! # uint256
   lonStakingAmount: BigInt! # uint256
   timestamp: Int!
+
+  apy: BigDecimal!
+  scaleIndex: BigDecimal!
+  txCount: BigInt!
+  timeInterval: BigDecimal!
 }
 
 type MintLon @entity {

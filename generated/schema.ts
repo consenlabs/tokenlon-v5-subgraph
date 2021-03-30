@@ -1046,6 +1046,42 @@ export class DistributeLon extends Entity {
   set timestamp(value: i32) {
     this.set("timestamp", Value.fromI32(value));
   }
+
+  get apy(): BigDecimal {
+    let value = this.get("apy");
+    return value.toBigDecimal();
+  }
+
+  set apy(value: BigDecimal) {
+    this.set("apy", Value.fromBigDecimal(value));
+  }
+
+  get scaleIndex(): BigDecimal {
+    let value = this.get("scaleIndex");
+    return value.toBigDecimal();
+  }
+
+  set scaleIndex(value: BigDecimal) {
+    this.set("scaleIndex", Value.fromBigDecimal(value));
+  }
+
+  get txCount(): BigInt {
+    let value = this.get("txCount");
+    return value.toBigInt();
+  }
+
+  set txCount(value: BigInt) {
+    this.set("txCount", Value.fromBigInt(value));
+  }
+
+  get timeInterval(): BigDecimal {
+    let value = this.get("timeInterval");
+    return value.toBigDecimal();
+  }
+
+  set timeInterval(value: BigDecimal) {
+    this.set("timeInterval", Value.fromBigDecimal(value));
+  }
 }
 
 export class MintLon extends Entity {
