@@ -143,6 +143,10 @@ type BuyBackDayData @entity {
   dailyLonStakingAmount: BigInt!
   dailyMintedAmount: BigInt!
 
+  totalTreasuryAmount: BigInt!
+  totalLonStakingAmount: BigInt!
+  totalMintedAmount: BigInt!
+
   lastUpdatedAt: Int!
   currApy: BigDecimal!
   apy: BigDecimal!
@@ -177,6 +181,7 @@ type Staked @entity {
   amount: BigInt! # uint256
   share: BigInt! # uint256
   timestamp: Int!
+  date: Int!
 }
 
 type Redeem @entity {
@@ -193,6 +198,7 @@ type Redeem @entity {
   share: BigInt! # uint256
   penalty: BigInt!
   timestamp: Int!
+  date: Int!
 }
 
 type StakedDayData @entity {
@@ -227,6 +233,7 @@ type Cooldown @entity {
   user: Bytes!
   cooldownSeconds: BigInt!
   timestamp: Int!
+  date: Int!
 }
 
 type SetFeeToken @entity {

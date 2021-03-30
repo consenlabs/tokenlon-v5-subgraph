@@ -122,6 +122,9 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
     buyBackDayData.currApy = ZERO_BD
     buyBackDayData.scaleIndex = ZERO_BD
     buyBackDayData.lastUpdatedAt = 0
+    buyBackDayData.totalTreasuryAmount = ZERO
+    buyBackDayData.totalLonStakingAmount = ZERO
+    buyBackDayData.totalMintedAmount = ZERO
   }
   oriTxCount = buyBackDayData.txCount
   buyBackDayData.txCount = buyBackDayData.txCount.plus(ONE)
@@ -131,6 +134,8 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   buyBackDayData.lastUpdatedAt = timestamp
   buyBackDayData.dailyTreasuryAmount = buyBackDayData.dailyTreasuryAmount.plus(treasuryAmount)
   buyBackDayData.dailyLonStakingAmount = buyBackDayData.dailyLonStakingAmount.plus(lonStakingAmount)
+  buyBackDayData.totalTreasuryAmount = buyBackDayData.totalTreasuryAmount.plus(treasuryAmount)
+  buyBackDayData.totalLonStakingAmount = buyBackDayData.totalLonStakingAmount.plus(lonStakingAmount)
   buyBackDayData.save()
 
   // update staked change
@@ -189,6 +194,7 @@ export function handleMintLon(event: MintLonEvent): void {
     log.error(`couldn't load the buyback day data in transaction: ${txHash}`, null)
   }
   buyBackDayData.dailyMintedAmount = buyBackDayData.dailyMintedAmount.plus(mintedAmount)
+  buyBackDayData.totalMintedAmount = buyBackDayData.totalMintedAmount.plus(mintedAmount)
   buyBackDayData.save()
 
   // update buyback total

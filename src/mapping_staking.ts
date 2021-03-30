@@ -18,12 +18,16 @@ export function handleStaked(event: StakedEvent): void {
   }
 
   // update staked
+  let dayID = event.block.timestamp.toI32() / 86400
+  let dayStartTimestamp = dayID * 86400
   let entity = Staked.load(event.transaction.hash.toHex())
   if (entity == null) {
     entity = new Staked(event.transaction.hash.toHex())
     entity.gasPrice = ZERO
     entity.amount = ZERO
     entity.share = ZERO
+    entity.timestamp = 0
+    entity.date = 0
   }
   entity.from = event.transaction.from as Bytes
   entity.to = event.transaction.to as Bytes
@@ -36,6 +40,7 @@ export function handleStaked(event: StakedEvent): void {
   entity.amount = event.params.amount
   entity.share = event.params.share
   entity.timestamp = event.block.timestamp.toI32()
+  entity.date = dayStartTimestamp
 
   log.info(entity.transactionHash, null)
   entity.save()
@@ -57,6 +62,8 @@ export function handleRedeem(event: RedeemEvent): void {
   }
 
   // update redeem
+  let dayID = event.block.timestamp.toI32() / 86400
+  let dayStartTimestamp = dayID * 86400
   let entity = Redeem.load(event.transaction.hash.toHex())
   if (entity == null) {
     entity = new Redeem(event.transaction.hash.toHex())
@@ -64,6 +71,8 @@ export function handleRedeem(event: RedeemEvent): void {
     entity.amount = ZERO
     entity.share = ZERO
     entity.penalty = ZERO
+    entity.timestamp = 0
+    entity.date = 0
   }
   entity.from = event.transaction.from as Bytes
   entity.to = event.transaction.to as Bytes
@@ -77,6 +86,7 @@ export function handleRedeem(event: RedeemEvent): void {
   entity.share = event.params.share
   entity.timestamp = event.block.timestamp.toI32()
   entity.penalty = event.params.penaltyAmount
+  entity.date = dayStartTimestamp
 
   log.info(entity.transactionHash, null)
   entity.save()
@@ -87,10 +97,14 @@ export function handleRedeem(event: RedeemEvent): void {
 export function handleCooldown(event: CooldownEvent): void {
 
   // update cooldown
+  let dayID = event.block.timestamp.toI32() / 86400
+  let dayStartTimestamp = dayID * 86400
   let entity = Cooldown.load(event.transaction.hash.toHex())
   if (entity == null) {
     entity = new Cooldown(event.transaction.hash.toHex())
     entity.gasPrice = ZERO
+    entity.timestamp = 0
+    entity.date = 0
   }
   entity.from = event.transaction.from as Bytes
   entity.to = event.transaction.to as Bytes
@@ -102,6 +116,7 @@ export function handleCooldown(event: CooldownEvent): void {
   entity.user = event.params.user
   entity.cooldownSeconds = LonStakingContract.COOLDOWN_SECONDS()
   entity.timestamp = event.block.timestamp.toI32()
+  entity.date = dayStartTimestamp
 
   log.info(entity.transactionHash, null)
   entity.save()
