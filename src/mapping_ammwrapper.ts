@@ -49,6 +49,50 @@ export function handleSwapped(event: SwappedEvent): void {
   entity.save()
   swappedTotalEntity.save()
   processSubsidizedEvent(event)
+
+  let takerAddr = entity.takerAssetAddr.toHex()
+  if (isETH(takerAddr)) {
+    takerAddr = WETH_ADDRESS
+  }
+  // check whether token is in the traded token
+  let takerTradedToken = TradedToken.load(takerAddr)
+  if (takerTradedToken == null) {
+    let takerTradedTokenContract = ERC20.bind(Address.fromString(takerAddr))
+    let decimals = takerTradedTokenContract.try_decimals()
+    let name = takerTradedTokenContract.try_name()
+    let symbol = takerTradedTokenContract.try_symbol()
+    if (!decimals.reverted && !name.reverted && !symbol.reverted) {
+      takerTradedToken = new TradedToken(takerAddr)
+      takerTradedToken.address = entity.takerAssetAddr
+      takerTradedToken.startDate = event.block.timestamp.toI32()
+      takerTradedToken.decimals = decimals.value
+      takerTradedToken.name = name.value
+      takerTradedToken.symbol = symbol.value
+      takerTradedToken.save()
+    }
+  }
+
+  let makerAddr = entity.makerAssetAddr.toHex()
+  if (isETH(makerAddr)) {
+    makerAddr = WETH_ADDRESS
+  }
+  // check whether token is in the traded token
+  let makerTradedToken = TradedToken.load(makerAddr)
+  if (makerTradedToken == null) {
+    let makerTradedTokenContract = ERC20.bind(Address.fromString(makerAddr))
+    let decimals = makerTradedTokenContract.try_decimals()
+    let name = makerTradedTokenContract.try_name()
+    let symbol = makerTradedTokenContract.try_symbol()
+    if (!decimals.reverted && !name.reverted && !symbol.reverted) {
+      makerTradedToken = new TradedToken(makerAddr)
+      makerTradedToken.address = entity.makerAssetAddr
+      makerTradedToken.startDate = event.block.timestamp.toI32()
+      makerTradedToken.decimals = decimals.value
+      makerTradedToken.name = name.value
+      makerTradedToken.symbol = symbol.value
+      makerTradedToken.save()
+    }
+  }
 }
 
 const processSubsidizedEvent = (event: SwappedEvent): void => {
