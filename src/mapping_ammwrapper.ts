@@ -1,7 +1,9 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { AMMWrapper, Swapped as SwappedEvent } from "../generated/AMMWrapper/AMMWrapper"
-import { Swapped, SubsidizedSwapped, SwappedTotal } from "../generated/schema"
+import { ERC20 } from "../generated/AMMWrapper/ERC20"
+import { isETH, WETH_ADDRESS } from "./helper"
+import { Swapped, SubsidizedSwapped, SwappedTotal, TradedToken } from "../generated/schema"
 
 export function handleSwapped(event: SwappedEvent): void {
   // Entities can be loaded from the store using a string ID; this ID
@@ -40,12 +42,57 @@ export function handleSwapped(event: SwappedEvent): void {
   entity.logIndex = event.logIndex
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
+  entity.timestamp = event.block.timestamp.toI32()
 
   log.info(entity.transactionHash, null)
   // Entities can be written to the store with `.save()`
   entity.save()
   swappedTotalEntity.save()
   processSubsidizedEvent(event)
+
+  let takerAddr = entity.takerAssetAddr.toHex()
+  if (isETH(takerAddr)) {
+    takerAddr = WETH_ADDRESS
+  }
+  // check whether token is in the traded token
+  let takerTradedToken = TradedToken.load(takerAddr)
+  if (takerTradedToken == null) {
+    let takerTradedTokenContract = ERC20.bind(Address.fromString(takerAddr))
+    let decimals = takerTradedTokenContract.try_decimals()
+    let name = takerTradedTokenContract.try_name()
+    let symbol = takerTradedTokenContract.try_symbol()
+    if (!decimals.reverted && !name.reverted && !symbol.reverted) {
+      takerTradedToken = new TradedToken(takerAddr)
+      takerTradedToken.address = entity.takerAssetAddr
+      takerTradedToken.startDate = event.block.timestamp.toI32()
+      takerTradedToken.decimals = decimals.value
+      takerTradedToken.name = name.value
+      takerTradedToken.symbol = symbol.value
+      takerTradedToken.save()
+    }
+  }
+
+  let makerAddr = entity.makerAssetAddr.toHex()
+  if (isETH(makerAddr)) {
+    makerAddr = WETH_ADDRESS
+  }
+  // check whether token is in the traded token
+  let makerTradedToken = TradedToken.load(makerAddr)
+  if (makerTradedToken == null) {
+    let makerTradedTokenContract = ERC20.bind(Address.fromString(makerAddr))
+    let decimals = makerTradedTokenContract.try_decimals()
+    let name = makerTradedTokenContract.try_name()
+    let symbol = makerTradedTokenContract.try_symbol()
+    if (!decimals.reverted && !name.reverted && !symbol.reverted) {
+      makerTradedToken = new TradedToken(makerAddr)
+      makerTradedToken.address = entity.makerAssetAddr
+      makerTradedToken.startDate = event.block.timestamp.toI32()
+      makerTradedToken.decimals = decimals.value
+      makerTradedToken.name = name.value
+      makerTradedToken.symbol = symbol.value
+      makerTradedToken.save()
+    }
+  }
 }
 
 const processSubsidizedEvent = (event: SwappedEvent): void => {
@@ -79,6 +126,7 @@ const processSubsidizedEvent = (event: SwappedEvent): void => {
     entity.logIndex = event.logIndex
     entity.eventAddr = event.address
     entity.gasPrice = event.transaction.gasPrice
+    entity.timestamp = event.block.timestamp.toI32()
 
     log.info(entity.transactionHash, null)
     entity.save()

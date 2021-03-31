@@ -20,6 +20,7 @@ type FillOrder @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
+  timestamp: Int!
 }
 
 type Swapped @entity {
@@ -45,6 +46,7 @@ type Swapped @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
+  timestamp: Int!
 }
 
 type SwappedTotal @entity {
@@ -79,4 +81,218 @@ type SubsidizedSwapped @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
+  timestamp: Int!
+}
+
+type BuyBack @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  feeToken: Bytes!
+  feeTokenAmount: BigInt! # uint256
+  swappedLonAmount: BigInt! # uint256
+  LFactor: BigInt! # uint256
+  RFactor: BigInt! # uint256
+  minBuy: BigInt! # uint256
+  maxBuy: BigInt! # uint256
+  timestamp: Int!
+}
+
+type DistributeLon @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  treasuryAmount: BigInt! # uint256
+  lonStakingAmount: BigInt! # uint256
+  timestamp: Int!
+
+  apy: BigDecimal!
+  scaleIndex: BigDecimal!
+  txCount: BigInt!
+  timeInterval: BigDecimal!
+}
+
+type MintLon @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  mintedAmount: BigInt! # uint256
+  timestamp: Int!
+}
+
+type BuyBackDayScaleIndex @entity {
+  id: ID!
+  date: Int!
+  timestamp: Int!
+
+  scaleIndex: BigDecimal!
+}
+
+type BuyBackDayData @entity {
+  id: ID!
+  date: Int!
+
+  dailyTreasuryAmount: BigInt!
+  dailyLonStakingAmount: BigInt!
+  dailyMintedAmount: BigInt!
+
+  totalTreasuryAmount: BigInt!
+  totalLonStakingAmount: BigInt!
+  totalMintedAmount: BigInt!
+
+  lastUpdatedAt: Int!
+  currApy: BigDecimal!
+  apy: BigDecimal!
+  scaleIndex: BigDecimal!
+  txCount: BigInt!
+}
+
+type BuyBackTotal @entity {
+  id: ID!
+
+  totalTreasuryAmount: BigInt!
+  totalLonStakingAmount: BigInt!
+  totalMintedAmount: BigInt!
+
+  lastUpdatedAt: Int!
+  currApy: BigDecimal!
+  apy: BigDecimal!
+  scaleIndex: BigDecimal!
+  txCount: BigInt!
+}
+
+type Staked @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  user: Bytes!
+  amount: BigInt! # uint256
+  share: BigInt! # uint256
+  timestamp: Int!
+  date: Int!
+}
+
+type Redeem @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  user: Bytes!
+  amount: BigInt! # uint256
+  share: BigInt! # uint256
+  penalty: BigInt!
+  timestamp: Int!
+  date: Int!
+}
+
+type StakedDayData @entity {
+  id: ID!
+  date: Int!
+  dailyStakedAmount: BigInt!
+  penalty: BigInt!
+}
+
+type StakedChange @entity {
+  id: ID!
+  date: Int!
+  stakedAmount: BigInt!
+  penalty: BigInt!
+  added: Boolean!
+}
+
+type StakedTotal @entity {
+  id: ID!
+  totalStakedAmount: BigInt!
+}
+
+type Cooldown @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  user: Bytes!
+  cooldownSeconds: BigInt!
+  timestamp: Int!
+  date: Int!
+}
+
+type SetFeeToken @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  feeToken: Bytes! # bytes32
+  exchangeIndex: BigInt!
+  path: [Bytes!]!
+  LFactor: BigInt!
+  RFactor: BigInt!
+  minBuy: BigInt!
+  maxBuy: BigInt!
+  timestamp: Int!
+}
+
+type EnableFeeToken @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  eventAddr: Bytes! # bytes32
+  gasPrice: BigInt! # uint256
+  feeToken: Bytes! # bytes32
+  enabled: Boolean!
+  timestamp: Int!
+}
+
+type FeeToken @entity {
+  id: ID!
+  exchangeIndex: BigInt!
+  path: [Bytes!]!
+  LFactor: BigInt!
+  RFactor: BigInt!
+  minBuy: BigInt!
+  maxBuy: BigInt!
+  enabled: Boolean!
+}
+
+type TradedToken @entity {
+  id: ID!
+  address: Bytes! # bytes32
+  decimals: Int!
+  startDate: Int!
+  symbol: String!
+  name: String!
 }

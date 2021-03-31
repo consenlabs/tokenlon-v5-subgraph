@@ -18,13 +18,15 @@ dataSources:
       abis:
         - name: PMM
           file: PMM/abis/PMM.json
+        - name: ERC20
+          file: PMM/abis/ERC20.json
       eventHandlers:
         - event: FillOrder(string,indexed bytes32,indexed bytes32,indexed
             address,address,uint256,address,address,uint256,address,uint256,uint16)
           handler: handleFillOrder
       file: PMM/PMM.wasm
   - kind: ethereum/contract
-    name: AMMWrapper1
+    name: AMMWrapper
     network: mainnet
     source:
       address: "0x11be6f5520FEE8E867e20AF9C9D2c8A09b909B83"
@@ -38,12 +40,14 @@ dataSources:
         - Swapped
       abis:
         - name: AMMWrapper
-          file: AMMWrapper1/abis/AMMWrapper.json
+          file: AMMWrapper/abis/AMMWrapper.json
+        - name: ERC20
+          file: AMMWrapper/abis/ERC20.json
       eventHandlers:
         - event: Swapped(string,indexed bytes32,indexed
             address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
           handler: handleSwapped
-      file: AMMWrapper1/AMMWrapper1.wasm
+      file: AMMWrapper/AMMWrapper.wasm
   - kind: ethereum/contract
     name: AMMWrapper2
     network: mainnet
@@ -64,4 +68,60 @@ dataSources:
         - event: Swapped(string,indexed bytes32,indexed
             address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
           handler: handleSwapped
-      file: AMMWrapper1/AMMWrapper1.wasm
+      file: AMMWrapper/AMMWrapper.wasm
+  - kind: ethereum/contract
+    name: RewardDistributor
+    network: mainnet
+    source:
+      address: "0xbF1C2c17CC77e7Dec3466B96F46f93c09f02aB07"
+      abi: RewardDistributor
+      startBlock: 12133461
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - RewardDistributor
+      abis:
+        - name: RewardDistributor
+          file: RewardDistributor/abis/RewardDistributor.json
+        - name: LonStaking
+          file: RewardDistributor/abis/LonStaking.json
+        - name: ERC20
+          file: RewardDistributor/abis/ERC20.json
+      eventHandlers:
+        - event: BuyBack(address,uint256,uint256,uint256,uint256,uint256,uint256)
+          handler: handleBuyBack
+        - event: DistributeLon(uint256,uint256)
+          handler: handleDistributeLon
+        - event: MintLon(uint256)
+          handler: handleMintLon
+        - event: SetFeeToken(address,uint256,address[],uint256,uint256,uint256,uint256)
+          handler: handleSetFeeToken
+        - event: EnableFeeToken(address,bool)
+          handler: handleEnableFeeToken
+      file: RewardDistributor/RewardDistributor.wasm
+  - kind: ethereum/contract
+    name: LonStaking
+    network: mainnet
+    source:
+      address: "0x413ecce5d56204962090eef1dead4c0a247e289b"
+      abi: LonStaking
+      startBlock: 12133376
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - LonStaking
+      abis:
+        - name: LonStaking
+          file: LonStaking/abis/LonStaking.json
+      eventHandlers:
+        - event: Staked(indexed address,uint256,uint256)
+          handler: handleStaked
+        - event: Redeem(indexed address,uint256,uint256,uint256)
+          handler: handleRedeem
+        - event: Cooldown(indexed address)
+          handler: handleCooldown
+      file: LonStaking/LonStaking.wasm

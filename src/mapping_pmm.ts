@@ -1,7 +1,9 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { PMM, FillOrder as FillOrderEvent } from "../generated/PMM/PMM"
-import { FillOrder, FillOrderTotal } from "../generated/schema"
+import { ERC20 } from "../generated/PMM/ERC20"
+import { isETH, WETH_ADDRESS } from "./helper"
+import { FillOrder, FillOrderTotal, TradedToken } from "../generated/schema"
 
 export function handleFillOrder(event: FillOrderEvent): void {
   // Entities can be loaded from the store using a string ID; this ID
@@ -41,6 +43,7 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.logIndex = event.logIndex
   entity.eventAddr = event.address
   entity.gasPrice = event.transaction.gasPrice
+  entity.timestamp = event.block.timestamp.toI32()
 
   log.info(entity.transactionHash, null)
 
@@ -48,28 +51,47 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.save()
   fillTotalEntity.save()
 
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
+  let takerAddr = entity.takerAssetAddr.toHex()
+  if (isETH(takerAddr)) {
+    takerAddr = WETH_ADDRESS
+  }
+  // check whether token is in the traded token
+  let takerTradedToken = TradedToken.load(takerAddr)
+  if (takerTradedToken == null) {
+    let takerTradedTokenContract = ERC20.bind(Address.fromString(takerAddr))
+    let decimals = takerTradedTokenContract.try_decimals()
+    let name = takerTradedTokenContract.try_name()
+    let symbol = takerTradedTokenContract.try_symbol()
+    if (!decimals.reverted && !name.reverted && !symbol.reverted) {
+      takerTradedToken = new TradedToken(takerAddr)
+      takerTradedToken.address = entity.takerAssetAddr
+      takerTradedToken.startDate = event.block.timestamp.toI32()
+      takerTradedToken.decimals = decimals.value
+      takerTradedToken.name = name.value
+      takerTradedToken.symbol = symbol.value
+      takerTradedToken.save()
+    }
+  }
 
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.EIP712_DOMAIN_HASH(...)
-  // - contract.SOURCE(...)
-  // - contract.operator(...)
-  // - contract.permStorage(...)
-  // - contract.spender(...)
-  // - contract.userProxy(...)
-  // - contract.version(...)
-  // - contract.zeroExchange(...)
-  // - contract.zxERC20Proxy(...)
+  let makerAddr = entity.makerAssetAddr.toHex()
+  if (isETH(makerAddr)) {
+    makerAddr = WETH_ADDRESS
+  }
+  // check whether token is in the traded token
+  let makerTradedToken = TradedToken.load(makerAddr)
+  if (makerTradedToken == null) {
+    let makerTradedTokenContract = ERC20.bind(Address.fromString(makerAddr))
+    let decimals = makerTradedTokenContract.try_decimals()
+    let name = makerTradedTokenContract.try_name()
+    let symbol = makerTradedTokenContract.try_symbol()
+    if (!decimals.reverted && !name.reverted && !symbol.reverted) {
+      makerTradedToken = new TradedToken(makerAddr)
+      makerTradedToken.address = entity.makerAssetAddr
+      makerTradedToken.startDate = event.block.timestamp.toI32()
+      makerTradedToken.decimals = decimals.value
+      makerTradedToken.name = name.value
+      makerTradedToken.symbol = symbol.value
+      makerTradedToken.save()
+    }
+  }
 }
