@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: RewardDistributor
-    network: mainnet
+    network: kovan
     source:
-      address: "0xbF1C2c17CC77e7Dec3466B96F46f93c09f02aB07"
+      address: "0x1F8B0Ab82C79bDBB02AbB87F6681a464CF24D50A"
       abi: RewardDistributor
-      startBlock: 12133461
+      startBlock: 24112601
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -34,11 +34,11 @@ dataSources:
       file: ./src/mapping_buyback.ts
   - kind: ethereum/contract
     name: LonStaking
-    network: mainnet
+    network: kovan
     source:
-      address: "0xf88506b0f1d30056b9e5580668d5875b9cd30f23"
+      address: "0x21C9847b047411FaB225dBd45199765ba5c0dA52"
       abi: LonStaking
-      startBlock: 12133376
+      startBlock: 24112521
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
