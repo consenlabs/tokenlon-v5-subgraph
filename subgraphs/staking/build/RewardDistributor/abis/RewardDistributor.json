@@ -3,11 +3,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_LON_TOKEN_ADDR",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_owner",
         "type": "address"
       },
@@ -231,25 +226,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "Recovered",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "uint256",
         "name": "interval",
         "type": "uint256"
@@ -411,12 +387,6 @@
         "internalType": "address",
         "name": "operator",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "enable",
-        "type": "bool"
       }
     ],
     "name": "SetOperator",
@@ -625,24 +595,19 @@
     "name": "feeTokens",
     "outputs": [
       {
-        "internalType": "uint8",
+        "internalType": "uint256",
         "name": "exchangeIndex",
-        "type": "uint8"
+        "type": "uint256"
       },
       {
-        "internalType": "uint8",
+        "internalType": "uint256",
         "name": "LFactor",
-        "type": "uint8"
+        "type": "uint256"
       },
       {
-        "internalType": "uint8",
+        "internalType": "uint256",
         "name": "RFactor",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint32",
-        "name": "lastTimeBuyback",
-        "type": "uint32"
+        "type": "uint256"
       },
       {
         "internalType": "bool",
@@ -658,44 +623,11 @@
         "internalType": "uint256",
         "name": "maxBuy",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
+      },
       {
-        "internalType": "address",
-        "name": "_feeTokenAddr",
-        "type": "address"
-      }
-    ],
-    "name": "getFeeTokenPath",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "path",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "isOperator",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "uint256",
+        "name": "lastTimeBuyback",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -794,6 +726,19 @@
   },
   {
     "inputs": [],
+    "name": "operator",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "owner",
     "outputs": [
       {
@@ -823,24 +768,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_tokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_tokenAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "recoverERC20",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -889,9 +816,9 @@
         "type": "address"
       },
       {
-        "internalType": "uint8",
+        "internalType": "uint256",
         "name": "_exchangeIndex",
-        "type": "uint8"
+        "type": "uint256"
       },
       {
         "internalType": "address[]",
@@ -899,14 +826,14 @@
         "type": "address[]"
       },
       {
-        "internalType": "uint8",
+        "internalType": "uint256",
         "name": "_LFactor",
-        "type": "uint8"
+        "type": "uint256"
       },
       {
-        "internalType": "uint8",
+        "internalType": "uint256",
         "name": "_RFactor",
-        "type": "uint8"
+        "type": "uint256"
       },
       {
         "internalType": "bool",
@@ -950,9 +877,9 @@
         "type": "address[]"
       },
       {
-        "internalType": "uint8[]",
+        "internalType": "uint256[]",
         "name": "_exchangeIndex",
-        "type": "uint8[]"
+        "type": "uint256[]"
       },
       {
         "internalType": "address[]",
@@ -960,14 +887,14 @@
         "type": "address[]"
       },
       {
-        "internalType": "uint8[]",
+        "internalType": "uint256[]",
         "name": "_LFactor",
-        "type": "uint8[]"
+        "type": "uint256[]"
       },
       {
-        "internalType": "uint8[]",
+        "internalType": "uint256[]",
         "name": "_RFactor",
-        "type": "uint8[]"
+        "type": "uint256[]"
       },
       {
         "internalType": "bool[]",
@@ -1035,11 +962,6 @@
         "internalType": "address",
         "name": "_operator",
         "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "_enable",
-        "type": "bool"
       }
     ],
     "name": "setOperator",

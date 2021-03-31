@@ -67,7 +67,7 @@ export function handleRedeem(event: RedeemEvent): void {
     stakedChange = new StakedChange(event.transaction.hash.toHex())
     stakedChange.stakedAmount = event.params.redeemAmount
     stakedChange.timestamp = 0
-    stakedChange.penalty = ZERO
+    stakedChange.penalty = event.params.penaltyAmount
     stakedChange.added = false
     stakedChange.save()
   }
@@ -96,8 +96,8 @@ export function handleRedeem(event: RedeemEvent): void {
   entity.amount = event.params.redeemAmount
   entity.share = event.params.share
   entity.timestamp = event.block.timestamp.toI32()
-  entity.penalty = event.params.penaltyAmount
   entity.date = dayStartTimestamp
+  entity.penalty = event.params.penaltyAmount
 
   log.info(entity.transactionHash, null)
   entity.save()
