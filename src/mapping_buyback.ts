@@ -92,7 +92,7 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
     buyBackTotal.lastUpdatedAt = START_TIMESTAMP
   }
   let oriTxCount = buyBackTotal.txCount
-  let timeInterval = new BigDecimal(BigInt.fromI32(timestamp - buyBackTotal.lastUpdatedAt))
+  let timeInterval = new BigDecimal(BigInt.fromI32(timestamp - buyBackTotal.lastUpdatedAt).plus(ONE))
   let scaleIndexDiff = scaleIndex.minus(buyBackTotal.scaleIndex)
   let currApy = scaleIndexDiff.div(timeInterval).times(BigDecimal.fromString('86400')).times(BigDecimal.fromString('365')).times(BigDecimal.fromString('100'))
   buyBackTotal.txCount = buyBackTotal.txCount.plus(ONE)
