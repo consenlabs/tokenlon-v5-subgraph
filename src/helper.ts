@@ -3,7 +3,7 @@ import { BigInt, BigDecimal, ethereum, Address, Bytes } from '@graphprotocol/gra
 import { log } from '@graphprotocol/graph-ts'
 import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { ERC20 } from "../generated/PMM/ERC20"
-import { StakedDayData, StakedTotal, StakedChange, BuyBack, TradedToken } from "../generated/schema"
+import { StakedDayData, StakedTotal, StakedChange, BuyBack, TradedToken, User } from "../generated/schema"
 
 export const STAKING_ADDRESS = '0xf88506b0f1d30056b9e5580668d5875b9cd30f23'
 export const LON_ADDRESS = '0x0000000000095413afc295d19edeb1ad7b71c952'
@@ -101,4 +101,19 @@ export const addTradedToken = (tokenAddr: Address, startDate: i32): TradedToken 
     }
   }
   return tradedToken
+}
+
+export const getUser = (userAddr: Address, startDate: i32): User | null => {
+  let userAddrStr = userAddr.toHex()
+  let user = User.load(userAddrStr)
+  if (user == null) {
+    user = new User(userAddrStr)
+    user.stakeCount = 0
+    user.buyBackCount = 0
+    user.redeemCount = 0
+    user.tradeCount = 0
+    user.firstSeen = startDate
+    user.lastSeen = 0
+  }
+  return user
 }

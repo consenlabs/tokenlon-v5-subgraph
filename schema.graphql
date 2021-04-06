@@ -288,3 +288,13 @@ type TradedToken @entity {
   symbol: String!
   name: String!
 }
+
+type User @entity {
+  id: ID!
+  stakeCount: Int!
+  buyBackCount: Int!
+  redeemCount: Int!
+  tradeCount: Int!
+  firstSeen: Int!
+  lastSeen: Int!
+}

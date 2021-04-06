@@ -3,7 +3,7 @@ import { log } from '@graphprotocol/graph-ts'
 import { BuyBack as BuyBackEvent, DistributeLon as DistributeLonEvent, MintLon as MintLonEvent, SetFeeToken as SetFeeTokenEvent, EnableFeeToken as EnableFeeTokenEvent } from "../generated/RewardDistributor/RewardDistributor"
 import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { BuyBack, DistributeLon, MintLon, BuyBackDayData, BuyBackTotal, StakedChange, SetFeeToken, EnableFeeToken, FeeToken, BuyBackDayScaleIndex } from "../generated/schema"
-import { ZERO, ZERO_BD, ONE, LonStakingContract, LON_ADDRESS, STAKING_ADDRESS, updateStakedData, getBuyBack } from './helper'
+import { ZERO, ZERO_BD, ONE, LonStakingContract, LON_ADDRESS, STAKING_ADDRESS, updateStakedData, getBuyBack, getUser } from './helper'
 const START_TIMESTAMP = 1617206400
 
 export function handleBuyBack(event: BuyBackEvent): void {
@@ -144,6 +144,11 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   log.info(entity.transactionHash, null)
 
   updateStakedData(event)
+
+  let user = getUser(event.transaction.from, event.block.timestamp.toI32())
+  user.buyBackCount += 1
+  user.lastSeen = event.block.timestamp.toI32()
+  user.save()
 }
 
 export function handleMintLon(event: MintLonEvent): void {

@@ -2,7 +2,7 @@ import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { PMM, FillOrder as FillOrderEvent } from "../generated/PMM/PMM"
 import { ERC20 } from "../generated/PMM/ERC20"
-import { isETH, WETH_ADDRESS, addTradedToken } from "./helper"
+import { isETH, WETH_ADDRESS, addTradedToken, getUser } from "./helper"
 import { FillOrder, FillOrderTotal, TradedToken } from "../generated/schema"
 
 export function handleFillOrder(event: FillOrderEvent): void {
@@ -53,4 +53,9 @@ export function handleFillOrder(event: FillOrderEvent): void {
 
   addTradedToken(entity.takerAssetAddr as Address, event.block.timestamp.toI32())
   addTradedToken(entity.makerAssetAddr as Address, event.block.timestamp.toI32())
+
+  let user = getUser(event.params.userAddr, event.block.timestamp.toI32())
+  user.tradeCount += 1
+  user.lastSeen = event.block.timestamp.toI32()
+  user.save()
 }

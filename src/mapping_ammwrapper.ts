@@ -2,16 +2,16 @@ import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { AMMWrapper, Swapped as SwappedEvent } from "../generated/AMMWrapper/AMMWrapper"
 import { ERC20 } from "../generated/AMMWrapper/ERC20"
-import { ETH_ADDRESS, isETH, WETH_ADDRESS, ZERO_ADDRESS, addTradedToken } from "./helper"
+import { ZERO, ETH_ADDRESS, isETH, WETH_ADDRESS, ZERO_ADDRESS, addTradedToken, getUser } from "./helper"
 import { Swapped, SubsidizedSwapped, SwappedTotal, TradedToken } from "../generated/schema"
 
 export function handleSwapped(event: SwappedEvent): void {
   // Entities can be loaded from the store using a string ID; this ID
   // needs to be unique across all entities of the same type
-  let swappedTotalEntity = SwappedTotal.load('1')
-  if (swappedTotalEntity == null) {
-    swappedTotalEntity = new SwappedTotal('1')
-    swappedTotalEntity.total = BigInt.fromI32(0)
+  let swappedTotal = SwappedTotal.load('1')
+  if (swappedTotal == null) {
+    swappedTotal = new SwappedTotal('1')
+    swappedTotal.total = ZERO
   }
   let entity = Swapped.load(event.transaction.hash.toHex())
   // Entities only exist after they have been saved to the store;
@@ -19,9 +19,9 @@ export function handleSwapped(event: SwappedEvent): void {
   if (entity == null) {
     entity = new Swapped(event.transaction.hash.toHex())
   }
-  swappedTotalEntity.total = swappedTotalEntity.total.plus(BigInt.fromI32(1))
+  swappedTotal.total = swappedTotal.total.plus(BigInt.fromI32(1))
   // Entity fields can be set based on event parameters
-  entity.txNumber = swappedTotalEntity.total
+  entity.txNumber = swappedTotal.total
   entity.from = event.transaction.from as Bytes
   entity.to = event.transaction.to as Bytes
   entity.source = event.params.source
@@ -47,11 +47,16 @@ export function handleSwapped(event: SwappedEvent): void {
   log.info(entity.transactionHash, null)
   // Entities can be written to the store with `.save()`
   entity.save()
-  swappedTotalEntity.save()
+  swappedTotal.save()
   processSubsidizedEvent(event)
 
   addTradedToken(entity.takerAssetAddr as Address, event.block.timestamp.toI32())
   addTradedToken(entity.makerAssetAddr as Address, event.block.timestamp.toI32())
+
+  let user = getUser(event.params.userAddr, event.block.timestamp.toI32())
+  user.tradeCount += 1
+  user.lastSeen = event.block.timestamp.toI32()
+  user.save()
 }
 
 const processSubsidizedEvent = (event: SwappedEvent): void => {
