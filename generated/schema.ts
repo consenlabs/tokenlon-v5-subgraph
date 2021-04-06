@@ -925,6 +925,24 @@ export class BuyBack extends Entity {
   set timestamp(value: i32) {
     this.set("timestamp", Value.fromI32(value));
   }
+
+  get scaleIndex(): BigDecimal {
+    let value = this.get("scaleIndex");
+    return value.toBigDecimal();
+  }
+
+  set scaleIndex(value: BigDecimal) {
+    this.set("scaleIndex", Value.fromBigDecimal(value));
+  }
+
+  get txCount(): BigInt {
+    let value = this.get("txCount");
+    return value.toBigInt();
+  }
+
+  set txCount(value: BigInt) {
+    this.set("txCount", Value.fromBigInt(value));
+  }
 }
 
 export class DistributeLon extends Entity {
@@ -1045,42 +1063,6 @@ export class DistributeLon extends Entity {
 
   set timestamp(value: i32) {
     this.set("timestamp", Value.fromI32(value));
-  }
-
-  get apy(): BigDecimal {
-    let value = this.get("apy");
-    return value.toBigDecimal();
-  }
-
-  set apy(value: BigDecimal) {
-    this.set("apy", Value.fromBigDecimal(value));
-  }
-
-  get scaleIndex(): BigDecimal {
-    let value = this.get("scaleIndex");
-    return value.toBigDecimal();
-  }
-
-  set scaleIndex(value: BigDecimal) {
-    this.set("scaleIndex", Value.fromBigDecimal(value));
-  }
-
-  get txCount(): BigInt {
-    let value = this.get("txCount");
-    return value.toBigInt();
-  }
-
-  set txCount(value: BigInt) {
-    this.set("txCount", Value.fromBigInt(value));
-  }
-
-  get timeInterval(): BigDecimal {
-    let value = this.get("timeInterval");
-    return value.toBigDecimal();
-  }
-
-  set timeInterval(value: BigDecimal) {
-    this.set("timeInterval", Value.fromBigDecimal(value));
   }
 }
 
@@ -1359,24 +1341,6 @@ export class BuyBackDayData extends Entity {
     this.set("lastUpdatedAt", Value.fromI32(value));
   }
 
-  get currApy(): BigDecimal {
-    let value = this.get("currApy");
-    return value.toBigDecimal();
-  }
-
-  set currApy(value: BigDecimal) {
-    this.set("currApy", Value.fromBigDecimal(value));
-  }
-
-  get apy(): BigDecimal {
-    let value = this.get("apy");
-    return value.toBigDecimal();
-  }
-
-  set apy(value: BigDecimal) {
-    this.set("apy", Value.fromBigDecimal(value));
-  }
-
   get scaleIndex(): BigDecimal {
     let value = this.get("scaleIndex");
     return value.toBigDecimal();
@@ -1460,24 +1424,6 @@ export class BuyBackTotal extends Entity {
 
   set lastUpdatedAt(value: i32) {
     this.set("lastUpdatedAt", Value.fromI32(value));
-  }
-
-  get currApy(): BigDecimal {
-    let value = this.get("currApy");
-    return value.toBigDecimal();
-  }
-
-  set currApy(value: BigDecimal) {
-    this.set("currApy", Value.fromBigDecimal(value));
-  }
-
-  get apy(): BigDecimal {
-    let value = this.get("apy");
-    return value.toBigDecimal();
-  }
-
-  set apy(value: BigDecimal) {
-    this.set("apy", Value.fromBigDecimal(value));
   }
 
   get scaleIndex(): BigDecimal {
