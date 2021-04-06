@@ -2,7 +2,8 @@
 import { BigInt, BigDecimal, ethereum, Address, Bytes } from '@graphprotocol/graph-ts'
 import { log } from '@graphprotocol/graph-ts'
 import { LonStaking } from "../generated/LonStaking/LonStaking"
-import { StakedDayData, StakedTotal, StakedChange, BuyBackTotal } from "../generated/schema"
+import { ERC20 } from "../generated/PMM/ERC20"
+import { StakedDayData, StakedTotal, StakedChange, BuyBack, TradedToken, User } from "../generated/schema"
 
 export const STAKING_ADDRESS = '0xf88506b0f1d30056b9e5580668d5875b9cd30f23'
 export const LON_ADDRESS = '0x0000000000095413afc295d19edeb1ad7b71c952'
@@ -58,4 +59,61 @@ export function updateStakedData(event: ethereum.Event): void {
 
 export let isETH = (assetAddr: Bytes): boolean => {
   return (assetAddr == ZERO_ADDRESS) || (assetAddr == ETH_ADDRESS) || (assetAddr == WETH_ADDRESS)
+}
+
+export const getBuyBack = (event: ethereum.Event): BuyBack | null => {
+  let entity = BuyBack.load(event.transaction.hash.toHex())
+  if (entity == null) {
+    entity = new BuyBack(event.transaction.hash.toHex())
+    entity.gasPrice = ZERO
+    entity.feeTokenAmount = ZERO
+    entity.swappedLonAmount = ZERO
+    entity.scaleIndex = ZERO_BD
+    entity.txCount = ZERO
+  }
+  return entity
+}
+
+export const addTradedToken = (tokenAddr: Address, startDate: i32): TradedToken | null => {
+  let tokenAddrStr = tokenAddr.toHex()
+  if (isETH(tokenAddr)) {
+    tokenAddrStr = WETH_ADDRESS.toHex()
+  }
+  // check whether token is in the traded token
+  let tradedToken = TradedToken.load(tokenAddrStr)
+  if (tradedToken == null) {
+    let tradedTokenContract = ERC20.bind(tokenAddr)
+    let decimals = tradedTokenContract.try_decimals()
+    if (!decimals.reverted) {
+      let name = tradedTokenContract.try_name()
+      if (!name.reverted) {
+        let symbol = tradedTokenContract.try_symbol()
+        if (!symbol.reverted) {
+          tradedToken = new TradedToken(tokenAddrStr)
+          tradedToken.address = tokenAddr
+          tradedToken.startDate = startDate
+          tradedToken.decimals = decimals.value
+          tradedToken.name = name.value
+          tradedToken.symbol = symbol.value
+          tradedToken.save()
+        }
+      }
+    }
+  }
+  return tradedToken
+}
+
+export const getUser = (userAddr: Address, startDate: i32): User | null => {
+  let userAddrStr = userAddr.toHex()
+  let user = User.load(userAddrStr)
+  if (user == null) {
+    user = new User(userAddrStr)
+    user.stakeCount = 0
+    user.buyBackCount = 0
+    user.redeemCount = 0
+    user.tradeCount = 0
+    user.firstSeen = startDate
+    user.lastSeen = 0
+  }
+  return user
 }

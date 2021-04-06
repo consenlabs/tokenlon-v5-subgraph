@@ -2,16 +2,16 @@ import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { AMMWrapper, Swapped as SwappedEvent } from "../generated/AMMWrapper/AMMWrapper"
 import { ERC20 } from "../generated/AMMWrapper/ERC20"
-import { ETH_ADDRESS, isETH, WETH_ADDRESS, ZERO_ADDRESS } from "./helper"
+import { ZERO, ETH_ADDRESS, isETH, WETH_ADDRESS, ZERO_ADDRESS, addTradedToken, getUser } from "./helper"
 import { Swapped, SubsidizedSwapped, SwappedTotal, TradedToken } from "../generated/schema"
 
 export function handleSwapped(event: SwappedEvent): void {
   // Entities can be loaded from the store using a string ID; this ID
   // needs to be unique across all entities of the same type
-  let swappedTotalEntity = SwappedTotal.load('1')
-  if (swappedTotalEntity == null) {
-    swappedTotalEntity = new SwappedTotal('1')
-    swappedTotalEntity.total = BigInt.fromI32(0)
+  let swappedTotal = SwappedTotal.load('1')
+  if (swappedTotal == null) {
+    swappedTotal = new SwappedTotal('1')
+    swappedTotal.total = ZERO
   }
   let entity = Swapped.load(event.transaction.hash.toHex())
   // Entities only exist after they have been saved to the store;
@@ -19,9 +19,9 @@ export function handleSwapped(event: SwappedEvent): void {
   if (entity == null) {
     entity = new Swapped(event.transaction.hash.toHex())
   }
-  swappedTotalEntity.total = swappedTotalEntity.total.plus(BigInt.fromI32(1))
+  swappedTotal.total = swappedTotal.total.plus(BigInt.fromI32(1))
   // Entity fields can be set based on event parameters
-  entity.txNumber = swappedTotalEntity.total
+  entity.txNumber = swappedTotal.total
   entity.from = event.transaction.from as Bytes
   entity.to = event.transaction.to as Bytes
   entity.source = event.params.source
@@ -47,60 +47,16 @@ export function handleSwapped(event: SwappedEvent): void {
   log.info(entity.transactionHash, null)
   // Entities can be written to the store with `.save()`
   entity.save()
-  swappedTotalEntity.save()
+  swappedTotal.save()
   processSubsidizedEvent(event)
 
-  let takerAddr = entity.takerAssetAddr.toHex()
-  if (isETH(entity.takerAssetAddr)) {
-    takerAddr = WETH_ADDRESS.toHex()
-  }
-  // check whether token is in the traded token
-  let takerTradedToken = TradedToken.load(takerAddr)
-  if (takerTradedToken == null) {
-    let takerTradedTokenContract = ERC20.bind(Address.fromString(takerAddr))
-    let decimals = takerTradedTokenContract.try_decimals()
-    if (!decimals.reverted) {
-      let name = takerTradedTokenContract.try_name()
-      if (!name.reverted) {
-        let symbol = takerTradedTokenContract.try_symbol()
-        if (!symbol.reverted) {
-          takerTradedToken = new TradedToken(takerAddr)
-          takerTradedToken.address = entity.takerAssetAddr
-          takerTradedToken.startDate = event.block.timestamp.toI32()
-          takerTradedToken.decimals = decimals.value
-          takerTradedToken.name = name.value
-          takerTradedToken.symbol = symbol.value
-          takerTradedToken.save()
-        }
-      }
-    }
-  }
+  addTradedToken(entity.takerAssetAddr as Address, event.block.timestamp.toI32())
+  addTradedToken(entity.makerAssetAddr as Address, event.block.timestamp.toI32())
 
-  let makerAddr = entity.makerAssetAddr.toHex()
-  if (isETH(entity.makerAssetAddr)) {
-    makerAddr = WETH_ADDRESS.toHex()
-  }
-  // check whether token is in the traded token
-  let makerTradedToken = TradedToken.load(makerAddr)
-  if (makerTradedToken == null) {
-    let makerTradedTokenContract = ERC20.bind(Address.fromString(makerAddr))
-    let decimals = makerTradedTokenContract.try_decimals()
-    if (!decimals.reverted) {
-      let name = makerTradedTokenContract.try_name()
-      if (!name.reverted) {
-        let symbol = makerTradedTokenContract.try_symbol()
-        if (!symbol.reverted) {
-          makerTradedToken = new TradedToken(makerAddr)
-          makerTradedToken.address = entity.makerAssetAddr
-          makerTradedToken.startDate = event.block.timestamp.toI32()
-          makerTradedToken.decimals = decimals.value
-          makerTradedToken.name = name.value
-          makerTradedToken.symbol = symbol.value
-          makerTradedToken.save()
-        }
-      }
-    }
-  }
+  let user = getUser(event.params.userAddr, event.block.timestamp.toI32())
+  user.tradeCount += 1
+  user.lastSeen = event.block.timestamp.toI32()
+  user.save()
 }
 
 const processSubsidizedEvent = (event: SwappedEvent): void => {

@@ -925,6 +925,24 @@ export class BuyBack extends Entity {
   set timestamp(value: i32) {
     this.set("timestamp", Value.fromI32(value));
   }
+
+  get scaleIndex(): BigDecimal {
+    let value = this.get("scaleIndex");
+    return value.toBigDecimal();
+  }
+
+  set scaleIndex(value: BigDecimal) {
+    this.set("scaleIndex", Value.fromBigDecimal(value));
+  }
+
+  get txCount(): BigInt {
+    let value = this.get("txCount");
+    return value.toBigInt();
+  }
+
+  set txCount(value: BigInt) {
+    this.set("txCount", Value.fromBigInt(value));
+  }
 }
 
 export class DistributeLon extends Entity {
@@ -1045,42 +1063,6 @@ export class DistributeLon extends Entity {
 
   set timestamp(value: i32) {
     this.set("timestamp", Value.fromI32(value));
-  }
-
-  get apy(): BigDecimal {
-    let value = this.get("apy");
-    return value.toBigDecimal();
-  }
-
-  set apy(value: BigDecimal) {
-    this.set("apy", Value.fromBigDecimal(value));
-  }
-
-  get scaleIndex(): BigDecimal {
-    let value = this.get("scaleIndex");
-    return value.toBigDecimal();
-  }
-
-  set scaleIndex(value: BigDecimal) {
-    this.set("scaleIndex", Value.fromBigDecimal(value));
-  }
-
-  get txCount(): BigInt {
-    let value = this.get("txCount");
-    return value.toBigInt();
-  }
-
-  set txCount(value: BigInt) {
-    this.set("txCount", Value.fromBigInt(value));
-  }
-
-  get timeInterval(): BigDecimal {
-    let value = this.get("timeInterval");
-    return value.toBigDecimal();
-  }
-
-  set timeInterval(value: BigDecimal) {
-    this.set("timeInterval", Value.fromBigDecimal(value));
   }
 }
 
@@ -1359,24 +1341,6 @@ export class BuyBackDayData extends Entity {
     this.set("lastUpdatedAt", Value.fromI32(value));
   }
 
-  get currApy(): BigDecimal {
-    let value = this.get("currApy");
-    return value.toBigDecimal();
-  }
-
-  set currApy(value: BigDecimal) {
-    this.set("currApy", Value.fromBigDecimal(value));
-  }
-
-  get apy(): BigDecimal {
-    let value = this.get("apy");
-    return value.toBigDecimal();
-  }
-
-  set apy(value: BigDecimal) {
-    this.set("apy", Value.fromBigDecimal(value));
-  }
-
   get scaleIndex(): BigDecimal {
     let value = this.get("scaleIndex");
     return value.toBigDecimal();
@@ -1460,24 +1424,6 @@ export class BuyBackTotal extends Entity {
 
   set lastUpdatedAt(value: i32) {
     this.set("lastUpdatedAt", Value.fromI32(value));
-  }
-
-  get currApy(): BigDecimal {
-    let value = this.get("currApy");
-    return value.toBigDecimal();
-  }
-
-  set currApy(value: BigDecimal) {
-    this.set("currApy", Value.fromBigDecimal(value));
-  }
-
-  get apy(): BigDecimal {
-    let value = this.get("apy");
-    return value.toBigDecimal();
-  }
-
-  set apy(value: BigDecimal) {
-    this.set("apy", Value.fromBigDecimal(value));
   }
 
   get scaleIndex(): BigDecimal {
@@ -2535,5 +2481,90 @@ export class TradedToken extends Entity {
 
   set name(value: string) {
     this.set("name", Value.fromString(value));
+  }
+}
+
+export class User extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save User entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save User entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("User", id.toString(), this);
+  }
+
+  static load(id: string): User | null {
+    return store.get("User", id) as User | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get stakeCount(): i32 {
+    let value = this.get("stakeCount");
+    return value.toI32();
+  }
+
+  set stakeCount(value: i32) {
+    this.set("stakeCount", Value.fromI32(value));
+  }
+
+  get buyBackCount(): i32 {
+    let value = this.get("buyBackCount");
+    return value.toI32();
+  }
+
+  set buyBackCount(value: i32) {
+    this.set("buyBackCount", Value.fromI32(value));
+  }
+
+  get redeemCount(): i32 {
+    let value = this.get("redeemCount");
+    return value.toI32();
+  }
+
+  set redeemCount(value: i32) {
+    this.set("redeemCount", Value.fromI32(value));
+  }
+
+  get tradeCount(): i32 {
+    let value = this.get("tradeCount");
+    return value.toI32();
+  }
+
+  set tradeCount(value: i32) {
+    this.set("tradeCount", Value.fromI32(value));
+  }
+
+  get firstSeen(): i32 {
+    let value = this.get("firstSeen");
+    return value.toI32();
+  }
+
+  set firstSeen(value: i32) {
+    this.set("firstSeen", Value.fromI32(value));
+  }
+
+  get lastSeen(): i32 {
+    let value = this.get("lastSeen");
+    return value.toI32();
+  }
+
+  set lastSeen(value: i32) {
+    this.set("lastSeen", Value.fromI32(value));
   }
 }

@@ -3,19 +3,13 @@ import { log } from '@graphprotocol/graph-ts'
 import { BuyBack as BuyBackEvent, DistributeLon as DistributeLonEvent, MintLon as MintLonEvent, SetFeeToken as SetFeeTokenEvent, EnableFeeToken as EnableFeeTokenEvent } from "../generated/RewardDistributor/RewardDistributor"
 import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { BuyBack, DistributeLon, MintLon, BuyBackDayData, BuyBackTotal, StakedChange, SetFeeToken, EnableFeeToken, FeeToken, BuyBackDayScaleIndex } from "../generated/schema"
-import { ZERO, ZERO_BD, ONE, updateStakedData, LonStakingContract, LON_ADDRESS, STAKING_ADDRESS } from './helper'
+import { ZERO, ZERO_BD, ONE, LonStakingContract, LON_ADDRESS, STAKING_ADDRESS, updateStakedData, getBuyBack, getUser } from './helper'
 const START_TIMESTAMP = 1617206400
 
 export function handleBuyBack(event: BuyBackEvent): void {
 
   // update buyback
-  let entity = BuyBack.load(event.transaction.hash.toHex())
-  if (entity == null) {
-    entity = new BuyBack(event.transaction.hash.toHex())
-    entity.gasPrice = ZERO
-    entity.feeTokenAmount = ZERO
-    entity.swappedLonAmount = ZERO
-  }
+  let entity = getBuyBack(event)
   entity.from = event.transaction.from as Bytes
   entity.to = event.transaction.to as Bytes
   entity.transactionHash = event.transaction.hash.toHex()
@@ -57,6 +51,7 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   entity.treasuryAmount = event.params.treasuryAmount
   entity.lonStakingAmount = event.params.lonStakingAmount
   entity.timestamp = event.block.timestamp.toI32()
+  entity.save()
 
   // update buyback day data
   let timestamp = event.block.timestamp.toI32()
@@ -74,8 +69,6 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
     buyBackTotal.totalLonStakingAmount = ZERO
     buyBackTotal.totalMintedAmount = ZERO
     buyBackTotal.txCount = ZERO
-    buyBackTotal.apy = ZERO_BD
-    buyBackTotal.currApy = ZERO_BD
     buyBackTotal.scaleIndex = ZERO_BD
     buyBackTotal.lastUpdatedAt = 0
   }
@@ -91,24 +84,18 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   if (buyBackTotal.lastUpdatedAt == 0) {
     buyBackTotal.lastUpdatedAt = START_TIMESTAMP
   }
-  let oriTxCount = buyBackTotal.txCount
-  let timeInterval = new BigDecimal(BigInt.fromI32(timestamp - buyBackTotal.lastUpdatedAt))
-  let scaleIndexDiff = scaleIndex.minus(buyBackTotal.scaleIndex)
-  let currApy = scaleIndexDiff.div(timeInterval).times(BigDecimal.fromString('86400')).times(BigDecimal.fromString('365')).times(BigDecimal.fromString('100'))
   buyBackTotal.txCount = buyBackTotal.txCount.plus(ONE)
-  buyBackTotal.currApy = currApy
-  buyBackTotal.apy = buyBackTotal.apy.times(new BigDecimal(oriTxCount)).plus(currApy).div(new BigDecimal(buyBackTotal.txCount))
   buyBackTotal.scaleIndex = scaleIndex
   buyBackTotal.lastUpdatedAt = timestamp
   buyBackTotal.totalTreasuryAmount = buyBackTotal.totalTreasuryAmount.plus(treasuryAmount)
   buyBackTotal.totalLonStakingAmount = buyBackTotal.totalLonStakingAmount.plus(lonStakingAmount)
   buyBackTotal.save()
 
-  entity.apy = currApy
-  entity.scaleIndex = scaleIndex
-  entity.txCount = oriTxCount
-  entity.timeInterval = timeInterval
-  entity.save()
+  // update buyback
+  let buyBack = getBuyBack(event)
+  buyBack.scaleIndex = scaleIndex
+  buyBack.txCount = buyBack.txCount.plus(ONE)
+  buyBack.save()
 
   let buyBackDayData = BuyBackDayData.load(buyBackDayID)
   if (buyBackDayData == null) {
@@ -118,18 +105,13 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
     buyBackDayData.dailyLonStakingAmount = ZERO
     buyBackDayData.dailyMintedAmount = ZERO
     buyBackDayData.txCount = ZERO
-    buyBackDayData.apy = ZERO_BD
-    buyBackDayData.currApy = ZERO_BD
     buyBackDayData.scaleIndex = ZERO_BD
     buyBackDayData.lastUpdatedAt = 0
     buyBackDayData.totalTreasuryAmount = ZERO
     buyBackDayData.totalLonStakingAmount = ZERO
     buyBackDayData.totalMintedAmount = ZERO
   }
-  oriTxCount = buyBackDayData.txCount
   buyBackDayData.txCount = buyBackDayData.txCount.plus(ONE)
-  buyBackDayData.currApy = currApy
-  buyBackDayData.apy = buyBackDayData.apy.times(new BigDecimal(oriTxCount)).plus(currApy).div(new BigDecimal(buyBackDayData.txCount))
   buyBackDayData.scaleIndex = scaleIndex
   buyBackDayData.lastUpdatedAt = timestamp
   buyBackDayData.dailyTreasuryAmount = buyBackDayData.dailyTreasuryAmount.plus(treasuryAmount)
@@ -162,6 +144,11 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   log.info(entity.transactionHash, null)
 
   updateStakedData(event)
+
+  let user = getUser(event.transaction.from, event.block.timestamp.toI32())
+  user.buyBackCount += 1
+  user.lastSeen = event.block.timestamp.toI32()
+  user.save()
 }
 
 export function handleMintLon(event: MintLonEvent): void {
