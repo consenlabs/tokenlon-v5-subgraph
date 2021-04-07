@@ -2,7 +2,7 @@ import { Address, BigInt, BigDecimal, Bytes, ethereum } from "@graphprotocol/gra
 import { log } from '@graphprotocol/graph-ts'
 import { BuyBack as BuyBackEvent, DistributeLon as DistributeLonEvent, MintLon as MintLonEvent, SetFeeToken as SetFeeTokenEvent, EnableFeeToken as EnableFeeTokenEvent } from "../generated/RewardDistributor/RewardDistributor"
 import { LonStaking } from "../generated/LonStaking/LonStaking"
-import { BuyBack, DistributeLon, MintLon, BuyBackDayData, BuyBackTotal, StakedChange, SetFeeToken, EnableFeeToken, FeeToken, BuyBackDayScaleIndex } from "../generated/schema"
+import { BuyBack, DistributeLon, MintLon, BuyBackDayData, BuyBackTotal, StakedChange, SetFeeToken, EnableFeeToken, FeeToken } from "../generated/schema"
 import { ZERO, ZERO_BD, ONE, LonStakingContract, LON_ADDRESS, STAKING_ADDRESS, updateStakedData, getBuyBack, getUser } from './helper'
 const START_TIMESTAMP = 1617206400
 
@@ -94,7 +94,6 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   // update buyback
   let buyBack = getBuyBack(event)
   buyBack.scaleIndex = scaleIndex
-  buyBack.txCount = buyBack.txCount.plus(ONE)
   buyBack.save()
 
   let buyBackDayData = BuyBackDayData.load(buyBackDayID)
@@ -119,16 +118,6 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   buyBackDayData.totalTreasuryAmount = buyBackDayData.totalTreasuryAmount.plus(treasuryAmount)
   buyBackDayData.totalLonStakingAmount = buyBackDayData.totalLonStakingAmount.plus(lonStakingAmount)
   buyBackDayData.save()
-
-  // save first scaleIndex of day
-  let buyBackDayScaleIndex = BuyBackDayScaleIndex.load(buyBackDayID)
-  if (buyBackDayScaleIndex == null) {
-    buyBackDayScaleIndex = new BuyBackDayScaleIndex(buyBackDayID)
-    buyBackDayScaleIndex.date = dayStartTimestamp
-    buyBackDayScaleIndex.timestamp = timestamp
-    buyBackDayScaleIndex.scaleIndex = scaleIndex
-    buyBackDayScaleIndex.save()
-  }
 
   // update staked change
   let stakedChange = StakedChange.load(txHash)

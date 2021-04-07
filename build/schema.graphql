@@ -102,7 +102,6 @@ type BuyBack @entity {
   maxBuy: BigInt! # uint256
   timestamp: Int!
   scaleIndex: BigDecimal!
-  txCount: BigInt!
 }
 
 type DistributeLon @entity {
@@ -130,13 +129,6 @@ type MintLon @entity {
   gasPrice: BigInt! # uint256
   mintedAmount: BigInt! # uint256
   timestamp: Int!
-}
-
-type BuyBackDayScaleIndex @entity {
-  id: ID!
-  date: Int!
-  timestamp: Int!
-  scaleIndex: BigDecimal!
 }
 
 type BuyBackDayData @entity {
