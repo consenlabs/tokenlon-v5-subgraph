@@ -89,8 +89,6 @@ dataSources:
           file: RewardDistributor/abis/RewardDistributor.json
         - name: LonStaking
           file: RewardDistributor/abis/LonStaking.json
-        - name: ERC20
-          file: RewardDistributor/abis/ERC20.json
       eventHandlers:
         - event: BuyBack(address,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleBuyBack

@@ -68,7 +68,6 @@ export const getBuyBack = (event: ethereum.Event): BuyBack | null => {
     entity.gasPrice = ZERO
     entity.feeTokenAmount = ZERO
     entity.swappedLonAmount = ZERO
-    entity.scaleIndex = ZERO_BD
   }
   return entity
 }

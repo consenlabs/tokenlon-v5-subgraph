@@ -925,15 +925,6 @@ export class BuyBack extends Entity {
   set timestamp(value: i32) {
     this.set("timestamp", Value.fromI32(value));
   }
-
-  get scaleIndex(): BigDecimal {
-    let value = this.get("scaleIndex");
-    return value.toBigDecimal();
-  }
-
-  set scaleIndex(value: BigDecimal) {
-    this.set("scaleIndex", Value.fromBigDecimal(value));
-  }
 }
 
 export class DistributeLon extends Entity {
@@ -1054,6 +1045,15 @@ export class DistributeLon extends Entity {
 
   set timestamp(value: i32) {
     this.set("timestamp", Value.fromI32(value));
+  }
+
+  get scaleIndex(): BigDecimal {
+    let value = this.get("scaleIndex");
+    return value.toBigDecimal();
+  }
+
+  set scaleIndex(value: BigDecimal) {
+    this.set("scaleIndex", Value.fromBigDecimal(value));
   }
 }
 
@@ -1233,33 +1233,6 @@ export class BuyBackDayData extends Entity {
 
   set dailyMintedAmount(value: BigInt) {
     this.set("dailyMintedAmount", Value.fromBigInt(value));
-  }
-
-  get totalTreasuryAmount(): BigInt {
-    let value = this.get("totalTreasuryAmount");
-    return value.toBigInt();
-  }
-
-  set totalTreasuryAmount(value: BigInt) {
-    this.set("totalTreasuryAmount", Value.fromBigInt(value));
-  }
-
-  get totalLonStakingAmount(): BigInt {
-    let value = this.get("totalLonStakingAmount");
-    return value.toBigInt();
-  }
-
-  set totalLonStakingAmount(value: BigInt) {
-    this.set("totalLonStakingAmount", Value.fromBigInt(value));
-  }
-
-  get totalMintedAmount(): BigInt {
-    let value = this.get("totalMintedAmount");
-    return value.toBigInt();
-  }
-
-  set totalMintedAmount(value: BigInt) {
-    this.set("totalMintedAmount", Value.fromBigInt(value));
   }
 
   get lastUpdatedAt(): i32 {
