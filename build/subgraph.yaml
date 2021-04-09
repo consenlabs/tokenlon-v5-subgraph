@@ -20,6 +20,8 @@ dataSources:
           file: PMM/abis/PMM.json
         - name: ERC20
           file: PMM/abis/ERC20.json
+        - name: ERC20Bytes
+          file: PMM/abis/ERC20Bytes.json
       eventHandlers:
         - event: FillOrder(string,indexed bytes32,indexed bytes32,indexed
             address,address,uint256,address,address,uint256,address,uint256,uint16)
@@ -43,6 +45,8 @@ dataSources:
           file: AMMWrapper/abis/AMMWrapper.json
         - name: ERC20
           file: AMMWrapper/abis/ERC20.json
+        - name: ERC20Bytes
+          file: AMMWrapper/abis/ERC20Bytes.json
       eventHandlers:
         - event: Swapped(string,indexed bytes32,indexed
             address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
@@ -66,6 +70,8 @@ dataSources:
           file: AMMWrapper2/abis/AMMWrapper.json
         - name: ERC20
           file: AMMWrapper2/abis/ERC20.json
+        - name: ERC20Bytes
+          file: AMMWrapper2/abis/ERC20Bytes.json
       eventHandlers:
         - event: Swapped(string,indexed bytes32,indexed
             address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
