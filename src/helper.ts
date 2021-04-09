@@ -15,6 +15,7 @@ export let LonStakingContract = LonStaking.bind(Address.fromString(STAKING_ADDRE
 export let ZERO_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000')
 export let ETH_ADDRESS = Address.fromString('0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE')
 export let WETH_ADDRESS = Address.fromString("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
+export let MKR_ADDRESS = Address.fromString("0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2")
 
 export function updateStakedData(event: ethereum.Event): void {
   let stakedChange = StakedChange.load(event.transaction.hash.toHex())
@@ -83,19 +84,30 @@ export const addTradedToken = (tokenAddr: Address, startDate: i32): TradedToken 
     let tradedTokenContract = ERC20.bind(tokenAddr)
     let decimals = tradedTokenContract.try_decimals()
     if (!decimals.reverted) {
-      let name = tradedTokenContract.try_name()
-      if (!name.reverted) {
-        let symbol = tradedTokenContract.try_symbol()
-        if (!symbol.reverted) {
-          tradedToken = new TradedToken(tokenAddrStr)
-          tradedToken.address = tokenAddr
-          tradedToken.startDate = startDate
-          tradedToken.decimals = decimals.value
-          tradedToken.name = name.value
-          tradedToken.symbol = symbol.value
-          tradedToken.save()
+      let name = ''
+      let symbol = ''
+      if (tokenAddr == MKR_ADDRESS) {
+        name = 'Maker'
+        symbol = 'MKR'
+      } else {
+        let nameCall = tradedTokenContract.try_name()
+        if (nameCall.reverted) {
+          return null
         }
+        let symbolCall = tradedTokenContract.try_symbol()
+        if (symbolCall.reverted) {
+          return null
+        }
+        name = nameCall.value
+        symbol = symbolCall.value
       }
+      tradedToken = new TradedToken(tokenAddrStr)
+      tradedToken.address = tokenAddr
+      tradedToken.startDate = startDate
+      tradedToken.decimals = decimals.value
+      tradedToken.name = name.toString()
+      tradedToken.symbol = symbol.toString()
+      tradedToken.save()
     }
   }
   return tradedToken
