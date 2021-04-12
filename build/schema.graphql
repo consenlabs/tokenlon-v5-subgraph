@@ -101,8 +101,6 @@ type BuyBack @entity {
   minBuy: BigInt! # uint256
   maxBuy: BigInt! # uint256
   timestamp: Int!
-  scaleIndex: BigDecimal!
-  txCount: BigInt!
 }
 
 type DistributeLon @entity {
@@ -117,6 +115,7 @@ type DistributeLon @entity {
   treasuryAmount: BigInt! # uint256
   lonStakingAmount: BigInt! # uint256
   timestamp: Int!
+  scaleIndex: BigDecimal!
 }
 
 type MintLon @entity {
@@ -132,13 +131,6 @@ type MintLon @entity {
   timestamp: Int!
 }
 
-type BuyBackDayScaleIndex @entity {
-  id: ID!
-  date: Int!
-  timestamp: Int!
-  scaleIndex: BigDecimal!
-}
-
 type BuyBackDayData @entity {
   id: ID!
   date: Int!
@@ -146,10 +138,6 @@ type BuyBackDayData @entity {
   dailyTreasuryAmount: BigInt!
   dailyLonStakingAmount: BigInt!
   dailyMintedAmount: BigInt!
-
-  totalTreasuryAmount: BigInt!
-  totalLonStakingAmount: BigInt!
-  totalMintedAmount: BigInt!
 
   lastUpdatedAt: Int!
   scaleIndex: BigDecimal!

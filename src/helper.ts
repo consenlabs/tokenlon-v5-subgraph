@@ -3,6 +3,7 @@ import { BigInt, BigDecimal, ethereum, Address, Bytes } from '@graphprotocol/gra
 import { log } from '@graphprotocol/graph-ts'
 import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { ERC20 } from "../generated/PMM/ERC20"
+import { ERC20Bytes } from "../generated/PMM/ERC20Bytes"
 import { StakedDayData, StakedTotal, StakedChange, BuyBack, TradedToken, User } from "../generated/schema"
 
 export const STAKING_ADDRESS = '0xf88506b0f1d30056b9e5580668d5875b9cd30f23'
@@ -68,8 +69,6 @@ export const getBuyBack = (event: ethereum.Event): BuyBack | null => {
     entity.gasPrice = ZERO
     entity.feeTokenAmount = ZERO
     entity.swappedLonAmount = ZERO
-    entity.scaleIndex = ZERO_BD
-    entity.txCount = ZERO
   }
   return entity
 }
@@ -85,19 +84,37 @@ export const addTradedToken = (tokenAddr: Address, startDate: i32): TradedToken 
     let tradedTokenContract = ERC20.bind(tokenAddr)
     let decimals = tradedTokenContract.try_decimals()
     if (!decimals.reverted) {
-      let name = tradedTokenContract.try_name()
-      if (!name.reverted) {
-        let symbol = tradedTokenContract.try_symbol()
-        if (!symbol.reverted) {
-          tradedToken = new TradedToken(tokenAddrStr)
-          tradedToken.address = tokenAddr
-          tradedToken.startDate = startDate
-          tradedToken.decimals = decimals.value
-          tradedToken.name = name.value
-          tradedToken.symbol = symbol.value
-          tradedToken.save()
+      let name = ''
+      let symbol = ''
+      let nameCall = tradedTokenContract.try_name()
+      if (nameCall.reverted) {
+        let tradedTokenBytesContract = ERC20Bytes.bind(tokenAddr)
+        let nameCallBytes = tradedTokenBytesContract.try_name()
+        if (nameCallBytes.reverted) {
+          return null
         }
+        name = nameCallBytes.value.toString()
+      } else {
+        name = nameCall.value
       }
+      let symbolCall = tradedTokenContract.try_symbol()
+      if (symbolCall.reverted) {
+        let tradedTokenBytesContract = ERC20Bytes.bind(tokenAddr)
+        let symbolCallBytes = tradedTokenBytesContract.try_symbol()
+        if (symbolCallBytes.reverted) {
+          return null
+        }
+        symbol = symbolCallBytes.value.toString()
+      } else {
+        symbol = symbolCall.value
+      }
+      tradedToken = new TradedToken(tokenAddrStr)
+      tradedToken.address = tokenAddr
+      tradedToken.startDate = startDate
+      tradedToken.decimals = decimals.value
+      tradedToken.name = name
+      tradedToken.symbol = symbol
+      tradedToken.save()
     }
   }
   return tradedToken

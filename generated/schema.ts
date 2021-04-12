@@ -925,24 +925,6 @@ export class BuyBack extends Entity {
   set timestamp(value: i32) {
     this.set("timestamp", Value.fromI32(value));
   }
-
-  get scaleIndex(): BigDecimal {
-    let value = this.get("scaleIndex");
-    return value.toBigDecimal();
-  }
-
-  set scaleIndex(value: BigDecimal) {
-    this.set("scaleIndex", Value.fromBigDecimal(value));
-  }
-
-  get txCount(): BigInt {
-    let value = this.get("txCount");
-    return value.toBigInt();
-  }
-
-  set txCount(value: BigInt) {
-    this.set("txCount", Value.fromBigInt(value));
-  }
 }
 
 export class DistributeLon extends Entity {
@@ -1064,6 +1046,15 @@ export class DistributeLon extends Entity {
   set timestamp(value: i32) {
     this.set("timestamp", Value.fromI32(value));
   }
+
+  get scaleIndex(): BigDecimal {
+    let value = this.get("scaleIndex");
+    return value.toBigDecimal();
+  }
+
+  set scaleIndex(value: BigDecimal) {
+    this.set("scaleIndex", Value.fromBigDecimal(value));
+  }
 }
 
 export class MintLon extends Entity {
@@ -1178,67 +1169,6 @@ export class MintLon extends Entity {
   }
 }
 
-export class BuyBackDayScaleIndex extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(
-      id !== null,
-      "Cannot save BuyBackDayScaleIndex entity without an ID"
-    );
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save BuyBackDayScaleIndex entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("BuyBackDayScaleIndex", id.toString(), this);
-  }
-
-  static load(id: string): BuyBackDayScaleIndex | null {
-    return store.get("BuyBackDayScaleIndex", id) as BuyBackDayScaleIndex | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get date(): i32 {
-    let value = this.get("date");
-    return value.toI32();
-  }
-
-  set date(value: i32) {
-    this.set("date", Value.fromI32(value));
-  }
-
-  get timestamp(): i32 {
-    let value = this.get("timestamp");
-    return value.toI32();
-  }
-
-  set timestamp(value: i32) {
-    this.set("timestamp", Value.fromI32(value));
-  }
-
-  get scaleIndex(): BigDecimal {
-    let value = this.get("scaleIndex");
-    return value.toBigDecimal();
-  }
-
-  set scaleIndex(value: BigDecimal) {
-    this.set("scaleIndex", Value.fromBigDecimal(value));
-  }
-}
-
 export class BuyBackDayData extends Entity {
   constructor(id: string) {
     super();
@@ -1303,33 +1233,6 @@ export class BuyBackDayData extends Entity {
 
   set dailyMintedAmount(value: BigInt) {
     this.set("dailyMintedAmount", Value.fromBigInt(value));
-  }
-
-  get totalTreasuryAmount(): BigInt {
-    let value = this.get("totalTreasuryAmount");
-    return value.toBigInt();
-  }
-
-  set totalTreasuryAmount(value: BigInt) {
-    this.set("totalTreasuryAmount", Value.fromBigInt(value));
-  }
-
-  get totalLonStakingAmount(): BigInt {
-    let value = this.get("totalLonStakingAmount");
-    return value.toBigInt();
-  }
-
-  set totalLonStakingAmount(value: BigInt) {
-    this.set("totalLonStakingAmount", Value.fromBigInt(value));
-  }
-
-  get totalMintedAmount(): BigInt {
-    let value = this.get("totalMintedAmount");
-    return value.toBigInt();
-  }
-
-  set totalMintedAmount(value: BigInt) {
-    this.set("totalMintedAmount", Value.fromBigInt(value));
   }
 
   get lastUpdatedAt(): i32 {
