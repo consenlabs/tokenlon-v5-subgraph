@@ -2,7 +2,7 @@ import { Bytes } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { Staked as StakedEvent, Redeem as RedeemEvent, Transfer as TransferEvent, Cooldown as CooldownEvent } from "../generated/LonStaking/LonStaking"
 import { Staked, Redeem, StakedChange, Cooldown } from "../generated/schema"
-import { ZERO, ZERO_BD, updateStakedData, LonStakingContract, getUser } from './helper'
+import { ZERO, ZERO_BD, updateStakedData, LonStakingContract, getUser, getStakingRecord, StakeType_Staked, StakeType_Cooldown, StakeType_Redeem } from './helper'
 
 export function handleStaked(event: StakedEvent): void {
 
@@ -51,6 +51,14 @@ export function handleStaked(event: StakedEvent): void {
   user.stakeCount += 1
   user.lastSeen = event.block.timestamp.toI32()
   user.save()
+
+  let stakingRecord = getStakingRecord(event)
+  stakingRecord.user = event.params.user
+  stakingRecord.date = dayStartTimestamp
+  stakingRecord.stakeType = StakeType_Staked
+  stakingRecord.amount = event.params.amount
+  stakingRecord.share = event.params.share
+  stakingRecord.save()
 }
 
 export function handleRedeem(event: RedeemEvent): void {
@@ -102,6 +110,15 @@ export function handleRedeem(event: RedeemEvent): void {
   user.redeemCount += 1
   user.lastSeen = event.block.timestamp.toI32()
   user.save()
+
+  let stakingRecord = getStakingRecord(event)
+  stakingRecord.user = event.params.user
+  stakingRecord.date = dayStartTimestamp
+  stakingRecord.stakeType = StakeType_Redeem
+  stakingRecord.amount = event.params.redeemAmount
+  stakingRecord.penalty = event.params.penaltyAmount
+  stakingRecord.share = event.params.share
+  stakingRecord.save()
 }
 
 export function handleCooldown(event: CooldownEvent): void {
@@ -130,4 +147,12 @@ export function handleCooldown(event: CooldownEvent): void {
 
   log.info(entity.transactionHash, null)
   entity.save()
+
+  let stakingRecord = getStakingRecord(event)
+  stakingRecord.user = event.params.user
+  stakingRecord.date = dayStartTimestamp
+  stakingRecord.stakeType = StakeType_Cooldown
+  stakingRecord.cooldownSeconds = entity.cooldownSeconds
+  stakingRecord.cooldownDate = dayStartTimestamp
+  stakingRecord.save()
 }
