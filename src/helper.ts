@@ -2,17 +2,20 @@
 import { BigInt, BigDecimal, ethereum, Address, Bytes } from '@graphprotocol/graph-ts'
 import { log } from '@graphprotocol/graph-ts'
 import { LonStaking } from "../generated/LonStaking/LonStaking"
+import { RewardDistributor } from "../generated/RewardDistributor/RewardDistributor"
 import { ERC20 } from "../generated/PMM/ERC20"
 import { ERC20Bytes } from "../generated/PMM/ERC20Bytes"
 import { StakedDayData, StakedTotal, StakedChange, BuyBack, TradedToken, User } from "../generated/schema"
 
-export const STAKING_ADDRESS = '0xf88506b0f1d30056b9e5580668d5875b9cd30f23'
+export const LON_STAKING_ADDRESS = '0xf88506b0f1d30056b9e5580668d5875b9cd30f23'
+export const REWARD_DISTRIBUTOR_ADDRESS = '0xbF1C2c17CC77e7Dec3466B96F46f93c09f02aB07'
 export const LON_ADDRESS = '0x0000000000095413afc295d19edeb1ad7b71c952'
 export let ZERO = BigInt.fromI32(0)
 export let ZERO_BD = BigDecimal.fromString('0')
 export let ONE = BigInt.fromI32(1)
 export let ONE_BD = BigDecimal.fromString('1')
-export let LonStakingContract = LonStaking.bind(Address.fromString(STAKING_ADDRESS))
+export let LonStakingContract = LonStaking.bind(Address.fromString(LON_STAKING_ADDRESS))
+export let RewardDistributorContract = RewardDistributor.bind(Address.fromString(REWARD_DISTRIBUTOR_ADDRESS))
 export let ZERO_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000')
 export let ETH_ADDRESS = Address.fromString('0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE')
 export let WETH_ADDRESS = Address.fromString("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
