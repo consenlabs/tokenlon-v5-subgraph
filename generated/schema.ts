@@ -1348,6 +1348,154 @@ export class BuyBackTotal extends Entity {
   }
 }
 
+export class StakingRecord extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save StakingRecord entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save StakingRecord entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("StakingRecord", id.toString(), this);
+  }
+
+  static load(id: string): StakingRecord | null {
+    return store.get("StakingRecord", id) as StakingRecord | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get transactionHash(): string {
+    let value = this.get("transactionHash");
+    return value.toString();
+  }
+
+  set transactionHash(value: string) {
+    this.set("transactionHash", Value.fromString(value));
+  }
+
+  get blockNumber(): BigInt {
+    let value = this.get("blockNumber");
+    return value.toBigInt();
+  }
+
+  set blockNumber(value: BigInt) {
+    this.set("blockNumber", Value.fromBigInt(value));
+  }
+
+  get logIndex(): BigInt {
+    let value = this.get("logIndex");
+    return value.toBigInt();
+  }
+
+  set logIndex(value: BigInt) {
+    this.set("logIndex", Value.fromBigInt(value));
+  }
+
+  get user(): Bytes {
+    let value = this.get("user");
+    return value.toBytes();
+  }
+
+  set user(value: Bytes) {
+    this.set("user", Value.fromBytes(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+
+  get penalty(): BigInt {
+    let value = this.get("penalty");
+    return value.toBigInt();
+  }
+
+  set penalty(value: BigInt) {
+    this.set("penalty", Value.fromBigInt(value));
+  }
+
+  get share(): BigInt {
+    let value = this.get("share");
+    return value.toBigInt();
+  }
+
+  set share(value: BigInt) {
+    this.set("share", Value.fromBigInt(value));
+  }
+
+  get redeem(): boolean {
+    let value = this.get("redeem");
+    return value.toBoolean();
+  }
+
+  set redeem(value: boolean) {
+    this.set("redeem", Value.fromBoolean(value));
+  }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
+  }
+
+  get date(): i32 {
+    let value = this.get("date");
+    return value.toI32();
+  }
+
+  set date(value: i32) {
+    this.set("date", Value.fromI32(value));
+  }
+
+  get stakeType(): i32 {
+    let value = this.get("stakeType");
+    return value.toI32();
+  }
+
+  set stakeType(value: i32) {
+    this.set("stakeType", Value.fromI32(value));
+  }
+
+  get cooldownSeconds(): BigInt {
+    let value = this.get("cooldownSeconds");
+    return value.toBigInt();
+  }
+
+  set cooldownSeconds(value: BigInt) {
+    this.set("cooldownSeconds", Value.fromBigInt(value));
+  }
+
+  get cooldownDate(): i32 {
+    let value = this.get("cooldownDate");
+    return value.toI32();
+  }
+
+  set cooldownDate(value: i32) {
+    this.set("cooldownDate", Value.fromI32(value));
+  }
+}
+
 export class Staked extends Entity {
   constructor(id: string) {
     super();

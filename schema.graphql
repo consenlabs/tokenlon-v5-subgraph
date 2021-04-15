@@ -156,6 +156,23 @@ type BuyBackTotal @entity {
   txCount: BigInt!
 }
 
+type StakingRecord @entity {
+  id: ID!
+  transactionHash: String!
+  blockNumber: BigInt! # block number
+  logIndex: BigInt! # transaction index
+  user: Bytes!
+  amount: BigInt! # uint256
+  penalty: BigInt! # uint256
+  share: BigInt! # uint256
+  redeem: Boolean!
+  timestamp: Int!
+  date: Int!
+  stakeType: Int!
+  cooldownSeconds: BigInt!
+  cooldownDate: Int!
+}
+
 type Staked @entity {
   id: ID!
   from: Bytes!

@@ -5,7 +5,7 @@ import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { RewardDistributor } from "../generated/RewardDistributor/RewardDistributor"
 import { ERC20 } from "../generated/PMM/ERC20"
 import { ERC20Bytes } from "../generated/PMM/ERC20Bytes"
-import { StakedDayData, StakedTotal, StakedChange, BuyBack, TradedToken, User } from "../generated/schema"
+import { StakingRecord, StakedDayData, StakedTotal, StakedChange, BuyBack, TradedToken, User } from "../generated/schema"
 
 export const LON_STAKING_ADDRESS = '0xf88506b0f1d30056b9e5580668d5875b9cd30f23'
 export const REWARD_DISTRIBUTOR_ADDRESS = '0xbF1C2c17CC77e7Dec3466B96F46f93c09f02aB07'
@@ -19,6 +19,9 @@ export let RewardDistributorContract = RewardDistributor.bind(Address.fromString
 export let ZERO_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000')
 export let ETH_ADDRESS = Address.fromString('0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE')
 export let WETH_ADDRESS = Address.fromString("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
+export const StakeType_Staked = 1
+export const StakeType_Cooldown = 2
+export const StakeType_Redeem = 3
 
 export function updateStakedData(event: ethereum.Event): void {
   let stakedChange = StakedChange.load(event.transaction.hash.toHex())
@@ -136,4 +139,22 @@ export const getUser = (userAddr: Address, startDate: i32): User | null => {
     user.lastSeen = 0
   }
   return user
+}
+
+export const getStakingRecord = (event: ethereum.Event): StakingRecord | null => {
+  let entity = StakingRecord.load(event.transaction.hash.toHex())
+  if (entity == null) {
+    entity = new StakingRecord(event.transaction.hash.toHex())
+    entity.transactionHash = event.transaction.hash.toHex()
+    entity.blockNumber = event.block.number
+    entity.logIndex = event.logIndex
+    entity.timestamp = event.block.timestamp.toI32()
+    entity.amount = ZERO
+    entity.penalty = ZERO
+    entity.share = ZERO
+    entity.redeem = false
+    entity.cooldownSeconds = ZERO
+    entity.cooldownDate = 0
+  }
+  return entity
 }
