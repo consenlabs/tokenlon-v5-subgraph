@@ -110,8 +110,8 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
       //   uint256 maxBuy;
       //   address[] path;
       // }
-      buyBack.LFactor = BigInt.fromI32(feeTokens.value.value1)
-      buyBack.RFactor = BigInt.fromI32(feeTokens.value.value2)
+      buyBack.LFactor = feeTokens.value.value1
+      buyBack.RFactor = feeTokens.value.value2
       buyBack.minBuy = feeTokens.value.value5
       buyBack.maxBuy = feeTokens.value.value6
     }
