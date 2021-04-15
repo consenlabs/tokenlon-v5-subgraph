@@ -1,9 +1,8 @@
 import { Address, BigInt, BigDecimal, Bytes, ethereum } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { BuyBack as BuyBackEvent, DistributeLon as DistributeLonEvent, MintLon as MintLonEvent, SetFeeToken as SetFeeTokenEvent, EnableFeeToken as EnableFeeTokenEvent } from "../generated/RewardDistributor/RewardDistributor"
-import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { BuyBack, DistributeLon, MintLon, BuyBackDayData, BuyBackTotal, StakedChange, SetFeeToken, EnableFeeToken, FeeToken } from "../generated/schema"
-import { ZERO, ZERO_BD, ONE, LonStakingContract, LON_ADDRESS, STAKING_ADDRESS, updateStakedData, getBuyBack, getUser } from './helper'
+import { ZERO, ZERO_BD, ONE, LonStakingContract, RewardDistributorContract, LON_ADDRESS, LON_STAKING_ADDRESS, updateStakedData, getBuyBack, getUser, REWARD_DISTRIBUTOR_ADDRESS } from './helper'
 const START_TIMESTAMP = 1617206400
 
 export function handleBuyBack(event: BuyBackEvent): void {
@@ -52,12 +51,11 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
     buyBackTotal.lastUpdatedAt = 0
   }
 
-  let lon = LonStaking.bind(Address.fromString(LON_ADDRESS))
   let totalSupply = new BigDecimal(LonStakingContract.totalSupply())
   let lonBalance = ZERO_BD
   let scaleIndex = ZERO_BD
   if (totalSupply.gt(ZERO_BD)) {
-    lonBalance = new BigDecimal(lon.balanceOf(Address.fromString(STAKING_ADDRESS)))
+    lonBalance = new BigDecimal(LonStakingContract.balanceOf(Address.fromString(LON_STAKING_ADDRESS)))
     scaleIndex = lonBalance.div(totalSupply)
   }
   if (buyBackTotal.lastUpdatedAt == 0) {
@@ -87,6 +85,46 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   buyBackDayData.dailyTreasuryAmount = buyBackDayData.dailyTreasuryAmount.plus(treasuryAmount)
   buyBackDayData.dailyLonStakingAmount = buyBackDayData.dailyLonStakingAmount.plus(lonStakingAmount)
   buyBackDayData.save()
+
+  // add buyback if the fee token is Lon
+  let buyBack = getBuyBack(event)
+  if (buyBack.gasPrice.equals(ZERO)) {
+    buyBack.from = event.transaction.from as Bytes
+    buyBack.to = event.transaction.to as Bytes
+    buyBack.transactionHash = event.transaction.hash.toHex()
+    buyBack.blockNumber = event.block.number
+    buyBack.logIndex = event.logIndex
+    buyBack.eventAddr = event.address
+    buyBack.gasPrice = event.transaction.gasPrice
+    buyBack.feeToken = Address.fromString(LON_ADDRESS)
+    buyBack.feeTokenAmount = event.params.treasuryAmount.plus(event.params.lonStakingAmount)
+    buyBack.swappedLonAmount = ZERO
+    buyBack.LFactor = ZERO
+    buyBack.RFactor = ZERO
+    buyBack.minBuy = ZERO
+    buyBack.maxBuy = ZERO
+    buyBack.timestamp = event.block.timestamp.toI32()
+
+    let feeTokens = RewardDistributorContract.try_feeTokens(Address.fromString(LON_ADDRESS))
+    if (!feeTokens.reverted) {
+      // struct FeeToken {
+      //   uint8 exchangeIndex;
+      //   uint8 LFactor;
+      //   uint8 RFactor;
+      //   uint32 lastTimeBuyback;
+      //   bool enable;
+      //   uint256 minBuy;
+      //   uint256 maxBuy;
+      //   address[] path;
+      // }
+      buyBack.LFactor = BigInt.fromI32(feeTokens.value.value1)
+      buyBack.RFactor = BigInt.fromI32(feeTokens.value.value2)
+      buyBack.minBuy = feeTokens.value.value5
+      buyBack.maxBuy = feeTokens.value.value6
+    }
+
+    buyBack.save()
+  }
 
   // update distribute lon
   let txHash = event.transaction.hash.toHex()
