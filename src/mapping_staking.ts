@@ -11,7 +11,7 @@ export function handleStaked(event: StakedEvent): void {
   if (stakedChange == null) {
     stakedChange = new StakedChange(event.transaction.hash.toHex())
     stakedChange.stakedAmount = event.params.amount
-    stakedChange.date = 0
+    stakedChange.timestamp = 0
     stakedChange.penalty = ZERO
     stakedChange.added = true
     stakedChange.save()
@@ -68,7 +68,7 @@ export function handleRedeem(event: RedeemEvent): void {
   if (stakedChange == null) {
     stakedChange = new StakedChange(event.transaction.hash.toHex())
     stakedChange.stakedAmount = event.params.redeemAmount
-    stakedChange.date = 0
+    stakedChange.timestamp = 0
     stakedChange.penalty = ZERO
     stakedChange.added = false
     stakedChange.save()
