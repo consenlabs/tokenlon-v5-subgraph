@@ -2,7 +2,7 @@ import { Address, BigInt, BigDecimal, Bytes, ethereum } from "@graphprotocol/gra
 import { log } from '@graphprotocol/graph-ts'
 import { BuyBack as BuyBackEvent, DistributeLon as DistributeLonEvent, MintLon as MintLonEvent, SetFeeToken as SetFeeTokenEvent, EnableFeeToken as EnableFeeTokenEvent } from "../generated/RewardDistributor/RewardDistributor"
 import { BuyBack, DistributeLon, MintLon, BuyBackDayData, BuyBackTotal, StakedChange, SetFeeToken, EnableFeeToken, FeeToken } from "../generated/schema"
-import { ZERO, ZERO_BD, ONE, LonStakingContract, RewardDistributorContract, LON_ADDRESS, LON_STAKING_ADDRESS, updateStakedData, getBuyBack, getUser, REWARD_DISTRIBUTOR_ADDRESS } from './helper'
+import { ZERO, ZERO_BD, ONE, LonStakingContract, RewardDistributorContract, LON_ADDRESS, LON_STAKING_ADDRESS, updateStakedData, getBuyBack, getUser, REWARD_DISTRIBUTOR_ADDRESS, getScaleIndex } from './helper'
 const START_TIMESTAMP = 1617206400
 
 export function handleBuyBack(event: BuyBackEvent): void {
@@ -51,13 +51,7 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
     buyBackTotal.lastUpdatedAt = 0
   }
 
-  let totalSupply = new BigDecimal(LonStakingContract.totalSupply())
-  let lonBalance = ZERO_BD
-  let scaleIndex = ZERO_BD
-  if (totalSupply.gt(ZERO_BD)) {
-    lonBalance = new BigDecimal(LonStakingContract.balanceOf(Address.fromString(LON_STAKING_ADDRESS)))
-    scaleIndex = lonBalance.div(totalSupply)
-  }
+  let scaleIndex = getScaleIndex()
   if (buyBackTotal.lastUpdatedAt == 0) {
     buyBackTotal.lastUpdatedAt = START_TIMESTAMP
   }
@@ -153,7 +147,7 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   if (stakedChange == null) {
     stakedChange = new StakedChange(txHash)
     stakedChange.stakedAmount = lonStakingAmount
-    stakedChange.date = 0
+    stakedChange.timestamp = 0
     stakedChange.penalty = ZERO
     stakedChange.added = true
     stakedChange.save()

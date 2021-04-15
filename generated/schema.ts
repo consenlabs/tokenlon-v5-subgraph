@@ -1871,13 +1871,13 @@ export class StakedChange extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get date(): i32 {
-    let value = this.get("date");
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
     return value.toI32();
   }
 
-  set date(value: i32) {
-    this.set("date", Value.fromI32(value));
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
   }
 
   get stakedAmount(): BigInt {
@@ -1945,6 +1945,15 @@ export class StakedTotal extends Entity {
 
   set totalStakedAmount(value: BigInt) {
     this.set("totalStakedAmount", Value.fromBigInt(value));
+  }
+
+  get scaleIndex(): BigDecimal {
+    let value = this.get("scaleIndex");
+    return value.toBigDecimal();
+  }
+
+  set scaleIndex(value: BigDecimal) {
+    this.set("scaleIndex", Value.fromBigDecimal(value));
   }
 }
 

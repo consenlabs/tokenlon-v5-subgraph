@@ -58,7 +58,9 @@ export function updateStakedData(event: ethereum.Event): void {
     stakedTotal.totalStakedAmount = stakedTotal.totalStakedAmount.minus(stakedChange.stakedAmount)
     stakedDayData.dailyStakedAmount = stakedDayData.dailyStakedAmount.minus(stakedChange.stakedAmount)
   }
-  stakedChange.date = timestamp
+  let scaleIndex = getScaleIndex()
+  stakedTotal.scaleIndex = scaleIndex
+  stakedChange.timestamp = timestamp
   stakedTotal.save()
   stakedChange.save()
   stakedDayData.save()
@@ -157,4 +159,16 @@ export const getStakingRecord = (event: ethereum.Event): StakingRecord | null =>
     entity.cooldownDate = 0
   }
   return entity
+}
+
+export const getScaleIndex = (): BigDecimal => {
+  let lon = LonStaking.bind(Address.fromString(LON_ADDRESS))
+  let totalSupply = new BigDecimal(LonStakingContract.totalSupply())
+  let lonBalance = ZERO_BD
+  let scaleIndex = ZERO_BD
+  if (totalSupply.gt(ZERO_BD)) {
+    lonBalance = new BigDecimal(lon.balanceOf(Address.fromString(LON_STAKING_ADDRESS)))
+    scaleIndex = lonBalance.div(totalSupply)
+  }
+  return scaleIndex
 }

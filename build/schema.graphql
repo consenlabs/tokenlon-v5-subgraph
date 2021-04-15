@@ -215,7 +215,7 @@ type StakedDayData @entity {
 
 type StakedChange @entity {
   id: ID!
-  date: Int!
+  timestamp: Int!
   stakedAmount: BigInt!
   penalty: BigInt!
   added: Boolean!
@@ -224,6 +224,7 @@ type StakedChange @entity {
 type StakedTotal @entity {
   id: ID!
   totalStakedAmount: BigInt!
+  scaleIndex: BigDecimal!
 }
 
 type Cooldown @entity {
