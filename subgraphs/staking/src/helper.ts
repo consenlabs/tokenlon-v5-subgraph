@@ -3,7 +3,7 @@ import { BigInt, BigDecimal, ethereum, Address, Bytes } from '@graphprotocol/gra
 import { log } from '@graphprotocol/graph-ts'
 import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { RewardDistributor } from "../generated/RewardDistributor/RewardDistributor"
-import { StakingRecord, StakedDayData, StakedTotal, StakedChange, BuyBack, User } from "../generated/schema"
+import { StakingRecord, StakedDayData, StakedTotal, StakedChange, BuyBack } from "../generated/schema"
 
 export const LON_STAKING_ADDRESS = '0xf88506b0f1d30056b9e5580668d5875b9cd30f23'
 export const REWARD_DISTRIBUTOR_ADDRESS = '0xbF1C2c17CC77e7Dec3466B96F46f93c09f02aB07'
@@ -20,6 +20,7 @@ export let WETH_ADDRESS = Address.fromString("0xC02aaA39b223FE8D0A0e5C4F27eAD908
 export const StakeType_Staked = 1
 export const StakeType_Cooldown = 2
 export const StakeType_Redeem = 3
+export const START_TIMESTAMP = 1617206400
 
 export function updateStakedData(event: ethereum.Event): void {
   let stakedChange = StakedChange.load(event.transaction.hash.toHex())
@@ -77,21 +78,6 @@ export const getBuyBack = (event: ethereum.Event): BuyBack | null => {
     entity.swappedLonAmount = ZERO
   }
   return entity
-}
-
-export const getUser = (userAddr: Address, startDate: i32): User | null => {
-  let userAddrStr = userAddr.toHex()
-  let user = User.load(userAddrStr)
-  if (user == null) {
-    user = new User(userAddrStr)
-    user.stakeCount = 0
-    user.buyBackCount = 0
-    user.redeemCount = 0
-    user.tradeCount = 0
-    user.firstSeen = startDate
-    user.lastSeen = 0
-  }
-  return user
 }
 
 export const getStakingRecord = (event: ethereum.Event): StakingRecord | null => {

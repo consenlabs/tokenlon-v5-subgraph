@@ -1,9 +1,8 @@
-import { Address, BigInt, BigDecimal, Bytes, ethereum } from "@graphprotocol/graph-ts"
+import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { BuyBack as BuyBackEvent, DistributeLon as DistributeLonEvent, MintLon as MintLonEvent, SetFeeToken as SetFeeTokenEvent, EnableFeeToken as EnableFeeTokenEvent } from "../generated/RewardDistributor/RewardDistributor"
-import { BuyBack, DistributeLon, MintLon, BuyBackDayData, BuyBackTotal, StakedChange, SetFeeToken, EnableFeeToken, FeeToken } from "../generated/schema"
-import { ZERO, ZERO_BD, ONE, LonStakingContract, RewardDistributorContract, LON_ADDRESS, LON_STAKING_ADDRESS, updateStakedData, getBuyBack, getUser, REWARD_DISTRIBUTOR_ADDRESS, getScaleIndex } from './helper'
-const START_TIMESTAMP = 1617206400
+import { DistributeLon, MintLon, BuyBackDayData, BuyBackTotal, StakedChange, SetFeeToken, EnableFeeToken, FeeToken } from "../generated/schema"
+import { ZERO, ZERO_BD, ONE, START_TIMESTAMP, RewardDistributorContract, LON_ADDRESS, updateStakedData, getBuyBack, getScaleIndex } from './helper'
 
 export function handleBuyBack(event: BuyBackEvent): void {
 
@@ -156,11 +155,6 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   log.info(entity.transactionHash, null)
 
   updateStakedData(event)
-
-  let user = getUser(event.transaction.from, event.block.timestamp.toI32())
-  user.buyBackCount += 1
-  user.lastSeen = event.block.timestamp.toI32()
-  user.save()
 }
 
 export function handleMintLon(event: MintLonEvent): void {

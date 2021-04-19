@@ -1,8 +1,8 @@
 import { Bytes } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
-import { Staked as StakedEvent, Redeem as RedeemEvent, Transfer as TransferEvent, Cooldown as CooldownEvent } from "../generated/LonStaking/LonStaking"
+import { Staked as StakedEvent, Redeem as RedeemEvent, Cooldown as CooldownEvent } from "../generated/LonStaking/LonStaking"
 import { Staked, Redeem, StakedChange, Cooldown } from "../generated/schema"
-import { ZERO, ZERO_BD, updateStakedData, LonStakingContract, getUser, getStakingRecord, StakeType_Staked, StakeType_Cooldown, StakeType_Redeem } from './helper'
+import { ZERO, updateStakedData, LonStakingContract, getStakingRecord, StakeType_Staked, StakeType_Cooldown, StakeType_Redeem } from './helper'
 
 export function handleStaked(event: StakedEvent): void {
 
@@ -46,11 +46,6 @@ export function handleStaked(event: StakedEvent): void {
   entity.save()
 
   updateStakedData(event)
-
-  let user = getUser(event.params.user, event.block.timestamp.toI32())
-  user.stakeCount += 1
-  user.lastSeen = event.block.timestamp.toI32()
-  user.save()
 
   let stakingRecord = getStakingRecord(event)
   stakingRecord.user = event.params.user
@@ -105,11 +100,6 @@ export function handleRedeem(event: RedeemEvent): void {
   entity.save()
 
   updateStakedData(event)
-
-  let user = getUser(event.params.user, event.block.timestamp.toI32())
-  user.redeemCount += 1
-  user.lastSeen = event.block.timestamp.toI32()
-  user.save()
 
   let stakingRecord = getStakingRecord(event)
   stakingRecord.user = event.params.user

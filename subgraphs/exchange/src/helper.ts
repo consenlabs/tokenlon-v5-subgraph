@@ -64,17 +64,16 @@ export const addTradedToken = (tokenAddr: Address, startDate: i32): TradedToken 
   return tradedToken
 }
 
-export const getUser = (userAddr: Address, startDate: i32): User | null => {
+export const getUser = (userAddr: Address, event: ethereum.Event): User | null => {
   let userAddrStr = userAddr.toHex()
   let user = User.load(userAddrStr)
   if (user == null) {
     user = new User(userAddrStr)
-    user.stakeCount = 0
-    user.buyBackCount = 0
-    user.redeemCount = 0
     user.tradeCount = 0
-    user.firstSeen = startDate
     user.lastSeen = 0
+    user.firstSeen = event.block.timestamp.toI32()
+    user.firstBlock = event.block.number
+    user.firstTx = event.transaction.hash.toHex()
   }
   return user
 }

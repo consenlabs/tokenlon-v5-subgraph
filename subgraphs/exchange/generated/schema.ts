@@ -867,33 +867,6 @@ export class User extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get stakeCount(): i32 {
-    let value = this.get("stakeCount");
-    return value.toI32();
-  }
-
-  set stakeCount(value: i32) {
-    this.set("stakeCount", Value.fromI32(value));
-  }
-
-  get buyBackCount(): i32 {
-    let value = this.get("buyBackCount");
-    return value.toI32();
-  }
-
-  set buyBackCount(value: i32) {
-    this.set("buyBackCount", Value.fromI32(value));
-  }
-
-  get redeemCount(): i32 {
-    let value = this.get("redeemCount");
-    return value.toI32();
-  }
-
-  set redeemCount(value: i32) {
-    this.set("redeemCount", Value.fromI32(value));
-  }
-
   get tradeCount(): i32 {
     let value = this.get("tradeCount");
     return value.toI32();
@@ -901,6 +874,15 @@ export class User extends Entity {
 
   set tradeCount(value: i32) {
     this.set("tradeCount", Value.fromI32(value));
+  }
+
+  get lastSeen(): i32 {
+    let value = this.get("lastSeen");
+    return value.toI32();
+  }
+
+  set lastSeen(value: i32) {
+    this.set("lastSeen", Value.fromI32(value));
   }
 
   get firstSeen(): i32 {
@@ -912,12 +894,21 @@ export class User extends Entity {
     this.set("firstSeen", Value.fromI32(value));
   }
 
-  get lastSeen(): i32 {
-    let value = this.get("lastSeen");
-    return value.toI32();
+  get firstTx(): string {
+    let value = this.get("firstTx");
+    return value.toString();
   }
 
-  set lastSeen(value: i32) {
-    this.set("lastSeen", Value.fromI32(value));
+  set firstTx(value: string) {
+    this.set("firstTx", Value.fromString(value));
+  }
+
+  get firstBlock(): BigInt {
+    let value = this.get("firstBlock");
+    return value.toBigInt();
+  }
+
+  set firstBlock(value: BigInt) {
+    this.set("firstBlock", Value.fromBigInt(value));
   }
 }

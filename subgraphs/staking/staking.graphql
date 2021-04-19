@@ -199,13 +199,3 @@ type FeeToken @entity {
   maxBuy: BigInt!
   enabled: Boolean!
 }
-
-type User @entity {
-  id: ID!
-  stakeCount: Int!
-  buyBackCount: Int!
-  redeemCount: Int!
-  tradeCount: Int!
-  firstSeen: Int!
-  lastSeen: Int!
-}

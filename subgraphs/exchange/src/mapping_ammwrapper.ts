@@ -53,7 +53,7 @@ export function handleSwapped(event: SwappedEvent): void {
   addTradedToken(entity.takerAssetAddr as Address, event.block.timestamp.toI32())
   addTradedToken(entity.makerAssetAddr as Address, event.block.timestamp.toI32())
 
-  let user = getUser(event.params.userAddr, event.block.timestamp.toI32())
+  let user = getUser(event.params.userAddr, event)
   user.tradeCount += 1
   user.lastSeen = event.block.timestamp.toI32()
   user.save()

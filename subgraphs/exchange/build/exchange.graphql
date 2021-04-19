@@ -95,10 +95,9 @@ type TradedToken @entity {
 
 type User @entity {
   id: ID!
-  stakeCount: Int!
-  buyBackCount: Int!
-  redeemCount: Int!
   tradeCount: Int!
-  firstSeen: Int!
   lastSeen: Int!
+  firstSeen: Int!
+  firstTx: String!
+  firstBlock: BigInt!
 }
