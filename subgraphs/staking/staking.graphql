@@ -1,89 +1,3 @@
-type FillOrder @entity {
-  id: ID!
-  from: Bytes!
-  to: Bytes!
-  txNumber: BigInt! # uint256
-  source: String! # string
-  transactionHash: String!
-  executeTxHash: Bytes!
-  orderHash: Bytes! # bytes32
-  userAddr: Bytes! # bytes32
-  takerAssetAddr: Bytes! # bytes32
-  takerAssetAmount: BigInt! # uint256
-  makerAddr: Bytes! # bytes32
-  makerAssetAddr: Bytes! # bytes32
-  makerAssetAmount: BigInt! # uint256
-  receiverAddr: Bytes! # bytes32
-  settleAmount: BigInt! # uint256
-  feeFactor: Int! # uin16 < uint32
-  blockNumber: BigInt! # block number
-  logIndex: BigInt! # transaction index
-  eventAddr: Bytes! # bytes32
-  gasPrice: BigInt! # uint256
-  timestamp: Int!
-}
-
-type Swapped @entity {
-  id: ID!
-  from: Bytes!
-  to: Bytes!
-  txNumber: BigInt! # uint256
-  source: String! # string
-  transactionHash: String!
-  executeTxHash: Bytes!
-  userAddr: Bytes! # bytes32
-  takerAssetAddr: Bytes! # bytes32
-  takerAssetAmount: BigInt! # uint256
-  makerAddr: Bytes! # bytes32
-  makerAssetAddr: Bytes! # bytes32
-  makerAssetAmount: BigInt! # uint256
-  receiverAddr: Bytes! # bytes32
-  settleAmount: BigInt! # uint256
-  receivedAmount: BigInt! # uint256
-  feeFactor: Int! # uin16 < uint32
-  subsidyFactor: Int! # uin16 < uint32
-  blockNumber: BigInt! # block number
-  logIndex: BigInt! # transaction index
-  eventAddr: Bytes! # bytes32
-  gasPrice: BigInt! # uint256
-  timestamp: Int!
-}
-
-type SwappedTotal @entity {
-  id: ID!
-  total: BigInt!
-}
-
-type FillOrderTotal @entity {
-  id: ID!
-  total: BigInt!
-}
-
-type SubsidizedSwapped @entity {
-  id: ID!
-  from: Bytes!
-  to: Bytes!
-  source: String! # string
-  transactionHash: String!
-  executeTxHash: Bytes!
-  userAddr: Bytes! # bytes32
-  takerAssetAddr: Bytes! # bytes32
-  takerAssetAmount: BigInt! # uint256
-  makerAddr: Bytes! # bytes32
-  makerAssetAddr: Bytes! # bytes32
-  makerAssetAmount: BigInt! # uint256
-  receiverAddr: Bytes! # bytes32
-  settleAmount: BigInt! # uint256
-  receivedAmount: BigInt! # uint256
-  feeFactor: Int! # uin16 < uint32
-  subsidyFactor: Int! # uin16 < uint32
-  blockNumber: BigInt! # block number
-  logIndex: BigInt! # transaction index
-  eventAddr: Bytes! # bytes32
-  gasPrice: BigInt! # uint256
-  timestamp: Int!
-}
-
 type BuyBack @entity {
   id: ID!
   from: Bytes!
@@ -284,15 +198,6 @@ type FeeToken @entity {
   minBuy: BigInt!
   maxBuy: BigInt!
   enabled: Boolean!
-}
-
-type TradedToken @entity {
-  id: ID!
-  address: Bytes! # bytes32
-  decimals: Int!
-  startDate: Int!
-  symbol: String!
-  name: String!
 }
 
 type User @entity {

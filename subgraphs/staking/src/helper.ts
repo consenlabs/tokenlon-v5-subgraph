@@ -3,9 +3,7 @@ import { BigInt, BigDecimal, ethereum, Address, Bytes } from '@graphprotocol/gra
 import { log } from '@graphprotocol/graph-ts'
 import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { RewardDistributor } from "../generated/RewardDistributor/RewardDistributor"
-import { ERC20 } from "../generated/PMM/ERC20"
-import { ERC20Bytes } from "../generated/PMM/ERC20Bytes"
-import { StakingRecord, StakedDayData, StakedTotal, StakedChange, BuyBack, TradedToken, User } from "../generated/schema"
+import { StakingRecord, StakedDayData, StakedTotal, StakedChange, BuyBack, User } from "../generated/schema"
 
 export const LON_STAKING_ADDRESS = '0xf88506b0f1d30056b9e5580668d5875b9cd30f23'
 export const REWARD_DISTRIBUTOR_ADDRESS = '0xbF1C2c17CC77e7Dec3466B96F46f93c09f02aB07'
@@ -79,53 +77,6 @@ export const getBuyBack = (event: ethereum.Event): BuyBack | null => {
     entity.swappedLonAmount = ZERO
   }
   return entity
-}
-
-export const addTradedToken = (tokenAddr: Address, startDate: i32): TradedToken | null => {
-  let tokenAddrStr = tokenAddr.toHex()
-  if (isETH(tokenAddr)) {
-    tokenAddrStr = WETH_ADDRESS.toHex()
-  }
-  // check whether token is in the traded token
-  let tradedToken = TradedToken.load(tokenAddrStr)
-  if (tradedToken == null) {
-    let tradedTokenContract = ERC20.bind(tokenAddr)
-    let decimals = tradedTokenContract.try_decimals()
-    if (!decimals.reverted) {
-      let name = ''
-      let symbol = ''
-      let nameCall = tradedTokenContract.try_name()
-      if (nameCall.reverted) {
-        let tradedTokenBytesContract = ERC20Bytes.bind(tokenAddr)
-        let nameCallBytes = tradedTokenBytesContract.try_name()
-        if (nameCallBytes.reverted) {
-          return null
-        }
-        name = nameCallBytes.value.toString()
-      } else {
-        name = nameCall.value
-      }
-      let symbolCall = tradedTokenContract.try_symbol()
-      if (symbolCall.reverted) {
-        let tradedTokenBytesContract = ERC20Bytes.bind(tokenAddr)
-        let symbolCallBytes = tradedTokenBytesContract.try_symbol()
-        if (symbolCallBytes.reverted) {
-          return null
-        }
-        symbol = symbolCallBytes.value.toString()
-      } else {
-        symbol = symbolCall.value
-      }
-      tradedToken = new TradedToken(tokenAddrStr)
-      tradedToken.address = tokenAddr
-      tradedToken.startDate = startDate
-      tradedToken.decimals = decimals.value
-      tradedToken.name = name
-      tradedToken.symbol = symbol
-      tradedToken.save()
-    }
-  }
-  return tradedToken
 }
 
 export const getUser = (userAddr: Address, startDate: i32): User | null => {

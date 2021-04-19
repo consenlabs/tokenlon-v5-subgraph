@@ -1,14 +1,16 @@
 {
   "name": "tokenlon-v5-subgraph",
+  "version": "0.1.0",
+  "private": true,
   "license": "UNLICENSED",
+  "workspaces": [
+    "subgraphs/*"
+  ],
   "scripts": {
-    "codegen": "graph codegen",
-    "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ benjaminlu/tokenlon-v5-subgraph",
-    "deploy-staging": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ $SUBGRAPH_REPO",
-    "create-local": "graph create --node http://localhost:8020/ benjaminlu/tokenlon-v5-subgraph",
-    "remove-local": "graph remove --node http://localhost:8020/ benjaminlu/tokenlon-v5-subgraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 benjaminlu/tokenlon-v5-subgraph"
+    "build": "yarn workspaces run build",
+    "codegen": "yarn workspaces run codegen",
+    "deploy": "yarn workspaces run deploy",
+    "deploy-staging": "yarn workspaces run deploy-staging"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.20.0",

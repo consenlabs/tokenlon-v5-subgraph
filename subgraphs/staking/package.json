@@ -1,0 +1,19 @@
+{
+  "name": "tokenlon-v5-subgraph-staking",
+  "version": "0.1.0",
+  "license": "UNLICENSED",
+  "author": "consenlabs",
+  "scripts": {
+    "codegen": "graph codegen staking.yaml",
+    "build": "graph build staking.yaml",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ consenlabs/tokenlon-v5-staking staking.yaml",
+    "deploy-staging": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ $SUBGRAPH_USER/tokenlon-v5-staking staking.yaml"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.20.0",
+    "@graphprotocol/graph-ts": "^0.20.0"
+  },
+  "devDependencies": {
+    "yargs-parser": "^18.1.2"
+  }
+}
