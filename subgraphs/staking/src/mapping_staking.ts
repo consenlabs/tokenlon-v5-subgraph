@@ -2,7 +2,7 @@ import { Bytes } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { Staked as StakedEvent, Redeem as RedeemEvent, Cooldown as CooldownEvent } from "../generated/LonStaking/LonStaking"
 import { Staked, Redeem, StakedChange, Cooldown } from "../generated/schema"
-import { ZERO, updateStakedData, LonStakingContract, getStakingRecord, StakeType_Staked, StakeType_Cooldown, StakeType_Redeem } from './helper'
+import { ZERO, ONE, updateStakedData, getStakedTotal, LonStakingContract, getStakingRecord, StakeType_Staked, StakeType_Cooldown, StakeType_Redeem } from './helper'
 
 export function handleStaked(event: StakedEvent): void {
 
@@ -45,7 +45,9 @@ export function handleStaked(event: StakedEvent): void {
   log.info(entity.transactionHash, null)
   entity.save()
 
-  updateStakedData(event)
+  let stakedTotal = getStakedTotal()
+  stakedTotal.txCount = stakedTotal.txCount.plus(ONE)
+  stakedTotal.save()
 
   let stakingRecord = getStakingRecord(event)
   stakingRecord.user = event.params.user
@@ -53,6 +55,7 @@ export function handleStaked(event: StakedEvent): void {
   stakingRecord.stakeType = StakeType_Staked
   stakingRecord.amount = event.params.amount
   stakingRecord.share = event.params.share
+  stakingRecord.txNumber = stakedTotal.txCount
   stakingRecord.save()
 }
 
@@ -99,7 +102,9 @@ export function handleRedeem(event: RedeemEvent): void {
   log.info(entity.transactionHash, null)
   entity.save()
 
-  updateStakedData(event)
+  let stakedTotal = getStakedTotal()
+  stakedTotal.txCount = stakedTotal.txCount.plus(ONE)
+  stakedTotal.save()
 
   let stakingRecord = getStakingRecord(event)
   stakingRecord.user = event.params.user
@@ -108,6 +113,7 @@ export function handleRedeem(event: RedeemEvent): void {
   stakingRecord.amount = event.params.redeemAmount
   stakingRecord.penalty = event.params.penaltyAmount
   stakingRecord.share = event.params.share
+  stakingRecord.txNumber = stakedTotal.txCount
   stakingRecord.save()
 }
 
@@ -138,11 +144,16 @@ export function handleCooldown(event: CooldownEvent): void {
   log.info(entity.transactionHash, null)
   entity.save()
 
+  let stakedTotal = getStakedTotal()
+  stakedTotal.txCount = stakedTotal.txCount.plus(ONE)
+  stakedTotal.save()
+
   let stakingRecord = getStakingRecord(event)
   stakingRecord.user = event.params.user
   stakingRecord.date = dayStartTimestamp
   stakingRecord.stakeType = StakeType_Cooldown
   stakingRecord.cooldownSeconds = entity.cooldownSeconds
   stakingRecord.cooldownDate = dayStartTimestamp
+  stakingRecord.txNumber = stakedTotal.txCount
   stakingRecord.save()
 }

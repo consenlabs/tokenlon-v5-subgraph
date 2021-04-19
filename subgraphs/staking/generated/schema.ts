@@ -745,6 +745,15 @@ export class StakingRecord extends Entity {
   set cooldownDate(value: i32) {
     this.set("cooldownDate", Value.fromI32(value));
   }
+
+  get txNumber(): BigInt {
+    let value = this.get("txNumber");
+    return value.toBigInt();
+  }
+
+  set txNumber(value: BigInt) {
+    this.set("txNumber", Value.fromBigInt(value));
+  }
 }
 
 export class Staked extends Entity {
@@ -1205,6 +1214,15 @@ export class StakedTotal extends Entity {
 
   set scaleIndex(value: BigDecimal) {
     this.set("scaleIndex", Value.fromBigDecimal(value));
+  }
+
+  get txCount(): BigInt {
+    let value = this.get("txCount");
+    return value.toBigInt();
+  }
+
+  set txCount(value: BigInt) {
+    this.set("txCount", Value.fromBigInt(value));
   }
 }
 

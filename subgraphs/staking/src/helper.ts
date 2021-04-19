@@ -22,6 +22,17 @@ export const StakeType_Cooldown = 2
 export const StakeType_Redeem = 3
 export const START_TIMESTAMP = 1617206400
 
+export function getStakedTotal(): StakedTotal | null {
+  let stakedTotal = StakedTotal.load("1")
+  if (stakedTotal == null) {
+    stakedTotal = new StakedTotal("1")
+    stakedTotal.totalStakedAmount = ZERO
+    stakedTotal.scaleIndex = ZERO_BD
+    stakedTotal.txCount = ZERO
+  }
+  return stakedTotal
+}
+
 export function updateStakedData(event: ethereum.Event): void {
   let stakedChange = StakedChange.load(event.transaction.hash.toHex())
   if (stakedChange == null) {
@@ -29,12 +40,7 @@ export function updateStakedData(event: ethereum.Event): void {
     return
   }
 
-  // staked total, TODO: minus penalty?
-  let stakedTotal = StakedTotal.load("1")
-  if (stakedTotal == null) {
-    stakedTotal = new StakedTotal("1")
-    stakedTotal.totalStakedAmount = ZERO
-  }
+  let stakedTotal = getStakedTotal()
 
   // staked day data
   let timestamp = event.block.timestamp.toI32()
@@ -63,6 +69,7 @@ export function updateStakedData(event: ethereum.Event): void {
   stakedTotal.save()
   stakedChange.save()
   stakedDayData.save()
+  return
 }
 
 export let isETH = (assetAddr: Bytes): boolean => {

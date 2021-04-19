@@ -85,6 +85,7 @@ type StakingRecord @entity {
   stakeType: Int!
   cooldownSeconds: BigInt!
   cooldownDate: Int!
+  txNumber: BigInt!
 }
 
 type Staked @entity {
@@ -139,6 +140,7 @@ type StakedTotal @entity {
   id: ID!
   totalStakedAmount: BigInt!
   scaleIndex: BigDecimal!
+  txCount: BigInt!
 }
 
 type Cooldown @entity {
