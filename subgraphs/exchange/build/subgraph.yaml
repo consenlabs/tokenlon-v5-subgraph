@@ -1,0 +1,79 @@
+specVersion: 0.0.2
+schema:
+  file: exchange.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PMM
+    network: mainnet
+    source:
+      address: "0x8D90113A1e286a5aB3e496fbD1853F265e5913c6"
+      abi: PMM
+      startBlock: 11463019
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - FillOrder
+      abis:
+        - name: PMM
+          file: PMM/abis/PMM.json
+        - name: ERC20
+          file: PMM/abis/ERC20.json
+        - name: ERC20Bytes
+          file: PMM/abis/ERC20Bytes.json
+      eventHandlers:
+        - event: FillOrder(string,indexed bytes32,indexed bytes32,indexed
+            address,address,uint256,address,address,uint256,address,uint256,uint16)
+          handler: handleFillOrder
+      file: PMM/PMM.wasm
+  - kind: ethereum/contract
+    name: AMMWrapper
+    network: mainnet
+    source:
+      address: "0x11be6f5520FEE8E867e20AF9C9D2c8A09b909B83"
+      abi: AMMWrapper
+      startBlock: 11463016
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swapped
+      abis:
+        - name: AMMWrapper
+          file: AMMWrapper/abis/AMMWrapper.json
+        - name: ERC20
+          file: AMMWrapper/abis/ERC20.json
+        - name: ERC20Bytes
+          file: AMMWrapper/abis/ERC20Bytes.json
+      eventHandlers:
+        - event: Swapped(string,indexed bytes32,indexed
+            address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
+          handler: handleSwapped
+      file: AMMWrapper/AMMWrapper.wasm
+  - kind: ethereum/contract
+    name: AMMWrapper2
+    network: mainnet
+    source:
+      address: "0x904144473FdE753dc0729608CfeEA6F4A8B275E6"
+      abi: AMMWrapper
+      startBlock: 11689699
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swapped
+      abis:
+        - name: AMMWrapper
+          file: AMMWrapper2/abis/AMMWrapper.json
+        - name: ERC20
+          file: AMMWrapper2/abis/ERC20.json
+        - name: ERC20Bytes
+          file: AMMWrapper2/abis/ERC20Bytes.json
+      eventHandlers:
+        - event: Swapped(string,indexed bytes32,indexed
+            address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
+          handler: handleSwapped
+      file: AMMWrapper/AMMWrapper.wasm

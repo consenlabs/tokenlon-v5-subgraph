@@ -1,5 +1,21 @@
 # Tokenlon Version 5 Subgraph
 
+Provide the historical and analytics data for Tokenlon.
+
+The Graph exposes a GraphQL endpoint to query the events and entities within the Tokenlon ecosytem.
+
+Current subgraph locations:
+    
+* Exchange: includes all Tokenlon Exchange (AMM/PMM) data
+    
+    https://thegraph.com/explorer/subgraph/consenlabs/tokenlon-v5-exchange
+
+* Staking: includes all Tokenlon Staking (Staking/Buyback) data
+    
+    https://thegraph.com/explorer/subgraph/consenlabs/tokenlon-v5-staking
+
+
+
 ## Installation
 
 Install global commands.
@@ -45,14 +61,20 @@ Should execute auth command first.
 ```
 graph auth [options] <node> <access-token>
 ```
-Deploy to testing subgraph space.
+Deploy to subgraph space.
 
 ```
 yarn deploy
 ```
 
-## Playground
+Deploy to testing subgraph space.
 
-Go to [playground](https://thegraph.com/explorer/subgraph/benjaminlu/tokenlon-v5-subgraph) and test your query.
+```
+SUBGRAPH_USER=username yarn deploy-staging
+```
 
-**Once all events are determined, the subgraph would be moved to official subgraph space.**
+## To query these subgraphs
+
+Please use our node utility: [tokenlon-v5-data](https://github.com/consenlabs/tokenlon-v5-data).
+
+Note: This is in on going development as well.
