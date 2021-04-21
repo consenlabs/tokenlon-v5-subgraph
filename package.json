@@ -10,7 +10,8 @@
     "build": "yarn workspaces run build",
     "codegen": "yarn workspaces run codegen",
     "deploy": "yarn workspaces run deploy",
-    "deploy-staging": "yarn workspaces run deploy-staging"
+    "deploy-staging": "yarn workspaces run deploy-staging",
+    "deploy-kovan": "yarn workspaces run deploy-kovan"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.20.0",
