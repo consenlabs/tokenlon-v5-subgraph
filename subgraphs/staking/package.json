@@ -1,7 +1,7 @@
 {
   "name": "tokenlon-v5-subgraph-staking",
   "version": "0.1.0",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "consenlabs",
   "scripts": {
     "codegen": "graph codegen staking.yaml",
