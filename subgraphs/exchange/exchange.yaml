@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: PMM
-    network: mainnet
+    network: goerli
     source:
-      address: "0x8D90113A1e286a5aB3e496fbD1853F265e5913c6"
+      address: "0xD489f1684CF5e78D933E254BD7AC8A9A6a70d491"
       abi: PMM
-      startBlock: 11463019
+      startBlock: 4657052
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -28,35 +28,11 @@ dataSources:
       file: ./src/mapping_pmm.ts
   - kind: ethereum/contract
     name: AMMWrapper
-    network: mainnet
+    network: goerli
     source:
-      address: "0x11be6f5520FEE8E867e20AF9C9D2c8A09b909B83"
+      address: "0xC9aFF103e8f8D47ace12D29ddF98e5099508985f"
       abi: AMMWrapper
-      startBlock: 11463016
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - Swapped
-      abis:
-        - name: AMMWrapper
-          file: ./abis/AMMWrapper.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: ERC20Bytes
-          file: ./abis/ERC20Bytes.json
-      eventHandlers:
-        - event: Swapped(string,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
-          handler: handleSwapped
-      file: ./src/mapping_ammwrapper.ts
-  - kind: ethereum/contract
-    name: AMMWrapper2
-    network: mainnet
-    source:
-      address: "0x904144473FdE753dc0729608CfeEA6F4A8B275E6"
-      abi: AMMWrapper
-      startBlock: 11689699
+      startBlock: 4691059
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
