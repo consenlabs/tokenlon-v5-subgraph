@@ -5,9 +5,9 @@ import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { RewardDistributor } from "../generated/RewardDistributor/RewardDistributor"
 import { StakingRecord, StakedDayData, StakedTotal, StakedChange, BuyBack } from "../generated/schema"
 
-export const LON_STAKING_ADDRESS = '0xf88506b0f1d30056b9e5580668d5875b9cd30f23'
-export const REWARD_DISTRIBUTOR_ADDRESS = '0xbF1C2c17CC77e7Dec3466B96F46f93c09f02aB07'
-export const LON_ADDRESS = '0x0000000000095413afc295d19edeb1ad7b71c952'
+export const LON_STAKING_ADDRESS = '0x235d9B4249E9C9D705fAC6E98F7D21E58091220A'
+export const REWARD_DISTRIBUTOR_ADDRESS = '0x02F929c7C837839a0D6B44B1d6Dbce64Fa87C9f3'
+export const LON_ADDRESS = '0x6dA0e6ABd44175f50C563cd8b860DD988A7C3433'
 export let ZERO = BigInt.fromI32(0)
 export let ZERO_BD = BigDecimal.fromString('0')
 export let ONE = BigInt.fromI32(1)

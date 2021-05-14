@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "workspaces": [
-    "subgraphs/exchange"
+    "subgraphs/*"
   ],
   "scripts": {
     "build": "yarn workspaces run build",
