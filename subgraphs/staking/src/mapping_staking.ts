@@ -57,6 +57,8 @@ export function handleStaked(event: StakedEvent): void {
   stakingRecord.share = event.params.share
   stakingRecord.txNumber = stakedTotal.txCount
   stakingRecord.save()
+
+  updateStakedData(event)
 }
 
 export function handleRedeem(event: RedeemEvent): void {
@@ -115,6 +117,8 @@ export function handleRedeem(event: RedeemEvent): void {
   stakingRecord.share = event.params.share
   stakingRecord.txNumber = stakedTotal.txCount
   stakingRecord.save()
+
+  updateStakedData(event)
 }
 
 export function handleCooldown(event: CooldownEvent): void {
@@ -156,4 +160,6 @@ export function handleCooldown(event: CooldownEvent): void {
   stakingRecord.cooldownDate = dayStartTimestamp
   stakingRecord.txNumber = stakedTotal.txCount
   stakingRecord.save()
+
+  updateStakedData(event)
 }
