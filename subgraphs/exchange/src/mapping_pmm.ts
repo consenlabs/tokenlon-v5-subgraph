@@ -1,32 +1,28 @@
 import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
-import { PMM, FillOrder as FillOrderEvent } from "../generated/PMM/PMM"
-import { ERC20 } from "../generated/PMM/ERC20"
-import { isETH, WETH_ADDRESS, addTradedToken, getUser } from "./helper"
+import { FillOrder as FillOrderEvent } from "../generated/PMM/PMM"
+import { addTradedToken, getUser, getEventID } from "./helper"
 import { FillOrder, FillOrderTotal, TradedToken } from "../generated/schema"
 
 export function handleFillOrder(event: FillOrderEvent): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
   let fillTotalEntity = FillOrderTotal.load('1')
   if (fillTotalEntity == null) {
     fillTotalEntity = new FillOrderTotal('1')
     fillTotalEntity.total = BigInt.fromI32(0)
   }
 
-  let entity = FillOrder.load(event.transaction.hash.toHex())
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
+  let fillOrderID = getEventID(event)
+  let entity = FillOrder.load(fillOrderID)
   if (entity == null) {
-    entity = new FillOrder(event.transaction.hash.toHex())
+    entity = new FillOrder(fillOrderID)
   }
 
   fillTotalEntity.total = fillTotalEntity.total.plus(BigInt.fromI32(1))
-  // Entity fields can be set based on event parameters
   entity.txNumber = fillTotalEntity.total
   entity.from = event.transaction.from as Bytes
   entity.to = event.transaction.to as Bytes
   entity.source = event.params.source
+  entity.blockHash = event.block.hash.toHex()
   entity.transactionHash = event.transaction.hash.toHex()
   entity.executeTxHash = event.params.transactionHash
   entity.orderHash = event.params.orderHash

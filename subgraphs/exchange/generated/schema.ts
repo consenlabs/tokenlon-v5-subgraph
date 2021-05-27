@@ -78,6 +78,15 @@ export class FillOrder extends Entity {
     this.set("source", Value.fromString(value));
   }
 
+  get blockHash(): string {
+    let value = this.get("blockHash");
+    return value.toString();
+  }
+
+  set blockHash(value: string) {
+    this.set("blockHash", Value.fromString(value));
+  }
+
   get transactionHash(): string {
     let value = this.get("transactionHash");
     return value.toString();
@@ -296,6 +305,15 @@ export class Swapped extends Entity {
 
   set source(value: string) {
     this.set("source", Value.fromString(value));
+  }
+
+  get blockHash(): string {
+    let value = this.get("blockHash");
+    return value.toString();
+  }
+
+  set blockHash(value: string) {
+    this.set("blockHash", Value.fromString(value));
   }
 
   get transactionHash(): string {
@@ -596,6 +614,15 @@ export class SubsidizedSwapped extends Entity {
 
   set source(value: string) {
     this.set("source", Value.fromString(value));
+  }
+
+  get blockHash(): string {
+    let value = this.get("blockHash");
+    return value.toString();
+  }
+
+  set blockHash(value: string) {
+    this.set("blockHash", Value.fromString(value));
   }
 
   get transactionHash(): string {

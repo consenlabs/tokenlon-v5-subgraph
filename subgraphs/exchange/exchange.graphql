@@ -4,6 +4,7 @@ type FillOrder @entity {
   to: Bytes!
   txNumber: BigInt! # uint256
   source: String! # string
+  blockHash: String!
   transactionHash: String!
   executeTxHash: Bytes!
   orderHash: Bytes! # bytes32
@@ -29,6 +30,7 @@ type Swapped @entity {
   to: Bytes!
   txNumber: BigInt! # uint256
   source: String! # string
+  blockHash: String!
   transactionHash: String!
   executeTxHash: Bytes!
   userAddr: Bytes! # bytes32
@@ -64,6 +66,7 @@ type SubsidizedSwapped @entity {
   from: Bytes!
   to: Bytes!
   source: String! # string
+  blockHash: String!
   transactionHash: String!
   executeTxHash: Bytes!
   userAddr: Bytes! # bytes32
