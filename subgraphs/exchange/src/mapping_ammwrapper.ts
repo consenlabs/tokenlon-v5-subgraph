@@ -1,30 +1,28 @@
 import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
-import { AMMWrapper, Swapped as SwappedEvent } from "../generated/AMMWrapper/AMMWrapper"
-import { ERC20 } from "../generated/AMMWrapper/ERC20"
-import { ZERO, ETH_ADDRESS, isETH, WETH_ADDRESS, ZERO_ADDRESS, addTradedToken, getUser } from "./helper"
-import { Swapped, SubsidizedSwapped, SwappedTotal, TradedToken } from "../generated/schema"
+import { Swapped as SwappedEvent } from "../generated/AMMWrapper/AMMWrapper"
+import { ZERO, addTradedToken, getUser, getEventID } from "./helper"
+import { Swapped, SubsidizedSwapped, SwappedTotal } from "../generated/schema"
 
 export function handleSwapped(event: SwappedEvent): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
   let swappedTotal = SwappedTotal.load('1')
   if (swappedTotal == null) {
     swappedTotal = new SwappedTotal('1')
     swappedTotal.total = ZERO
   }
-  let entity = Swapped.load(event.transaction.hash.toHex())
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
+
+  let swappedID = getEventID(event)
+  let entity = Swapped.load(swappedID)
   if (entity == null) {
-    entity = new Swapped(event.transaction.hash.toHex())
+    entity = new Swapped(swappedID)
   }
+
   swappedTotal.total = swappedTotal.total.plus(BigInt.fromI32(1))
-  // Entity fields can be set based on event parameters
   entity.txNumber = swappedTotal.total
   entity.from = event.transaction.from as Bytes
   entity.to = event.transaction.to as Bytes
   entity.source = event.params.source
+  entity.blockHash = event.block.hash.toHex()
   entity.transactionHash = event.transaction.hash.toHex()
   entity.executeTxHash = event.params.transactionHash
   entity.userAddr = event.params.userAddr
@@ -45,7 +43,6 @@ export function handleSwapped(event: SwappedEvent): void {
   entity.timestamp = event.block.timestamp.toI32()
 
   log.info(entity.transactionHash, null)
-  // Entities can be written to the store with `.save()`
   entity.save()
   swappedTotal.save()
   processSubsidizedEvent(event)
@@ -61,18 +58,16 @@ export function handleSwapped(event: SwappedEvent): void {
 
 const processSubsidizedEvent = (event: SwappedEvent): void => {
   if (event.params.settleAmount.gt(event.params.receivedAmount)) {
-    let entity = SubsidizedSwapped.load(event.params.transactionHash.toHex())
-
-    // Entities only exist after they have been saved to the store;
-    // `null` checks allow to create entities on demand
+    let subSwappedID = getEventID(event)
+    let entity = SubsidizedSwapped.load(subSwappedID)
     if (entity == null) {
-      entity = new SubsidizedSwapped(event.params.transactionHash.toHex())
+      entity = new SubsidizedSwapped(subSwappedID)
     }
-
-    // Entity fields can be set based on event parameters
+    
     entity.from = event.transaction.from as Bytes
     entity.to = event.transaction.to as Bytes
     entity.source = event.params.source
+    entity.blockHash = event.block.hash.toHex()
     entity.transactionHash = event.transaction.hash.toHex()
     entity.executeTxHash = event.params.transactionHash
     entity.userAddr = event.params.userAddr
