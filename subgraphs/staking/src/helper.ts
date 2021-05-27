@@ -3,7 +3,7 @@ import { BigInt, BigDecimal, ethereum, Address, Bytes } from '@graphprotocol/gra
 import { log } from '@graphprotocol/graph-ts'
 import { LonStaking } from "../generated/LonStaking/LonStaking"
 import { RewardDistributor } from "../generated/RewardDistributor/RewardDistributor"
-import { StakingRecord, StakedDayData, StakedTotal, StakedChange, BuyBack } from "../generated/schema"
+import { StakingRecord, StakedDayData, StakedTotal, StakedChange, Staked, Redeem, Cooldown, BuyBack, BuyBackTotal, DistributeLon, FeeToken, MintLon, EnableFeeToken, SetFeeToken } from "../generated/schema"
 
 export const LON_STAKING_ADDRESS = '0x235d9B4249E9C9D705fAC6E98F7D21E58091220A'
 export const REWARD_DISTRIBUTOR_ADDRESS = '0x02F929c7C837839a0D6B44B1d6Dbce64Fa87C9f3'
@@ -22,6 +22,13 @@ export const StakeType_Cooldown = 2
 export const StakeType_Redeem = 3
 export const START_TIMESTAMP = 1617206400
 
+export const getEventID = (event: ethereum.Event): string => {
+  let blockHash = event.block.hash.toHex()
+  let txHash = event.transaction.hash.toHex()
+  let logIndex = event.logIndex.toString()
+  return blockHash + '-' + txHash + '-' + logIndex
+}
+
 export function getStakedTotal(): StakedTotal | null {
   let stakedTotal = StakedTotal.load("1")
   if (stakedTotal == null) {
@@ -33,10 +40,86 @@ export function getStakedTotal(): StakedTotal | null {
   return stakedTotal
 }
 
-export function updateStakedData(event: ethereum.Event): void {
-  let stakedChange = StakedChange.load(event.transaction.hash.toHex())
+export function getStakedChange(event: ethereum.Event): StakedChange | null {
+  let entityID = getEventID(event)
+  let stakedChange = StakedChange.load(entityID)
   if (stakedChange == null) {
-    log.info(`should log staked change first ${event.transaction.hash.toHex()}`, null)
+    stakedChange = new StakedChange(entityID)
+    stakedChange.stakedAmount = ZERO
+    stakedChange.timestamp = event.block.timestamp.toI32()
+    stakedChange.penalty = ZERO
+    stakedChange.added = false
+  }
+  return stakedChange
+}
+
+export function getStaked(event: ethereum.Event): Staked | null {
+  let entityID = getEventID(event)
+  let staked = Staked.load(entityID)
+  if (staked == null) {
+    staked = new Staked(entityID)
+    staked.from = event.transaction.from as Bytes
+    staked.to = event.transaction.to as Bytes
+    staked.blockHash = event.block.hash.toHex()
+    staked.transactionHash = event.transaction.hash.toHex()
+    staked.blockNumber = event.block.number
+    staked.logIndex = event.logIndex
+    staked.eventAddr = event.address
+    staked.gasPrice = event.transaction.gasPrice
+    staked.amount = ZERO
+    staked.share = ZERO
+    staked.timestamp = event.block.timestamp.toI32()
+    staked.date = 0
+  }
+  return staked
+}
+
+export function getRedeem(event: ethereum.Event): Redeem | null {
+  let entityID = getEventID(event)
+  let redeem = Redeem.load(entityID)
+  if (redeem == null) {
+    redeem = new Redeem(entityID)
+    redeem.from = event.transaction.from as Bytes
+    redeem.to = event.transaction.to as Bytes
+    redeem.blockHash = event.block.hash.toHex()
+    redeem.transactionHash = event.transaction.hash.toHex()
+    redeem.blockNumber = event.block.number
+    redeem.logIndex = event.logIndex
+    redeem.eventAddr = event.address
+    redeem.gasPrice = event.transaction.gasPrice
+    redeem.amount = ZERO
+    redeem.share = ZERO
+    redeem.penalty = ZERO
+    redeem.timestamp = event.block.timestamp.toI32()
+    redeem.date = 0
+  }
+  return redeem
+}
+
+export function getCooldown(event: ethereum.Event): Cooldown | null {
+  let entityID = getEventID(event)
+  let cooldown = Cooldown.load(entityID)
+  if (cooldown == null) {
+    cooldown = new Cooldown(entityID)
+    cooldown.from = event.transaction.from as Bytes
+    cooldown.to = event.transaction.to as Bytes
+    cooldown.blockHash = event.block.hash.toHex()
+    cooldown.transactionHash = event.transaction.hash.toHex()
+    cooldown.blockNumber = event.block.number
+    cooldown.logIndex = event.logIndex
+    cooldown.eventAddr = event.address
+    cooldown.gasPrice = event.transaction.gasPrice
+    cooldown.timestamp = event.block.timestamp.toI32()
+    cooldown.date = 0
+  }
+  return cooldown
+}
+
+export function updateStakedData(event: ethereum.Event): void {
+  let entityID = getEventID(event)
+  let stakedChange = StakedChange.load(entityID)
+  if (stakedChange == null) {
+    log.info(`should log staked change first ${entityID}`, null)
     return
   }
 
@@ -77,32 +160,42 @@ export let isETH = (assetAddr: Bytes): boolean => {
 }
 
 export const getBuyBack = (event: ethereum.Event): BuyBack | null => {
-  let entity = BuyBack.load(event.transaction.hash.toHex())
-  if (entity == null) {
-    entity = new BuyBack(event.transaction.hash.toHex())
-    entity.gasPrice = ZERO
-    entity.feeTokenAmount = ZERO
-    entity.swappedLonAmount = ZERO
+  let entityID = getEventID(event)
+  let buyBack = BuyBack.load(entityID)
+  if (buyBack == null) {
+    buyBack = new BuyBack(entityID)
+    buyBack.from = event.transaction.from as Bytes
+    buyBack.to = event.transaction.to as Bytes
+    buyBack.blockHash = event.block.hash.toHex()
+    buyBack.transactionHash = event.transaction.hash.toHex()
+    buyBack.blockNumber = event.block.number
+    buyBack.logIndex = event.logIndex
+    buyBack.eventAddr = event.address
+    buyBack.gasPrice = event.transaction.gasPrice
+    buyBack.feeTokenAmount = ZERO
+    buyBack.swappedLonAmount = ZERO
   }
-  return entity
+  return buyBack
 }
 
 export const getStakingRecord = (event: ethereum.Event): StakingRecord | null => {
-  let entity = StakingRecord.load(event.transaction.hash.toHex())
-  if (entity == null) {
-    entity = new StakingRecord(event.transaction.hash.toHex())
-    entity.transactionHash = event.transaction.hash.toHex()
-    entity.blockNumber = event.block.number
-    entity.logIndex = event.logIndex
-    entity.timestamp = event.block.timestamp.toI32()
-    entity.amount = ZERO
-    entity.penalty = ZERO
-    entity.share = ZERO
-    entity.redeem = false
-    entity.cooldownSeconds = ZERO
-    entity.cooldownDate = 0
+  let entityID = getEventID(event)
+  let stakingRecord = StakingRecord.load(entityID)
+  if (stakingRecord == null) {
+    stakingRecord = new StakingRecord(entityID)
+    stakingRecord.blockHash = event.block.hash.toHex()
+    stakingRecord.transactionHash = event.transaction.hash.toHex()
+    stakingRecord.blockNumber = event.block.number
+    stakingRecord.logIndex = event.logIndex
+    stakingRecord.timestamp = event.block.timestamp.toI32()
+    stakingRecord.amount = ZERO
+    stakingRecord.penalty = ZERO
+    stakingRecord.share = ZERO
+    stakingRecord.redeem = false
+    stakingRecord.cooldownSeconds = ZERO
+    stakingRecord.cooldownDate = 0
   }
-  return entity
+  return stakingRecord
 }
 
 export const getScaleIndex = (): BigDecimal => {
@@ -115,4 +208,109 @@ export const getScaleIndex = (): BigDecimal => {
     scaleIndex = lonBalance.div(totalSupply)
   }
   return scaleIndex
+}
+
+export function getDistributeLon(event: ethereum.Event): DistributeLon | null {
+  let entityID = getEventID(event)
+  let distrubuteLon = DistributeLon.load(entityID)
+  if (distrubuteLon == null) {
+    distrubuteLon = new DistributeLon(entityID)
+    distrubuteLon.from = event.transaction.from as Bytes
+    distrubuteLon.to = event.transaction.to as Bytes
+    distrubuteLon.blockHash = event.block.hash.toHex()
+    distrubuteLon.transactionHash = event.transaction.hash.toHex()
+    distrubuteLon.blockNumber = event.block.number
+    distrubuteLon.logIndex = event.logIndex
+    distrubuteLon.eventAddr = event.address
+    distrubuteLon.gasPrice = event.transaction.gasPrice
+    distrubuteLon.treasuryAmount = ZERO
+    distrubuteLon.lonStakingAmount = ZERO
+    distrubuteLon.timestamp = event.block.timestamp.toI32()
+  }
+  return distrubuteLon
+}
+
+export function getBuyBackTotal(): BuyBackTotal | null {
+  let buyBackTotal = BuyBackTotal.load("1")
+  if (buyBackTotal == null) {
+    buyBackTotal = new BuyBackTotal("1")
+    buyBackTotal.totalTreasuryAmount = ZERO
+    buyBackTotal.totalLonStakingAmount = ZERO
+    buyBackTotal.totalMintedAmount = ZERO
+    buyBackTotal.txCount = ZERO
+    buyBackTotal.scaleIndex = ZERO_BD
+    buyBackTotal.lastUpdatedAt = 0
+  }
+  return buyBackTotal
+}
+
+export function getFeeToken(address: string): FeeToken | null {
+  let feeToken = FeeToken.load(address)
+  if (feeToken == null) {
+    feeToken = new FeeToken(address)
+    feeToken.exchangeIndex = ZERO
+    feeToken.path = []
+    feeToken.LFactor = ZERO
+    feeToken.RFactor = ZERO
+    feeToken.minBuy = ZERO
+    feeToken.maxBuy = ZERO
+    feeToken.enabled = false
+  }
+  return feeToken
+}
+
+export function getMintLon(event: ethereum.Event): MintLon | null {
+  let entityID = getEventID(event)
+  let mintLon = MintLon.load(entityID)
+  if (mintLon == null) {
+    mintLon = new MintLon(entityID)
+    mintLon.gasPrice = ZERO
+    mintLon.mintedAmount = ZERO
+    mintLon.from = event.transaction.from as Bytes
+    mintLon.to = event.transaction.to as Bytes
+    mintLon.blockHash = event.block.hash.toHex()
+    mintLon.transactionHash = event.transaction.hash.toHex()
+    mintLon.blockNumber = event.block.number
+    mintLon.logIndex = event.logIndex
+    mintLon.eventAddr = event.address
+    mintLon.gasPrice = event.transaction.gasPrice
+    mintLon.timestamp = event.block.timestamp.toI32()
+  }
+  return mintLon
+}
+
+export function getEnableFeeToken(event: ethereum.Event): EnableFeeToken | null {
+  let entityID = getEventID(event)
+  let enableFeeToken = EnableFeeToken.load(entityID)
+  if (enableFeeToken == null) {
+    enableFeeToken = new EnableFeeToken(entityID)
+    enableFeeToken.from = event.transaction.from as Bytes
+    enableFeeToken.to = event.transaction.to as Bytes
+    enableFeeToken.blockHash = event.block.hash.toHex()
+    enableFeeToken.timestamp = event.block.timestamp.toI32()
+    enableFeeToken.transactionHash = event.transaction.hash.toHex()
+    enableFeeToken.blockNumber = event.block.number
+    enableFeeToken.logIndex = event.logIndex
+    enableFeeToken.eventAddr = event.address
+    enableFeeToken.gasPrice = event.transaction.gasPrice
+  }
+  return enableFeeToken
+}
+
+export function getSetFeeToken(event: ethereum.Event): SetFeeToken | null {
+  let entityID = getEventID(event)
+  let setFeeToken = SetFeeToken.load(entityID)
+  if (setFeeToken == null) {
+    setFeeToken = new SetFeeToken(entityID)
+    setFeeToken.from = event.transaction.from as Bytes
+    setFeeToken.to = event.transaction.to as Bytes
+    setFeeToken.blockHash = event.block.hash.toHex()
+    setFeeToken.transactionHash = event.transaction.hash.toHex()
+    setFeeToken.blockNumber = event.block.number
+    setFeeToken.logIndex = event.logIndex
+    setFeeToken.eventAddr = event.address
+    setFeeToken.gasPrice = event.transaction.gasPrice
+    setFeeToken.timestamp = event.block.timestamp.toI32()
+  }
+  return setFeeToken
 }
