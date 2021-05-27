@@ -60,6 +60,15 @@ export class BuyBack extends Entity {
     this.set("to", Value.fromBytes(value));
   }
 
+  get blockHash(): string {
+    let value = this.get("blockHash");
+    return value.toString();
+  }
+
+  set blockHash(value: string) {
+    this.set("blockHash", Value.fromString(value));
+  }
+
   get transactionHash(): string {
     let value = this.get("transactionHash");
     return value.toString();
@@ -226,6 +235,15 @@ export class DistributeLon extends Entity {
     this.set("to", Value.fromBytes(value));
   }
 
+  get blockHash(): string {
+    let value = this.get("blockHash");
+    return value.toString();
+  }
+
+  set blockHash(value: string) {
+    this.set("blockHash", Value.fromString(value));
+  }
+
   get transactionHash(): string {
     let value = this.get("transactionHash");
     return value.toString();
@@ -354,6 +372,15 @@ export class MintLon extends Entity {
 
   set to(value: Bytes) {
     this.set("to", Value.fromBytes(value));
+  }
+
+  get blockHash(): string {
+    let value = this.get("blockHash");
+    return value.toString();
+  }
+
+  set blockHash(value: string) {
+    this.set("blockHash", Value.fromString(value));
   }
 
   get transactionHash(): string {
@@ -629,6 +656,15 @@ export class StakingRecord extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get blockHash(): string {
+    let value = this.get("blockHash");
+    return value.toString();
+  }
+
+  set blockHash(value: string) {
+    this.set("blockHash", Value.fromString(value));
+  }
+
   get transactionHash(): string {
     let value = this.get("transactionHash");
     return value.toString();
@@ -804,6 +840,15 @@ export class Staked extends Entity {
     this.set("to", Value.fromBytes(value));
   }
 
+  get blockHash(): string {
+    let value = this.get("blockHash");
+    return value.toString();
+  }
+
+  set blockHash(value: string) {
+    this.set("blockHash", Value.fromString(value));
+  }
+
   get transactionHash(): string {
     let value = this.get("transactionHash");
     return value.toString();
@@ -941,6 +986,15 @@ export class Redeem extends Entity {
 
   set to(value: Bytes) {
     this.set("to", Value.fromBytes(value));
+  }
+
+  get blockHash(): string {
+    let value = this.get("blockHash");
+    return value.toString();
+  }
+
+  set blockHash(value: string) {
+    this.set("blockHash", Value.fromString(value));
   }
 
   get transactionHash(): string {
@@ -1274,6 +1328,15 @@ export class Cooldown extends Entity {
     this.set("to", Value.fromBytes(value));
   }
 
+  get blockHash(): string {
+    let value = this.get("blockHash");
+    return value.toString();
+  }
+
+  set blockHash(value: string) {
+    this.set("blockHash", Value.fromString(value));
+  }
+
   get transactionHash(): string {
     let value = this.get("transactionHash");
     return value.toString();
@@ -1402,6 +1465,15 @@ export class SetFeeToken extends Entity {
 
   set to(value: Bytes) {
     this.set("to", Value.fromBytes(value));
+  }
+
+  get blockHash(): string {
+    let value = this.get("blockHash");
+    return value.toString();
+  }
+
+  set blockHash(value: string) {
+    this.set("blockHash", Value.fromString(value));
   }
 
   get transactionHash(): string {
@@ -1568,6 +1640,15 @@ export class EnableFeeToken extends Entity {
 
   set to(value: Bytes) {
     this.set("to", Value.fromBytes(value));
+  }
+
+  get blockHash(): string {
+    let value = this.get("blockHash");
+    return value.toString();
+  }
+
+  set blockHash(value: string) {
+    this.set("blockHash", Value.fromString(value));
   }
 
   get transactionHash(): string {
