@@ -77,3 +77,10 @@ export const getUser = (userAddr: Address, event: ethereum.Event): User | null =
   }
   return user
 }
+
+export const getEventID = (event: ethereum.Event): string => {
+  let blockHash = event.block.hash.toHex()
+  let txHash = event.transaction.hash.toHex()
+  let logIndex = event.logIndex.toString()
+  return blockHash + '-' + txHash + '-' + logIndex
+}

@@ -2,6 +2,7 @@ type BuyBack @entity {
   id: ID!
   from: Bytes!
   to: Bytes!
+  blockHash: String!
   transactionHash: String!
   blockNumber: BigInt! # block number
   logIndex: BigInt! # transaction index
@@ -21,6 +22,7 @@ type DistributeLon @entity {
   id: ID!
   from: Bytes!
   to: Bytes!
+  blockHash: String!
   transactionHash: String!
   blockNumber: BigInt! # block number
   logIndex: BigInt! # transaction index
@@ -36,6 +38,7 @@ type MintLon @entity {
   id: ID!
   from: Bytes!
   to: Bytes!
+  blockHash: String!
   transactionHash: String!
   blockNumber: BigInt! # block number
   logIndex: BigInt! # transaction index
@@ -72,6 +75,7 @@ type BuyBackTotal @entity {
 
 type StakingRecord @entity {
   id: ID!
+  blockHash: String!
   transactionHash: String!
   blockNumber: BigInt! # block number
   logIndex: BigInt! # transaction index
@@ -92,6 +96,7 @@ type Staked @entity {
   id: ID!
   from: Bytes!
   to: Bytes!
+  blockHash: String!
   transactionHash: String!
   blockNumber: BigInt! # block number
   logIndex: BigInt! # transaction index
@@ -108,6 +113,7 @@ type Redeem @entity {
   id: ID!
   from: Bytes!
   to: Bytes!
+  blockHash: String!
   transactionHash: String!
   blockNumber: BigInt! # block number
   logIndex: BigInt! # transaction index
@@ -147,6 +153,7 @@ type Cooldown @entity {
   id: ID!
   from: Bytes!
   to: Bytes!
+  blockHash: String!
   transactionHash: String!
   blockNumber: BigInt! # block number
   logIndex: BigInt! # transaction index
@@ -162,6 +169,7 @@ type SetFeeToken @entity {
   id: ID!
   from: Bytes!
   to: Bytes!
+  blockHash: String!
   transactionHash: String!
   blockNumber: BigInt! # block number
   logIndex: BigInt! # transaction index
@@ -181,6 +189,7 @@ type EnableFeeToken @entity {
   id: ID!
   from: Bytes!
   to: Bytes!
+  blockHash: String!
   transactionHash: String!
   blockNumber: BigInt! # block number
   logIndex: BigInt! # transaction index
