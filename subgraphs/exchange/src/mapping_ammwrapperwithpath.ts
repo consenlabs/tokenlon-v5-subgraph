@@ -1,6 +1,6 @@
 import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
-import { Swapped as SwappedEvent } from "../generated/AMMWrapper/AMMWrapper"
+import { Swapped as SwappedTuppleEvent, Swapped1 as SwappedEvent } from "../generated/AMMWrapperWithPath/AMMWrapperWithPath"
 import { ZERO, addTradedToken, getUser, getEventID } from "./helper"
 import { Swapped, SubsidizedSwapped, SwappedTotal } from "../generated/schema"
 
@@ -90,6 +90,101 @@ const processSubsidizedEvent = (event: SwappedEvent): void => {
     entity.timestamp = event.block.timestamp.toI32()
     entity.salt = ZERO
     entity.deadline = ZERO
+
+    log.info(entity.transactionHash, null)
+    entity.save()
+  }
+}
+
+export function handleSwappedTupple(event: SwappedTuppleEvent): void {
+  let swappedTotal = SwappedTotal.load('1')
+  if (swappedTotal == null) {
+    swappedTotal = new SwappedTotal('1')
+    swappedTotal.total = ZERO
+  }
+
+  let swappedID = getEventID(event)
+  let entity = Swapped.load(swappedID)
+  if (entity == null) {
+    entity = new Swapped(swappedID)
+  }
+
+  swappedTotal.total = swappedTotal.total.plus(BigInt.fromI32(1))
+  let txMetaData = event.params.param0
+  let order = event.params.order
+  entity.txNumber = swappedTotal.total
+  entity.from = event.transaction.from as Bytes
+  entity.to = event.transaction.to as Bytes
+  entity.blockHash = event.block.hash.toHex()
+  entity.source = txMetaData.source
+  entity.transactionHash = event.transaction.hash.toHex()
+  entity.blockNumber = event.block.number
+  entity.logIndex = event.logIndex
+  entity.eventAddr = event.address
+  entity.gasPrice = event.transaction.gasPrice
+  entity.timestamp = event.block.timestamp.toI32()
+  entity.executeTxHash = txMetaData.transactionHash
+  entity.settleAmount = txMetaData.settleAmount
+  entity.receivedAmount = txMetaData.receivedAmount
+  entity.feeFactor = txMetaData.feeFactor
+  entity.subsidyFactor = txMetaData.subsidyFactor
+  entity.userAddr = order.userAddr
+  entity.takerAssetAddr = order.takerAssetAddr
+  entity.takerAssetAmount = order.takerAssetAmount
+  entity.makerAddr = order.makerAddr
+  entity.makerAssetAddr = order.makerAssetAddr
+  entity.makerAssetAmount = order.makerAssetAmount
+  entity.receiverAddr = order.receiverAddr
+  entity.salt = order.salt
+  entity.deadline = order.deadline
+
+  log.info(entity.transactionHash, null)
+  entity.save()
+  swappedTotal.save()
+  processSubsidizedTuppleEvent(event)
+
+  addTradedToken(entity.takerAssetAddr as Address, event.block.timestamp.toI32())
+  addTradedToken(entity.makerAssetAddr as Address, event.block.timestamp.toI32())
+
+  let user = getUser(order.userAddr, event)
+  user.tradeCount += 1
+  user.lastSeen = event.block.timestamp.toI32()
+  user.save()
+}
+
+const processSubsidizedTuppleEvent = (event: SwappedTuppleEvent): void => {
+  let txMetaData = event.params.param0
+  let order = event.params.order
+  if (txMetaData.settleAmount.gt(txMetaData.receivedAmount)) {
+    let subSwappedID = getEventID(event)
+    let entity = SubsidizedSwapped.load(subSwappedID)
+    if (entity == null) {
+      entity = new SubsidizedSwapped(subSwappedID)
+    }
+    entity.from = event.transaction.from as Bytes
+    entity.to = event.transaction.to as Bytes
+    entity.blockHash = event.block.hash.toHex()
+    entity.source = txMetaData.source
+    entity.transactionHash = event.transaction.hash.toHex()
+    entity.blockNumber = event.block.number
+    entity.logIndex = event.logIndex
+    entity.eventAddr = event.address
+    entity.gasPrice = event.transaction.gasPrice
+    entity.timestamp = event.block.timestamp.toI32()
+    entity.executeTxHash = txMetaData.transactionHash
+    entity.settleAmount = txMetaData.settleAmount
+    entity.receivedAmount = txMetaData.receivedAmount
+    entity.feeFactor = txMetaData.feeFactor
+    entity.subsidyFactor = txMetaData.subsidyFactor
+    entity.userAddr = order.userAddr
+    entity.takerAssetAddr = order.takerAssetAddr
+    entity.takerAssetAmount = order.takerAssetAmount
+    entity.makerAddr = order.makerAddr
+    entity.makerAssetAddr = order.makerAssetAddr
+    entity.makerAssetAmount = order.makerAssetAmount
+    entity.receiverAddr = order.receiverAddr
+    entity.salt = order.salt
+    entity.deadline = order.deadline
 
     log.info(entity.transactionHash, null)
     entity.save()

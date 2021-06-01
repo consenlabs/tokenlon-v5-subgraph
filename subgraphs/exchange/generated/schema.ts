@@ -469,6 +469,24 @@ export class Swapped extends Entity {
     this.set("gasPrice", Value.fromBigInt(value));
   }
 
+  get salt(): BigInt {
+    let value = this.get("salt");
+    return value.toBigInt();
+  }
+
+  set salt(value: BigInt) {
+    this.set("salt", Value.fromBigInt(value));
+  }
+
+  get deadline(): BigInt {
+    let value = this.get("deadline");
+    return value.toBigInt();
+  }
+
+  set deadline(value: BigInt) {
+    this.set("deadline", Value.fromBigInt(value));
+  }
+
   get timestamp(): i32 {
     let value = this.get("timestamp");
     return value.toI32();
@@ -776,6 +794,24 @@ export class SubsidizedSwapped extends Entity {
 
   set gasPrice(value: BigInt) {
     this.set("gasPrice", Value.fromBigInt(value));
+  }
+
+  get salt(): BigInt {
+    let value = this.get("salt");
+    return value.toBigInt();
+  }
+
+  set salt(value: BigInt) {
+    this.set("salt", Value.fromBigInt(value));
+  }
+
+  get deadline(): BigInt {
+    let value = this.get("deadline");
+    return value.toBigInt();
+  }
+
+  set deadline(value: BigInt) {
+    this.set("deadline", Value.fromBigInt(value));
   }
 
   get timestamp(): i32 {

@@ -48,6 +48,8 @@ type Swapped @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
+  salt: BigInt! # uint256
+  deadline: BigInt! # uint256
   timestamp: Int!
 }
 
@@ -84,6 +86,8 @@ type SubsidizedSwapped @entity {
   logIndex: BigInt! # transaction index
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
+  salt: BigInt! # uint256
+  deadline: BigInt! # uint256
   timestamp: Int!
 }
 
