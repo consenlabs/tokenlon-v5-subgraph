@@ -1,4 +1,4 @@
-import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
+import { BigInt, Bytes, Address, ethereum } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
 import { Swapped as SwappedTuppleEvent, Swapped1 as SwappedEvent } from "../generated/AMMWrapperWithPath/AMMWrapperWithPath"
 import { ZERO, addTradedToken, getUser, getEventID } from "./helper"
@@ -137,6 +137,15 @@ export function handleSwappedTupple(event: SwappedTuppleEvent): void {
   entity.receiverAddr = order.receiverAddr
   entity.salt = order.salt
   entity.deadline = order.deadline
+
+  // Order memory _order, uint256 _feeFactor, bytes calldata _sig, bytes calldata _makerSpecificData, address[] calldata _path
+  // let decoded = ethereum.decode('((address,address,address,uint256,uint256,address,address,uint256,uint256), uint256, bytes, bytes, address[])', event.transaction.input).toTuple()
+  // let xFeeFactor = decoded[1].toBigInt()
+  // entity.xFeeFactor = xFeeFactor
+  let address = ethereum.Value.fromAddress(Address.fromString("0x0000000000000000000000000000000000000420"))
+  let encoded = ethereum.encode(address)!
+  let decoded = ethereum.decode("address", encoded)
+  log.info(encoded.toHex(), null)
 
   log.info(entity.transactionHash, null)
   entity.save()

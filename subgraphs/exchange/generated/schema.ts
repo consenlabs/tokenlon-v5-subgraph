@@ -495,6 +495,23 @@ export class Swapped extends Entity {
   set timestamp(value: i32) {
     this.set("timestamp", Value.fromI32(value));
   }
+
+  get xFeeFactor(): BigInt | null {
+    let value = this.get("xFeeFactor");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set xFeeFactor(value: BigInt | null) {
+    if (value === null) {
+      this.unset("xFeeFactor");
+    } else {
+      this.set("xFeeFactor", Value.fromBigInt(value as BigInt));
+    }
+  }
 }
 
 export class SwappedTotal extends Entity {
