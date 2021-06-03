@@ -52,6 +52,8 @@ type Swapped @entity {
   deadline: BigInt! # uint256
   timestamp: Int!
   xFeeFactor: BigInt
+  xAddress: String
+  inputs: Bytes
 }
 
 type SwappedTotal @entity {

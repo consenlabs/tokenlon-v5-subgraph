@@ -512,6 +512,40 @@ export class Swapped extends Entity {
       this.set("xFeeFactor", Value.fromBigInt(value as BigInt));
     }
   }
+
+  get xAddress(): string | null {
+    let value = this.get("xAddress");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set xAddress(value: string | null) {
+    if (value === null) {
+      this.unset("xAddress");
+    } else {
+      this.set("xAddress", Value.fromString(value as string));
+    }
+  }
+
+  get inputs(): Bytes | null {
+    let value = this.get("inputs");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set inputs(value: Bytes | null) {
+    if (value === null) {
+      this.unset("inputs");
+    } else {
+      this.set("inputs", Value.fromBytes(value as Bytes));
+    }
+  }
 }
 
 export class SwappedTotal extends Entity {
