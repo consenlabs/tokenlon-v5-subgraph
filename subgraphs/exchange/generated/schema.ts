@@ -496,6 +496,15 @@ export class Swapped extends Entity {
     this.set("timestamp", Value.fromI32(value));
   }
 
+  get k(): i32 {
+    let value = this.get("k");
+    return value.toI32();
+  }
+
+  set k(value: i32) {
+    this.set("k", Value.fromI32(value));
+  }
+
   get xFeeFactor(): BigInt | null {
     let value = this.get("xFeeFactor");
     if (value === null || value.kind == ValueKind.NULL) {

@@ -51,6 +51,7 @@ type Swapped @entity {
   salt: BigInt! # uint256
   deadline: BigInt! # uint256
   timestamp: Int!
+  k: Int
   xFeeFactor: BigInt
   xAddress: String
   inputs: Bytes
