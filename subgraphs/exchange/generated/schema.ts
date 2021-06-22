@@ -496,15 +496,6 @@ export class Swapped extends Entity {
     this.set("timestamp", Value.fromI32(value));
   }
 
-  get k(): i32 {
-    let value = this.get("k");
-    return value.toI32();
-  }
-
-  set k(value: i32) {
-    this.set("k", Value.fromI32(value));
-  }
-
   get xFeeFactor(): BigInt | null {
     let value = this.get("xFeeFactor");
     if (value === null || value.kind == ValueKind.NULL) {
@@ -522,20 +513,20 @@ export class Swapped extends Entity {
     }
   }
 
-  get xAddress(): string | null {
-    let value = this.get("xAddress");
+  get path(): Array<Bytes> | null {
+    let value = this.get("path");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toString();
+      return value.toBytesArray();
     }
   }
 
-  set xAddress(value: string | null) {
+  set path(value: Array<Bytes> | null) {
     if (value === null) {
-      this.unset("xAddress");
+      this.unset("path");
     } else {
-      this.set("xAddress", Value.fromString(value as string));
+      this.set("path", Value.fromBytesArray(value as Array<Bytes>));
     }
   }
 
