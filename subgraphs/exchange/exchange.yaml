@@ -27,6 +27,30 @@ dataSources:
           handler: handleFillOrder
       file: ./src/mapping_pmm.ts
   - kind: ethereum/contract
+    name: RFQ
+    network: mainnet
+    source:
+      address: "0xfD6C2d2499b1331101726A8AC68CCc9Da3fAB54F"
+      abi: PMM
+      startBlock: 12792553
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - FillOrder
+      abis:
+        - name: PMM
+          file: ./abis/PMM.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC20Bytes
+          file: ./abis/ERC20Bytes.json
+      eventHandlers:
+        - event: FillOrder(string,indexed bytes32,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint16)
+          handler: handleFillOrder
+      file: ./src/mapping_pmm.ts
+  - kind: ethereum/contract
     name: AMMWrapper
     network: mainnet
     source:
@@ -73,4 +97,30 @@ dataSources:
       eventHandlers:
         - event: Swapped(string,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
           handler: handleSwapped
+      file: ./src/mapping_ammwrapper.ts
+  - kind: ethereum/contract
+    name: AMMWrapperWithPath
+    network: mainnet
+    source:
+      address: "0x4a14347083B80E5216cA31350a2D21702aC3650d"
+      abi: AMMWrapperWithPath
+      startBlock: 12792417
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swapped
+      abis:
+        - name: AMMWrapperWithPath
+          file: ./abis/AMMWrapperWithPath.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC20Bytes
+          file: ./abis/ERC20Bytes.json
+      eventHandlers:
+        - event: Swapped(string,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
+          handler: handleSwapped
+        - event: Swapped((string,bytes32,uint256,uint256,uint16,uint16),(address,address,address,uint256,uint256,address,address,uint256,uint256))
+          handler: handleSwappedTupple
       file: ./src/mapping_ammwrapper.ts
