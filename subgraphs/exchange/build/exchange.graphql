@@ -49,6 +49,9 @@ type Swapped @entity {
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
   timestamp: Int!
+  salt: BigInt! # uint256
+  deadline: BigInt! # uint256
+  path: [Bytes!]
 }
 
 type SwappedTotal @entity {
@@ -85,6 +88,9 @@ type SubsidizedSwapped @entity {
   eventAddr: Bytes! # bytes32
   gasPrice: BigInt! # uint256
   timestamp: Int!
+  salt: BigInt! # uint256
+  deadline: BigInt! # uint256
+  path: [Bytes!]
 }
 
 type TradedToken @entity {

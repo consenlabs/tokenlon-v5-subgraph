@@ -477,6 +477,41 @@ export class Swapped extends Entity {
   set timestamp(value: i32) {
     this.set("timestamp", Value.fromI32(value));
   }
+
+  get salt(): BigInt {
+    let value = this.get("salt");
+    return value.toBigInt();
+  }
+
+  set salt(value: BigInt) {
+    this.set("salt", Value.fromBigInt(value));
+  }
+
+  get deadline(): BigInt {
+    let value = this.get("deadline");
+    return value.toBigInt();
+  }
+
+  set deadline(value: BigInt) {
+    this.set("deadline", Value.fromBigInt(value));
+  }
+
+  get path(): Array<Bytes> | null {
+    let value = this.get("path");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytesArray();
+    }
+  }
+
+  set path(value: Array<Bytes> | null) {
+    if (value === null) {
+      this.unset("path");
+    } else {
+      this.set("path", Value.fromBytesArray(value as Array<Bytes>));
+    }
+  }
 }
 
 export class SwappedTotal extends Entity {
@@ -785,6 +820,41 @@ export class SubsidizedSwapped extends Entity {
 
   set timestamp(value: i32) {
     this.set("timestamp", Value.fromI32(value));
+  }
+
+  get salt(): BigInt {
+    let value = this.get("salt");
+    return value.toBigInt();
+  }
+
+  set salt(value: BigInt) {
+    this.set("salt", Value.fromBigInt(value));
+  }
+
+  get deadline(): BigInt {
+    let value = this.get("deadline");
+    return value.toBigInt();
+  }
+
+  set deadline(value: BigInt) {
+    this.set("deadline", Value.fromBigInt(value));
+  }
+
+  get path(): Array<Bytes> | null {
+    let value = this.get("path");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytesArray();
+    }
+  }
+
+  set path(value: Array<Bytes> | null) {
+    if (value === null) {
+      this.unset("path");
+    } else {
+      this.set("path", Value.fromBytesArray(value as Array<Bytes>));
+    }
   }
 }
 
