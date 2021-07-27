@@ -1,0 +1,34 @@
+{
+    "AMMV1": [
+        {
+            "name": "AMMWrapper",
+            "network": "goerli",
+            "address": "0xC9aFF103e8f8D47ace12D29ddF98e5099508985f",
+            "startBlock": "4691059"
+        }
+    ],
+    "AMMV2": [
+        {
+            "name": "AMMWrapperWithPath",
+            "network": "goerli",
+            "address": "0x691278b7D6527D87805487bDc27b328096a57c37",
+            "startBlock": "4851355"
+        }
+    ],
+    "PMMV5": [
+        {
+            "name": "PMM",
+            "network": "goerli",
+            "address": "0xD489f1684CF5e78D933E254BD7AC8A9A6a70d491",
+            "startBlock": "4657052"
+        }
+    ],
+    "RFQV1": [
+        {
+            "name": "RFQ",
+            "network": "goerli",
+            "address": "0xfD474E4809e690626C67ECb7A908de4b9c464b99",
+            "startBlock": "4851367"
+        }
+    ]
+}
