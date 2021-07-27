@@ -6,14 +6,8 @@
   "scripts": {
     "codegen": "graph codegen exchange.yaml",
     "build": "graph build exchange.yaml",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ consenlabs/tokenlon-v5-exchange exchange.yaml",
-    "deploy-staging": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ $SUBGRAPH_USER/tokenlon-v5-exchange exchange.yaml"
-  },
-  "dependencies": {
-    "@graphprotocol/graph-cli": "^0.20.0",
-    "@graphprotocol/graph-ts": "0.20.1"
-  },
-  "devDependencies": {
-    "yargs-parser": "^18.1.2"
+    "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ consenlabs/tokenlon-v5-exchange exchange.yaml",
+    "deploy-staging:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ $SUBGRAPH_USER/tokenlon-v5-exchange exchange.yaml",
+    "prepare:mainnet": "mustache config/mainnet.json template.yaml > exchange.yaml"
   }
 }

@@ -1,14 +1,17 @@
-specVersion: 0.0.2
+specVersion: 0.0.3
+description: Staking
+repository: https://github.com/consenlabs/tokenlon-v5-subgraph
 schema:
-  file: staking.graphql
+  file: ./staking.graphql
 dataSources:
+  {{#BUYBACK}}
   - kind: ethereum/contract
-    name: RewardDistributor
-    network: mainnet
+    name: {{ name }}
+    network: {{ network }}
     source:
-      address: "0xbF1C2c17CC77e7Dec3466B96F46f93c09f02aB07"
+      address: "{{ address }}"
       abi: RewardDistributor
-      startBlock: 12133461
+      startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -17,9 +20,9 @@ dataSources:
         - RewardDistributor
       abis:
         - name: RewardDistributor
-          file: RewardDistributor/abis/RewardDistributor.json
+          file: ./abis/RewardDistributor.json
         - name: LonStaking
-          file: RewardDistributor/abis/LonStaking.json
+          file: ./abis/LonStaking.json
       eventHandlers:
         - event: BuyBack(address,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleBuyBack
@@ -31,14 +34,16 @@ dataSources:
           handler: handleSetFeeToken
         - event: EnableFeeToken(address,bool)
           handler: handleEnableFeeToken
-      file: RewardDistributor/RewardDistributor.wasm
+      file: ./src/mapping_buyback.ts
+  {{/BUYBACK}}
+  {{#STAKING}}
   - kind: ethereum/contract
-    name: LonStaking
-    network: mainnet
+    name: {{ name }}
+    network: {{ network }}
     source:
-      address: "0xf88506b0f1d30056b9e5580668d5875b9cd30f23"
+      address: "{{ address }}"
       abi: LonStaking
-      startBlock: 12133376
+      startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -47,7 +52,7 @@ dataSources:
         - LonStaking
       abis:
         - name: LonStaking
-          file: LonStaking/abis/LonStaking.json
+          file: ./abis/LonStaking.json
       eventHandlers:
         - event: Staked(indexed address,uint256,uint256)
           handler: handleStaked
@@ -55,4 +60,5 @@ dataSources:
           handler: handleRedeem
         - event: Cooldown(indexed address)
           handler: handleCooldown
-      file: LonStaking/LonStaking.wasm
+      file: ./src/mapping_staking.ts
+  {{/STAKING}}

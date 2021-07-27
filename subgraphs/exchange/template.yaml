@@ -1,14 +1,17 @@
-specVersion: 0.0.2
+specVersion: 0.0.3
+description: Exchange
+repository: https://github.com/consenlabs/tokenlon-v5-subgraph
 schema:
   file: ./exchange.graphql
 dataSources:
+  {{#PMMV5}}
   - kind: ethereum/contract
-    name: PMM
-    network: mainnet
+    name: {{ name }}
+    network: {{ network }}
     source:
-      address: "0x8D90113A1e286a5aB3e496fbD1853F265e5913c6"
+      address: "{{ address }}"
       abi: PMM
-      startBlock: 11463019
+      startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -26,13 +29,15 @@ dataSources:
         - event: FillOrder(string,indexed bytes32,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint16)
           handler: handleFillOrder
       file: ./src/mapping_pmm.ts
+  {{/PMMV5}}
+  {{#RFQV1}}
   - kind: ethereum/contract
-    name: RFQ
-    network: mainnet
+    name: {{ name }}
+    network: {{ network }}
     source:
-      address: "0xfD6C2d2499b1331101726A8AC68CCc9Da3fAB54F"
+      address: "{{ address }}"
       abi: PMM
-      startBlock: 12792553
+      startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -50,13 +55,15 @@ dataSources:
         - event: FillOrder(string,indexed bytes32,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint16)
           handler: handleFillOrder
       file: ./src/mapping_pmm.ts
+  {{/RFQV1}}
+  {{#AMMV1}}
   - kind: ethereum/contract
-    name: AMMWrapper
-    network: mainnet
+    name: {{ name }}
+    network: {{ network }}
     source:
-      address: "0x11be6f5520FEE8E867e20AF9C9D2c8A09b909B83"
+      address: "{{ address }}"
       abi: AMMWrapper
-      startBlock: 11463016
+      startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -74,37 +81,15 @@ dataSources:
         - event: Swapped(string,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
           handler: handleSwapped
       file: ./src/mapping_ammwrapper.ts
+  {{/AMMV1}}
+  {{#AMMV2}}
   - kind: ethereum/contract
-    name: AMMWrapper2
-    network: mainnet
+    name: {{ name }}
+    network: {{ network }}
     source:
-      address: "0x904144473FdE753dc0729608CfeEA6F4A8B275E6"
-      abi: AMMWrapper
-      startBlock: 11689699
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - Swapped
-      abis:
-        - name: AMMWrapper
-          file: ./abis/AMMWrapper.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: ERC20Bytes
-          file: ./abis/ERC20Bytes.json
-      eventHandlers:
-        - event: Swapped(string,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint256,uint16,uint16)
-          handler: handleSwapped
-      file: ./src/mapping_ammwrapper.ts
-  - kind: ethereum/contract
-    name: AMMWrapperWithPath
-    network: mainnet
-    source:
-      address: "0x4a14347083B80E5216cA31350a2D21702aC3650d"
+      address: "{{ address }}"
       abi: AMMWrapperWithPath
-      startBlock: 12792417
+      startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -124,3 +109,4 @@ dataSources:
         - event: Swapped((string,bytes32,uint256,uint256,uint16,uint16),(address,address,address,uint256,uint256,address,address,uint256,uint256))
           handler: handleSwappedTupple
       file: ./src/mapping_ammwrapper.ts
+  {{/AMMV2}}

@@ -9,14 +9,16 @@
   "scripts": {
     "build": "yarn workspaces run build",
     "codegen": "yarn workspaces run codegen",
-    "deploy": "yarn workspaces run deploy",
-    "deploy-staging": "yarn workspaces run deploy-staging"
+    "deploy:mainnet": "yarn workspaces run deploy:mainnet",
+    "deploy-staging:mainnet": "yarn workspaces run deploy-staging:mainnet",
+    "prepare:mainnet": "yarn workspaces run prepare:mainnet"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.20.0",
     "@graphprotocol/graph-ts": "0.20.1"
   },
   "devDependencies": {
+    "mustache": "^4.2.0",
     "yargs-parser": "^18.1.2"
   }
 }

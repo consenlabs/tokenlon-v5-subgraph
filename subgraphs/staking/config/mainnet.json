@@ -1,0 +1,18 @@
+{
+    "BUYBACK": [
+        {
+            "name": "RewardDistributor1",
+            "network": "mainnet",
+            "address": "0xbF1C2c17CC77e7Dec3466B96F46f93c09f02aB07",
+            "startBlock": "12133461"
+        }
+    ],
+    "STAKING": [
+        {
+            "name": "LonStaking1",
+            "network": "mainnet",
+            "address": "0xf88506b0f1d30056b9e5580668d5875b9cd30f23",
+            "startBlock": "12133376"
+        }
+    ]
+}
