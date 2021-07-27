@@ -6,3 +6,4 @@ build/
 generated/
 exchange.yaml
 staking.yaml
+subgraphs/staking/src/helper.ts

@@ -1,4 +1,7 @@
 {
+    "REWARD_DISTRIBUTOR_ADDRESS": "0xbF1C2c17CC77e7Dec3466B96F46f93c09f02aB07",
+    "LON_STAKING_ADDRESS": "0xf88506b0f1d30056b9e5580668d5875b9cd30f23",
+    "LON_ADDRESS": "0x0000000000095413afc295d19edeb1ad7b71c952",
     "BUYBACK": [
         {
             "name": "RewardDistributor",
