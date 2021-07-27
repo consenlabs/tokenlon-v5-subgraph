@@ -1,7 +1,7 @@
 {
     "AMMV1": [
         {
-            "name": "AMMWrapper1",
+            "name": "AMMWrapper",
             "network": "mainnet",
             "address": "0x11be6f5520FEE8E867e20AF9C9D2c8A09b909B83",
             "startBlock": "11463016"
@@ -15,7 +15,7 @@
     ],
     "AMMV2": [
         {
-            "name": "AMMWrapperWithPath1",
+            "name": "AMMWrapperWithPath",
             "network": "mainnet",
             "address": "0x4a14347083B80E5216cA31350a2D21702aC3650d",
             "startBlock": "12792417"
@@ -23,7 +23,7 @@
     ],
     "PMMV5": [
         {
-            "name": "PMM1",
+            "name": "PMM",
             "network": "mainnet",
             "address": "0x8D90113A1e286a5aB3e496fbD1853F265e5913c6",
             "startBlock": "11463019"
@@ -31,7 +31,7 @@
     ],
     "RFQV1": [
         {
-            "name": "RFQ1",
+            "name": "RFQ",
             "network": "mainnet",
             "address": "0xfD6C2d2499b1331101726A8AC68CCc9Da3fAB54F",
             "startBlock": "12792553"
