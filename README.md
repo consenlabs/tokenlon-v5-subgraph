@@ -31,16 +31,28 @@ $ yarn global add truffle ganache-cli
 Install dependencies
 ```
 # NPM
-npm install
+$ npm install
 
 # Yarn
-yarn
+$ yarn
+```
+
+## Generate subgraph yaml file
+
+Generate subgraph yaml for Ethereum mainnet
+```
+$ yarn prepare:mainnet
+```
+
+Generate subgraph yaml for Ethereum goerli
+```
+$ yarn prepare:goerli
 ```
 
 ## Generate Schema
 
 ```
-yarn codegen
+$ yarn codegen
 ```
 
 Writing your mapper algorithm after doing codegen under `src` folder.
@@ -48,7 +60,7 @@ Writing your mapper algorithm after doing codegen under `src` folder.
 ## Compile AssemblyScript
 
 ```
-yarn build
+$ yarn build
 ```
 
 ## Deploy Subgraph
@@ -59,18 +71,18 @@ Prerequisite:
 
 Should execute auth command first.
 ```
-graph auth [options] <node> <access-token>
+$ graph auth [options] <node> <access-token>
 ```
 Deploy to subgraph space.
 
 ```
-yarn deploy
+$ yarn deploy
 ```
 
 Deploy to testing subgraph space.
 
 ```
-SUBGRAPH_USER=username yarn deploy-staging
+$ SUBGRAPH_USER=username yarn deploy-staging
 ```
 
 ## To query these subgraphs
