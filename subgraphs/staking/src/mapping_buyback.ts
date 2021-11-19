@@ -8,6 +8,7 @@ export function handleBuyBack(event: BuyBackEvent): void {
 
   // update buyback
   let entity = getBuyBack(event)
+  entity.gasPrice = event.transaction.gasPrice
   entity.feeToken = event.params.feeToken
   entity.feeTokenAmount = event.params.feeTokenAmount
   entity.swappedLonAmount = event.params.swappedLonAmount
@@ -66,6 +67,7 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   // add buyback if the fee token is Lon
   let buyBack = getBuyBack(event)
   if (buyBack.gasPrice.equals(ZERO)) {
+    buyBack.gasPrice = event.transaction.gasPrice
     buyBack.feeToken = Address.fromString(LON_ADDRESS)
     buyBack.feeTokenAmount = event.params.treasuryAmount.plus(event.params.lonStakingAmount)
     buyBack.swappedLonAmount = ZERO
