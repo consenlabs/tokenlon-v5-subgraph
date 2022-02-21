@@ -1,8 +1,8 @@
-import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
+import { BigInt, Bytes, Address } from '@graphprotocol/graph-ts'
 import { log } from '@graphprotocol/graph-ts'
-import { FillOrder as FillOrderEvent } from "../generated/PMM/PMM"
-import { addTradedToken, getUser, getEventID } from "./helper"
-import { FillOrder, FillOrderTotal, TradedToken } from "../generated/schema"
+import { FillOrder as FillOrderEvent } from '../generated/PMM/PMM'
+import { addTradedToken, getUser, getEventID } from './helper'
+import { FillOrder, FillOrderTotal, TradedToken } from '../generated/schema'
 
 export function handleFillOrder(event: FillOrderEvent): void {
   let fillTotalEntity = FillOrderTotal.load('1')
@@ -47,8 +47,16 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.save()
   fillTotalEntity.save()
 
-  addTradedToken(entity.takerAssetAddr as Address, event.block.timestamp.toI32())
-  addTradedToken(entity.makerAssetAddr as Address, event.block.timestamp.toI32())
+  log.info('add traded token', [])
+
+  addTradedToken(
+    event.params.makerAssetAddr as Address,
+    event.block.timestamp.toI32()
+  )
+  addTradedToken(
+    event.params.takerAssetAddr as Address,
+    event.block.timestamp.toI32()
+  )
 
   let user = getUser(event.params.userAddr, event)
   if (user) {

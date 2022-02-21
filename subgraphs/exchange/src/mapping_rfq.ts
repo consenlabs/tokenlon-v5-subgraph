@@ -52,11 +52,11 @@ export function handleFillOrder(event: FillOrderEvent): void {
   fillTotalEntity.save()
 
   addTradedToken(
-    entity.takerAssetAddr as Address,
+    event.params.takerAssetAddr as Address,
     event.block.timestamp.toI32()
   )
   addTradedToken(
-    entity.makerAssetAddr as Address,
+    event.params.makerAssetAddr as Address,
     event.block.timestamp.toI32()
   )
 
