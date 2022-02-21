@@ -36,7 +36,7 @@ dataSources:
     network: {{ network }}
     source:
       address: "{{ address }}"
-      abi: PMM
+      abi: RFQ
       startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
@@ -45,8 +45,8 @@ dataSources:
       entities:
         - FillOrder
       abis:
-        - name: PMM
-          file: ./abis/PMM.json
+        - name: RFQ
+          file: ./abis/RFQ.json
         - name: ERC20
           file: ./abis/ERC20.json
         - name: ERC20Bytes
@@ -54,7 +54,7 @@ dataSources:
       eventHandlers:
         - event: FillOrder(string,indexed bytes32,indexed bytes32,indexed address,address,uint256,address,address,uint256,address,uint256,uint16)
           handler: handleFillOrder
-      file: ./src/mapping_pmm.ts
+      file: ./src/mapping_rfq.ts
   {{/RFQV1}}
   {{#AMMV1}}
   - kind: ethereum/contract
