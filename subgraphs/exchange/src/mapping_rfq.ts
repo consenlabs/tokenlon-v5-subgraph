@@ -45,7 +45,7 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.gasPrice = event.transaction.gasPrice
   entity.timestamp = event.block.timestamp.toI32()
 
-  log.info(entity.transactionHash, null)
+  log.info(entity.transactionHash, [])
 
   // Entities can be written to the store with `.save()`
   entity.save()
@@ -61,7 +61,9 @@ export function handleFillOrder(event: FillOrderEvent): void {
   )
 
   let user = getUser(event.params.userAddr, event)
-  user.tradeCount += 1
-  user.lastSeen = event.block.timestamp.toI32()
-  user.save()
+  if (user) {
+    user.tradeCount += 1
+    user.lastSeen = event.block.timestamp.toI32()
+    user.save()
+  }
 }
