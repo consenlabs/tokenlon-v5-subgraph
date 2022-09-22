@@ -157,7 +157,7 @@ export function handleSwappedTupple(event: SwappedTuppleEvent): void {
     const decodedPathLength = ethereum.decode('uint256', pathLengthByte)!.toBigInt()
     if (decodedPathLength.gt(ZERO)) {
       let path: Array<Bytes> = []
-      entity.path.push(entity.makerAddr)
+      path.push(entity.makerAddr)
       for (let i = 1, j = decodedPathLength.toI32(); i <= j; i++) {
         let pathAddrStart = pathByteStart + i * 32
         const pathAddrByte = Bytes.fromUint8Array(payload.subarray(pathAddrStart, pathAddrStart + 32))
