@@ -158,7 +158,7 @@ export function handleSetFeeToken(event: SetFeeTokenEvent): void {
   let entity = getSetFeeToken(event)
   entity.feeToken = event.params.feeToken
   entity.exchangeIndex = event.params.exchangeIndex
-  entity.path = event.params.path as Array<Bytes>
+  entity.path = event.params.path.map<Bytes>(addr => addr as Bytes)
   entity.LFactor = event.params.LFactor
   entity.RFactor = event.params.RFactor
   entity.minBuy = event.params.minBuy
@@ -168,7 +168,7 @@ export function handleSetFeeToken(event: SetFeeTokenEvent): void {
   // update fee token
   let feeToken = getFeeToken(event.params.feeToken.toHex())
   feeToken.exchangeIndex = event.params.exchangeIndex
-  feeToken.path = event.params.path as Array<Bytes>
+  feeToken.path = event.params.path.map<Bytes>(addr => addr as Bytes)
   feeToken.LFactor = event.params.LFactor
   feeToken.RFactor = event.params.RFactor
   feeToken.minBuy = event.params.minBuy

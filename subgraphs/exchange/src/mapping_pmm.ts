@@ -47,8 +47,8 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.save()
   fillTotalEntity.save()
 
-  addTradedToken(entity.takerAssetAddr as Address, event.block.timestamp.toI32())
-  addTradedToken(entity.makerAssetAddr as Address, event.block.timestamp.toI32())
+  addTradedToken(entity.takerAssetAddr, event.block.timestamp)
+  addTradedToken(entity.makerAssetAddr, event.block.timestamp)
 
   let user = getUser(event.params.userAddr, event)
   user.tradeCount += 1

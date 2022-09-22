@@ -50,8 +50,8 @@ export function handleSwapped(event: SwappedEvent): void {
   swappedTotal.save()
   processSubsidizedEvent(event)
 
-  addTradedToken(entity.takerAssetAddr as Address, event.block.timestamp.toI32())
-  addTradedToken(entity.makerAssetAddr as Address, event.block.timestamp.toI32())
+  addTradedToken(entity.takerAssetAddr, event.block.timestamp)
+  addTradedToken(entity.makerAssetAddr, event.block.timestamp)
 
   let user = getUser(event.params.userAddr, event)
   user.tradeCount += 1
@@ -143,25 +143,25 @@ export function handleSwappedTupple(event: SwappedTuppleEvent): void {
 
     let input = event.transaction.input!
     // skip method bytes
-    let rawPayloadInput = input.subarray(4, input.length) as Bytes
+    const rawPayloadInput = Bytes.fromUint8Array(input.subarray(4, input.length))
     let rawPayload = ethereum.decode('bytes', rawPayloadInput!)
     // skip method bytes
-    let payload = rawPayload.toBytes().subarray(4, rawPayload.toBytes().length) as Bytes
+    const payload = Bytes.fromUint8Array(rawPayload.toBytes().subarray(4, rawPayload.toBytes().length))
     let pathByteStart = 19 * 32
     // decode maker specify data length
-    let dataLengthByte = payload.subarray(18 * 32, 19 * 32) as Bytes
+    const dataLengthByte = Bytes.fromUint8Array(payload.subarray(18 * 32, 19 * 32))
     let decodedDataLength = ethereum.decode('uint256', dataLengthByte!).toBigInt()
     if (decodedDataLength.gt(ZERO)) {
       pathByteStart += decodedDataLength.toI32()
     }
-    let pathLengthByte = payload.subarray(pathByteStart, pathByteStart + 32) as Bytes
+    const pathLengthByte = Bytes.fromUint8Array(payload.subarray(pathByteStart, pathByteStart + 32))
     let decodedPathLength = ethereum.decode('uint256', pathLengthByte!).toBigInt()
     if (decodedPathLength.gt(ZERO)) {
       let path: Array<Bytes> = []
       entity.path.push(entity.makerAddr)
       for (let i = 1, j = decodedPathLength.toI32(); i <= j; i++) {
         let pathAddrStart = pathByteStart + i * 32
-        let pathAddrByte = payload.subarray(pathAddrStart, pathAddrStart + 32) as Bytes
+        const pathAddrByte = Bytes.fromUint8Array(payload.subarray(pathAddrStart, pathAddrStart + 32))
         path.push(pathAddrByte!)
       }
       entity.path = path
@@ -174,8 +174,8 @@ export function handleSwappedTupple(event: SwappedTuppleEvent): void {
   swappedTotal.save()
   processSubsidizedTuppleEvent(event)
 
-  addTradedToken(entity.takerAssetAddr as Address, event.block.timestamp.toI32())
-  addTradedToken(entity.makerAssetAddr as Address, event.block.timestamp.toI32())
+  addTradedToken(entity.takerAssetAddr, event.block.timestamp)
+  addTradedToken(entity.makerAssetAddr, event.block.timestamp)
 
   let user = getUser(order.userAddr, event)
   user.tradeCount += 1
