@@ -1,9 +1,9 @@
 /* eslint-disable prefer-const */
 import { BigInt, BigDecimal, ethereum, Address, Bytes } from '@graphprotocol/graph-ts'
 import { log } from '@graphprotocol/graph-ts'
-import { ERC20 } from "../generated/PMM/ERC20"
-import { ERC20Bytes } from "../generated/PMM/ERC20Bytes"
-import { TradedToken, User } from "../generated/schema"
+import { ERC20 } from '../generated/PMM/ERC20'
+import { ERC20Bytes } from '../generated/PMM/ERC20Bytes'
+import { TradedToken, User } from '../generated/schema'
 
 export let ZERO = BigInt.fromI32(0)
 export let ZERO_BD = BigDecimal.fromString('0')
@@ -11,7 +11,7 @@ export let ONE = BigInt.fromI32(1)
 export let ONE_BD = BigDecimal.fromString('1')
 export let ZERO_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000')
 export let ETH_ADDRESS = Address.fromString('0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE')
-export let WETH_ADDRESS = Address.fromString("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
+export let WETH_ADDRESS = Address.fromString('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2')
 
 export let isETH = (assetAddr: Bytes): boolean => {
   return (assetAddr == ZERO_ADDRESS) || (assetAddr == ETH_ADDRESS) || (assetAddr == WETH_ADDRESS)

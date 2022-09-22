@@ -1,8 +1,8 @@
-import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
+import { BigInt, Bytes, Address } from '@graphprotocol/graph-ts'
 import { log } from '@graphprotocol/graph-ts'
-import { FillOrder as FillOrderEvent } from "../generated/PMM/PMM"
-import { addTradedToken, getUser, getEventID } from "./helper"
-import { FillOrder, FillOrderTotal, TradedToken } from "../generated/schema"
+import { FillOrder as FillOrderEvent } from '../generated/PMM/PMM'
+import { addTradedToken, getUser, getEventID } from './helper'
+import { FillOrder, FillOrderTotal, TradedToken } from '../generated/schema'
 
 export function handleFillOrder(event: FillOrderEvent): void {
   let fillTotalEntity = FillOrderTotal.load('1')

@@ -1,5 +1,5 @@
 import { log } from '@graphprotocol/graph-ts'
-import { Staked as StakedEvent, Redeem as RedeemEvent, Cooldown as CooldownEvent } from "../generated/LonStaking/LonStaking"
+import { Staked as StakedEvent, Redeem as RedeemEvent, Cooldown as CooldownEvent } from '../generated/LonStaking/LonStaking'
 import { ONE, getStakedChange, getStaked, getRedeem, getCooldown, updateStakedData, getStakedTotal, LonStakingContract, getStakingRecord, StakeType_Staked, StakeType_Cooldown, StakeType_Redeem } from './helper'
 
 export function handleStaked(event: StakedEvent): void {

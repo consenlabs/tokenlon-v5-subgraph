@@ -1,8 +1,8 @@
-import { BigInt, Bytes, Address, ethereum } from "@graphprotocol/graph-ts"
+import { BigInt, Bytes, Address, ethereum } from '@graphprotocol/graph-ts'
 import { log } from '@graphprotocol/graph-ts'
-import { Swapped as SwappedTuppleEvent, Swapped1 as SwappedEvent } from "../generated/AMMWrapperWithPath/AMMWrapperWithPath"
-import { ZERO, addTradedToken, getUser, getEventID } from "./helper"
-import { Swapped, SubsidizedSwapped, SwappedTotal } from "../generated/schema"
+import { Swapped as SwappedTuppleEvent, Swapped1 as SwappedEvent } from '../generated/AMMWrapperWithPath/AMMWrapperWithPath'
+import { ZERO, addTradedToken, getUser, getEventID } from './helper'
+import { Swapped, SubsidizedSwapped, SwappedTotal } from '../generated/schema'
 
 export function handleSwapped(event: SwappedEvent): void {
   let swappedTotal = SwappedTotal.load('1')
