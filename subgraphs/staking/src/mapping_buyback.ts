@@ -5,7 +5,6 @@ import { BuyBackDayData } from '../generated/schema'
 import { ZERO, ZERO_BD, ONE, START_TIMESTAMP, RewardDistributorContract, LON_ADDRESS, updateStakedData, getBuyBack, getScaleIndex, getDistributeLon, getStakedChange, getBuyBackTotal, getFeeToken, getMintLon, getEnableFeeToken, getSetFeeToken } from './helper'
 
 export function handleBuyBack(event: BuyBackEvent): void {
-
   // update buyback
   const entity = getBuyBack(event)!
   entity.gasPrice = event.transaction.gasPrice
@@ -23,7 +22,6 @@ export function handleBuyBack(event: BuyBackEvent): void {
 }
 
 export function handleDistributeLon(event: DistributeLonEvent): void {
-
   // update buyback day data
   let timestamp = event.block.timestamp.toI32()
   let dayID = timestamp / 86400
@@ -107,7 +105,6 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
 }
 
 export function handleMintLon(event: MintLonEvent): void {
-
   // update minted lon
   let txHash = event.transaction.hash.toHex()
   const mintLon = getMintLon(event)!
@@ -153,7 +150,6 @@ export function handleEnableFeeToken(event: EnableFeeTokenEvent): void {
 }
 
 export function handleSetFeeToken(event: SetFeeTokenEvent): void {
-
   // update set fee token
   const entity = getSetFeeToken(event)!
   entity.feeToken = event.params.feeToken

@@ -3,7 +3,6 @@ import { Staked as StakedEvent, Redeem as RedeemEvent, Cooldown as CooldownEvent
 import { ONE, getStakedChange, getStaked, getRedeem, getCooldown, updateStakedData, getStakedTotal, LonStakingContract, getStakingRecord, StakeType_Staked, StakeType_Cooldown, StakeType_Redeem } from './helper'
 
 export function handleStaked(event: StakedEvent): void {
-
   // update staked change
   const stakedChange = getStakedChange(event)!
   stakedChange.stakedAmount = event.params.amount
@@ -41,7 +40,6 @@ export function handleStaked(event: StakedEvent): void {
 }
 
 export function handleRedeem(event: RedeemEvent): void {
-
   // update staked change
   const stakedChange = getStakedChange(event)!
   stakedChange.stakedAmount = event.params.redeemAmount
@@ -79,7 +77,6 @@ export function handleRedeem(event: RedeemEvent): void {
 }
 
 export function handleCooldown(event: CooldownEvent): void {
-
   // update cooldown
   let dayID = event.block.timestamp.toI32() / 86400
   let dayStartTimestamp = dayID * 86400

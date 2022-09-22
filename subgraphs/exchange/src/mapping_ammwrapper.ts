@@ -66,7 +66,7 @@ const processSubsidizedEvent = (event: SwappedEvent): void => {
     if (entity == null) {
       entity = new SubsidizedSwapped(subSwappedID)
     }
-    
+
     entity.from = event.transaction.from as Bytes
     entity.to = event.transaction.to as Bytes
     entity.source = event.params.source
