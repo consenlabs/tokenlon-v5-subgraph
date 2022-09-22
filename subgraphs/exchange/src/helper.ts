@@ -1,6 +1,5 @@
 /* eslint-disable prefer-const */
 import { BigInt, BigDecimal, ethereum, Address, Bytes } from '@graphprotocol/graph-ts'
-import { log } from '@graphprotocol/graph-ts'
 import { ERC20 } from '../generated/PMM/ERC20'
 import { ERC20Bytes } from '../generated/PMM/ERC20Bytes'
 import { TradedToken, User } from '../generated/schema'

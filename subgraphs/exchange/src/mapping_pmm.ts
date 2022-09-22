@@ -43,7 +43,6 @@ export function handleFillOrder(event: FillOrderEvent): void {
 
   log.info('FillOrderEvent transaction hash: {}', [entity.transactionHash])
 
-  // Entities can be written to the store with `.save()`
   entity.save()
   fillTotalEntity.save()
 
