@@ -50,7 +50,7 @@ export function handleFillOrder(event: FillOrderEvent): void {
   addTradedToken(entity.takerAssetAddr, event.block.timestamp)
   addTradedToken(entity.makerAssetAddr, event.block.timestamp)
 
-  let user = getUser(event.params.userAddr, event)
+  const user = getUser(event.params.userAddr, event)!
   user.tradeCount += 1
   user.lastSeen = event.block.timestamp.toI32()
   user.save()

@@ -53,7 +53,7 @@ export function handleSwapped(event: SwappedEvent): void {
   addTradedToken(entity.takerAssetAddr, event.block.timestamp)
   addTradedToken(entity.makerAssetAddr, event.block.timestamp)
 
-  let user = getUser(event.params.userAddr, event)
+  const user = getUser(event.params.userAddr, event)!
   user.tradeCount += 1
   user.lastSeen = event.block.timestamp.toI32()
   user.save()
@@ -139,30 +139,29 @@ export function handleSwappedTupple(event: SwappedTuppleEvent): void {
   entity.salt = order.salt
   entity.deadline = order.deadline
 
-  if (event.transaction.input != null) {
-
-    let input = event.transaction.input!
+  if (event.transaction.input !== null) {
+    const input = event.transaction.input
     // skip method bytes
     const rawPayloadInput = Bytes.fromUint8Array(input.subarray(4, input.length))
-    let rawPayload = ethereum.decode('bytes', rawPayloadInput!)
+    const rawPayload = ethereum.decode('bytes', rawPayloadInput)!
     // skip method bytes
     const payload = Bytes.fromUint8Array(rawPayload.toBytes().subarray(4, rawPayload.toBytes().length))
     let pathByteStart = 19 * 32
     // decode maker specify data length
     const dataLengthByte = Bytes.fromUint8Array(payload.subarray(18 * 32, 19 * 32))
-    let decodedDataLength = ethereum.decode('uint256', dataLengthByte!).toBigInt()
+    const decodedDataLength = ethereum.decode('uint256', dataLengthByte)!.toBigInt()
     if (decodedDataLength.gt(ZERO)) {
       pathByteStart += decodedDataLength.toI32()
     }
     const pathLengthByte = Bytes.fromUint8Array(payload.subarray(pathByteStart, pathByteStart + 32))
-    let decodedPathLength = ethereum.decode('uint256', pathLengthByte!).toBigInt()
+    const decodedPathLength = ethereum.decode('uint256', pathLengthByte)!.toBigInt()
     if (decodedPathLength.gt(ZERO)) {
       let path: Array<Bytes> = []
       entity.path.push(entity.makerAddr)
       for (let i = 1, j = decodedPathLength.toI32(); i <= j; i++) {
         let pathAddrStart = pathByteStart + i * 32
         const pathAddrByte = Bytes.fromUint8Array(payload.subarray(pathAddrStart, pathAddrStart + 32))
-        path.push(pathAddrByte!)
+        path.push(pathAddrByte)
       }
       entity.path = path
     }
@@ -177,7 +176,7 @@ export function handleSwappedTupple(event: SwappedTuppleEvent): void {
   addTradedToken(entity.takerAssetAddr, event.block.timestamp)
   addTradedToken(entity.makerAssetAddr, event.block.timestamp)
 
-  let user = getUser(order.userAddr, event)
+  const user = getUser(order.userAddr, event)!
   user.tradeCount += 1
   user.lastSeen = event.block.timestamp.toI32()
   user.save()

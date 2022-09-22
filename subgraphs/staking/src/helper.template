@@ -123,7 +123,7 @@ export function updateStakedData(event: ethereum.Event): void {
     return
   }
 
-  let stakedTotal = getStakedTotal()
+  const stakedTotal = getStakedTotal()!
 
   // staked day data
   let timestamp = event.block.timestamp.toI32()
