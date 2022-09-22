@@ -18,7 +18,7 @@ export function handleBuyBack(event: BuyBackEvent): void {
   entity.maxBuy = event.params.maxBuy
   entity.timestamp = event.block.timestamp.toI32()
 
-  log.info(entity.transactionHash, null)
+  log.info('BuyBackEvent transaction hash: {}', [entity.transactionHash])
   entity.save()
 }
 
@@ -103,7 +103,7 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
 
   updateStakedData(event)
 
-  log.info(entity.transactionHash, null)
+  log.info('DistributeLonEvent transaction hash: {}', [entity.transactionHash])
 }
 
 export function handleMintLon(event: MintLonEvent): void {
@@ -124,7 +124,7 @@ export function handleMintLon(event: MintLonEvent): void {
 
   let buyBackDayData = BuyBackDayData.load(buyBackDayID)
   if (buyBackDayData == null) {
-    log.error(`couldn't load the buyback day data in transaction: ${txHash}`, null)
+    log.error("couldn't load the buyback day data in transaction: {}", [txHash])
   }
   buyBackDayData.dailyMintedAmount = buyBackDayData.dailyMintedAmount.plus(mintedAmount)
   buyBackDayData.save()
@@ -134,7 +134,7 @@ export function handleMintLon(event: MintLonEvent): void {
   buyBackTotal.totalMintedAmount = buyBackTotal.totalMintedAmount.plus(mintedAmount)
   buyBackTotal.save()
 
-  log.info(event.transaction.hash.toHex(), null)
+  log.info('MintLonEvent transaction hash: {}', [event.transaction.hash.toHex()])
 }
 
 export function handleEnableFeeToken(event: EnableFeeTokenEvent): void {
@@ -149,7 +149,7 @@ export function handleEnableFeeToken(event: EnableFeeTokenEvent): void {
   feeToken.enabled = event.params.enable
   feeToken.save()
 
-  log.info(entity.transactionHash, null)
+  log.info('EnableFeeTokenEvent transaction hash: {}', [entity.transactionHash])
 }
 
 export function handleSetFeeToken(event: SetFeeTokenEvent): void {
@@ -175,5 +175,5 @@ export function handleSetFeeToken(event: SetFeeTokenEvent): void {
   feeToken.maxBuy = event.params.maxBuy
   feeToken.save()
 
-  log.info(entity.transactionHash, null)
+  log.info('SetFeeTokenEvent transaction hash: {}', [entity.transactionHash])
 }

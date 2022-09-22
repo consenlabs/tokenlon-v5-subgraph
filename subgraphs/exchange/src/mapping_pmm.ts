@@ -41,7 +41,7 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.gasPrice = event.transaction.gasPrice
   entity.timestamp = event.block.timestamp.toI32()
 
-  log.info(entity.transactionHash, null)
+  log.info('FillOrderEvent transaction hash: {}', [entity.transactionHash])
 
   // Entities can be written to the store with `.save()`
   entity.save()

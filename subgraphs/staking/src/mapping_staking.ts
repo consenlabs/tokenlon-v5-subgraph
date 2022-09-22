@@ -37,7 +37,7 @@ export function handleStaked(event: StakedEvent): void {
 
   updateStakedData(event)
 
-  log.info(staked.transactionHash, null)
+  log.info('StakedEvent transaction hash: {}', [staked.transactionHash])
 }
 
 export function handleRedeem(event: RedeemEvent): void {
@@ -75,7 +75,7 @@ export function handleRedeem(event: RedeemEvent): void {
 
   updateStakedData(event)
 
-  log.info(redeem.transactionHash, null)
+  log.info('RedeemEvent transaction hash: {}', [redeem.transactionHash])
 }
 
 export function handleCooldown(event: CooldownEvent): void {
@@ -102,5 +102,5 @@ export function handleCooldown(event: CooldownEvent): void {
   stakingRecord.txNumber = stakedTotal.txCount
   stakingRecord.save()
 
-  log.info(cooldown.transactionHash, null)
+  log.info('CooldownEvent transaction hash: {}', [cooldown.transactionHash])
 }

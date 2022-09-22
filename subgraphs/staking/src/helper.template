@@ -119,7 +119,7 @@ export function updateStakedData(event: ethereum.Event): void {
   let entityID = getEventID(event)
   let stakedChange = StakedChange.load(entityID)
   if (stakedChange == null) {
-    log.info(`should log staked change first ${entityID}`, null)
+    log.info('should log staked change first {}', [entityID])
     return
   }
 

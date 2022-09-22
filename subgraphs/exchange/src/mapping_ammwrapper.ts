@@ -44,7 +44,8 @@ export function handleSwapped(event: SwappedEvent): void {
   entity.salt = ZERO
   entity.deadline = ZERO
 
-  log.info(entity.transactionHash, null)
+  log.info('SwappedEvent transaction hash: {}', [entity.transactionHash])
+
   entity.save()
   swappedTotal.save()
   processSubsidizedEvent(event)
@@ -91,7 +92,7 @@ const processSubsidizedEvent = (event: SwappedEvent): void => {
     entity.salt = ZERO
     entity.deadline = ZERO
 
-    log.info(entity.transactionHash, null)
+    log.info('ProcessSubsidizedEvent transaction hash: {}', [entity.transactionHash])
     entity.save()
   }
 }
@@ -167,7 +168,8 @@ export function handleSwappedTupple(event: SwappedTuppleEvent): void {
     }
   }
 
-  log.info(entity.transactionHash, null)
+  log.info('SwappedTuppleEvent transaction hash: {}', [entity.transactionHash])
+
   entity.save()
   swappedTotal.save()
   processSubsidizedTuppleEvent(event)
@@ -215,7 +217,7 @@ const processSubsidizedTuppleEvent = (event: SwappedTuppleEvent): void => {
     entity.salt = order.salt
     entity.deadline = order.deadline
 
-    log.info(entity.transactionHash, null)
+    log.info('ProcessSubsidizedTuppleEvent transaction hash: {}', [entity.transactionHash])
     entity.save()
   }
 }
