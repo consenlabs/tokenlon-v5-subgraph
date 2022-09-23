@@ -1,8 +1,8 @@
-import { BigInt, Bytes, Address, ethereum } from "@graphprotocol/graph-ts"
+import { BigInt, Bytes, Address, ethereum } from '@graphprotocol/graph-ts'
 import { log } from '@graphprotocol/graph-ts'
-import { Swapped as SwappedTuppleEvent, Swapped1 as SwappedEvent } from "../generated/AMMWrapperWithPath/AMMWrapperWithPath"
-import { ZERO, addTradedToken, getUser, getEventID } from "./helper"
-import { Swapped, SubsidizedSwapped, SwappedTotal } from "../generated/schema"
+import { Swapped as SwappedTuppleEvent, Swapped1 as SwappedEvent } from '../generated/AMMWrapperWithPath/AMMWrapperWithPath'
+import { ZERO, addTradedToken, getUser, getEventID } from './helper'
+import { Swapped, SubsidizedSwapped, SwappedTotal } from '../generated/schema'
 
 export function handleSwapped(event: SwappedEvent): void {
   let swappedTotal = SwappedTotal.load('1')
@@ -44,15 +44,16 @@ export function handleSwapped(event: SwappedEvent): void {
   entity.salt = ZERO
   entity.deadline = ZERO
 
-  log.info(entity.transactionHash, null)
+  log.info('SwappedEvent transaction hash: {}', [entity.transactionHash])
+
   entity.save()
   swappedTotal.save()
   processSubsidizedEvent(event)
 
-  addTradedToken(entity.takerAssetAddr as Address, event.block.timestamp.toI32())
-  addTradedToken(entity.makerAssetAddr as Address, event.block.timestamp.toI32())
+  addTradedToken(entity.takerAssetAddr, event.block.timestamp)
+  addTradedToken(entity.makerAssetAddr, event.block.timestamp)
 
-  let user = getUser(event.params.userAddr, event)
+  const user = getUser(event.params.userAddr, event)!
   user.tradeCount += 1
   user.lastSeen = event.block.timestamp.toI32()
   user.save()
@@ -65,7 +66,7 @@ const processSubsidizedEvent = (event: SwappedEvent): void => {
     if (entity == null) {
       entity = new SubsidizedSwapped(subSwappedID)
     }
-    
+
     entity.from = event.transaction.from as Bytes
     entity.to = event.transaction.to as Bytes
     entity.source = event.params.source
@@ -91,7 +92,7 @@ const processSubsidizedEvent = (event: SwappedEvent): void => {
     entity.salt = ZERO
     entity.deadline = ZERO
 
-    log.info(entity.transactionHash, null)
+    log.info('ProcessSubsidizedEvent transaction hash: {}', [entity.transactionHash])
     entity.save()
   }
 }
@@ -138,44 +139,44 @@ export function handleSwappedTupple(event: SwappedTuppleEvent): void {
   entity.salt = order.salt
   entity.deadline = order.deadline
 
-  if (event.transaction.input != null) {
-
-    let input = event.transaction.input!
+  if (event.transaction.input !== null) {
+    const input = event.transaction.input
     // skip method bytes
-    let rawPayloadInput = input.subarray(4, input.length) as Bytes
-    let rawPayload = ethereum.decode('bytes', rawPayloadInput!)
+    const rawPayloadInput = Bytes.fromUint8Array(input.subarray(4, input.length))
+    const rawPayload = ethereum.decode('bytes', rawPayloadInput)!
     // skip method bytes
-    let payload = rawPayload.toBytes().subarray(4, rawPayload.toBytes().length) as Bytes
+    const payload = Bytes.fromUint8Array(rawPayload.toBytes().subarray(4, rawPayload.toBytes().length))
     let pathByteStart = 19 * 32
     // decode maker specify data length
-    let dataLengthByte = payload.subarray(18 * 32, 19 * 32) as Bytes
-    let decodedDataLength = ethereum.decode('uint256', dataLengthByte!).toBigInt()
+    const dataLengthByte = Bytes.fromUint8Array(payload.subarray(18 * 32, 19 * 32))
+    const decodedDataLength = ethereum.decode('uint256', dataLengthByte)!.toBigInt()
     if (decodedDataLength.gt(ZERO)) {
       pathByteStart += decodedDataLength.toI32()
     }
-    let pathLengthByte = payload.subarray(pathByteStart, pathByteStart + 32) as Bytes
-    let decodedPathLength = ethereum.decode('uint256', pathLengthByte!).toBigInt()
+    const pathLengthByte = Bytes.fromUint8Array(payload.subarray(pathByteStart, pathByteStart + 32))
+    const decodedPathLength = ethereum.decode('uint256', pathLengthByte)!.toBigInt()
     if (decodedPathLength.gt(ZERO)) {
       let path: Array<Bytes> = []
-      entity.path.push(entity.makerAddr)
+      path.push(entity.makerAddr)
       for (let i = 1, j = decodedPathLength.toI32(); i <= j; i++) {
         let pathAddrStart = pathByteStart + i * 32
-        let pathAddrByte = payload.subarray(pathAddrStart, pathAddrStart + 32) as Bytes
-        path.push(pathAddrByte!)
+        const pathAddrByte = Bytes.fromUint8Array(payload.subarray(pathAddrStart, pathAddrStart + 32))
+        path.push(pathAddrByte)
       }
       entity.path = path
     }
   }
 
-  log.info(entity.transactionHash, null)
+  log.info('SwappedTuppleEvent transaction hash: {}', [entity.transactionHash])
+
   entity.save()
   swappedTotal.save()
   processSubsidizedTuppleEvent(event)
 
-  addTradedToken(entity.takerAssetAddr as Address, event.block.timestamp.toI32())
-  addTradedToken(entity.makerAssetAddr as Address, event.block.timestamp.toI32())
+  addTradedToken(entity.takerAssetAddr, event.block.timestamp)
+  addTradedToken(entity.makerAssetAddr, event.block.timestamp)
 
-  let user = getUser(order.userAddr, event)
+  const user = getUser(order.userAddr, event)!
   user.tradeCount += 1
   user.lastSeen = event.block.timestamp.toI32()
   user.save()
@@ -215,7 +216,7 @@ const processSubsidizedTuppleEvent = (event: SwappedTuppleEvent): void => {
     entity.salt = order.salt
     entity.deadline = order.deadline
 
-    log.info(entity.transactionHash, null)
+    log.info('ProcessSubsidizedTuppleEvent transaction hash: {}', [entity.transactionHash])
     entity.save()
   }
 }

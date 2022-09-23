@@ -1,13 +1,12 @@
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts'
 import { log } from '@graphprotocol/graph-ts'
-import { BuyBack as BuyBackEvent, DistributeLon as DistributeLonEvent, MintLon as MintLonEvent, SetFeeToken as SetFeeTokenEvent, EnableFeeToken as EnableFeeTokenEvent } from "../generated/RewardDistributor/RewardDistributor"
-import { BuyBackDayData } from "../generated/schema"
+import { BuyBack as BuyBackEvent, DistributeLon as DistributeLonEvent, MintLon as MintLonEvent, SetFeeToken as SetFeeTokenEvent, EnableFeeToken as EnableFeeTokenEvent } from '../generated/RewardDistributor/RewardDistributor'
+import { BuyBackDayData } from '../generated/schema'
 import { ZERO, ZERO_BD, ONE, START_TIMESTAMP, RewardDistributorContract, LON_ADDRESS, updateStakedData, getBuyBack, getScaleIndex, getDistributeLon, getStakedChange, getBuyBackTotal, getFeeToken, getMintLon, getEnableFeeToken, getSetFeeToken } from './helper'
 
 export function handleBuyBack(event: BuyBackEvent): void {
-
   // update buyback
-  let entity = getBuyBack(event)
+  const entity = getBuyBack(event)!
   entity.gasPrice = event.transaction.gasPrice
   entity.feeToken = event.params.feeToken
   entity.feeTokenAmount = event.params.feeTokenAmount
@@ -18,12 +17,11 @@ export function handleBuyBack(event: BuyBackEvent): void {
   entity.maxBuy = event.params.maxBuy
   entity.timestamp = event.block.timestamp.toI32()
 
-  log.info(entity.transactionHash, null)
+  log.info('BuyBackEvent transaction hash: {}', [entity.transactionHash])
   entity.save()
 }
 
 export function handleDistributeLon(event: DistributeLonEvent): void {
-
   // update buyback day data
   let timestamp = event.block.timestamp.toI32()
   let dayID = timestamp / 86400
@@ -33,7 +31,7 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   let lonStakingAmount = event.params.lonStakingAmount
 
   // update buyback total
-  let buyBackTotal = getBuyBackTotal()
+  const buyBackTotal = getBuyBackTotal()!
 
   let scaleIndex = getScaleIndex()
   if (buyBackTotal.lastUpdatedAt == 0) {
@@ -65,7 +63,7 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   buyBackDayData.save()
 
   // add buyback if the fee token is Lon
-  let buyBack = getBuyBack(event)
+  const buyBack = getBuyBack(event)!
   if (buyBack.gasPrice.equals(ZERO)) {
     buyBack.gasPrice = event.transaction.gasPrice
     buyBack.feeToken = Address.fromString(LON_ADDRESS)
@@ -89,28 +87,27 @@ export function handleDistributeLon(event: DistributeLonEvent): void {
   }
 
   // update distribute lon
-  let entity = getDistributeLon(event)
+  const entity = getDistributeLon(event)!
   entity.treasuryAmount = event.params.treasuryAmount
   entity.lonStakingAmount = event.params.lonStakingAmount
   entity.scaleIndex = scaleIndex
   entity.save()
 
   // update staked change
-  let stakedChange = getStakedChange(event)
+  const stakedChange = getStakedChange(event)!
   stakedChange.stakedAmount = lonStakingAmount
   stakedChange.added = true
   stakedChange.save()
 
   updateStakedData(event)
 
-  log.info(entity.transactionHash, null)
+  log.info('DistributeLonEvent transaction hash: {}', [entity.transactionHash])
 }
 
 export function handleMintLon(event: MintLonEvent): void {
-
   // update minted lon
   let txHash = event.transaction.hash.toHex()
-  let mintLon = getMintLon(event)
+  const mintLon = getMintLon(event)!
   mintLon.mintedAmount = event.params.mintedAmount
   mintLon.save()
 
@@ -124,41 +121,40 @@ export function handleMintLon(event: MintLonEvent): void {
 
   let buyBackDayData = BuyBackDayData.load(buyBackDayID)
   if (buyBackDayData == null) {
-    log.error(`couldn't load the buyback day data in transaction: ${txHash}`, null)
+    log.error("couldn't load the buyback day data in transaction: {}", [txHash])
+  } else {
+    buyBackDayData.dailyMintedAmount = buyBackDayData.dailyMintedAmount.plus(mintedAmount)
+    buyBackDayData.save()
   }
-  buyBackDayData.dailyMintedAmount = buyBackDayData.dailyMintedAmount.plus(mintedAmount)
-  buyBackDayData.save()
 
   // update buyback total
-  let buyBackTotal = getBuyBackTotal()
+  const buyBackTotal = getBuyBackTotal()!
   buyBackTotal.totalMintedAmount = buyBackTotal.totalMintedAmount.plus(mintedAmount)
   buyBackTotal.save()
 
-  log.info(event.transaction.hash.toHex(), null)
+  log.info('MintLonEvent transaction hash: {}', [event.transaction.hash.toHex()])
 }
 
 export function handleEnableFeeToken(event: EnableFeeTokenEvent): void {
-
-  let entity = getEnableFeeToken(event)
+  const entity = getEnableFeeToken(event)!
   entity.feeToken = event.params.feeToken
   entity.enabled = event.params.enable
   entity.save()
 
   // update fee token
-  let feeToken = getFeeToken(event.params.feeToken.toHex())
+  const feeToken = getFeeToken(event.params.feeToken.toHex())!
   feeToken.enabled = event.params.enable
   feeToken.save()
 
-  log.info(entity.transactionHash, null)
+  log.info('EnableFeeTokenEvent transaction hash: {}', [entity.transactionHash])
 }
 
 export function handleSetFeeToken(event: SetFeeTokenEvent): void {
-
   // update set fee token
-  let entity = getSetFeeToken(event)
+  const entity = getSetFeeToken(event)!
   entity.feeToken = event.params.feeToken
   entity.exchangeIndex = event.params.exchangeIndex
-  entity.path = event.params.path as Array<Bytes>
+  entity.path = event.params.path.map<Bytes>(addr => addr as Bytes)
   entity.LFactor = event.params.LFactor
   entity.RFactor = event.params.RFactor
   entity.minBuy = event.params.minBuy
@@ -166,14 +162,14 @@ export function handleSetFeeToken(event: SetFeeTokenEvent): void {
   entity.save()
 
   // update fee token
-  let feeToken = getFeeToken(event.params.feeToken.toHex())
+  const feeToken = getFeeToken(event.params.feeToken.toHex())!
   feeToken.exchangeIndex = event.params.exchangeIndex
-  feeToken.path = event.params.path as Array<Bytes>
+  feeToken.path = event.params.path.map<Bytes>(addr => addr as Bytes)
   feeToken.LFactor = event.params.LFactor
   feeToken.RFactor = event.params.RFactor
   feeToken.minBuy = event.params.minBuy
   feeToken.maxBuy = event.params.maxBuy
   feeToken.save()
 
-  log.info(entity.transactionHash, null)
+  log.info('SetFeeTokenEvent transaction hash: {}', [entity.transactionHash])
 }

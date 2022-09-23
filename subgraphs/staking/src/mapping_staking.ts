@@ -1,11 +1,10 @@
 import { log } from '@graphprotocol/graph-ts'
-import { Staked as StakedEvent, Redeem as RedeemEvent, Cooldown as CooldownEvent } from "../generated/LonStaking/LonStaking"
+import { Staked as StakedEvent, Redeem as RedeemEvent, Cooldown as CooldownEvent } from '../generated/LonStaking/LonStaking'
 import { ONE, getStakedChange, getStaked, getRedeem, getCooldown, updateStakedData, getStakedTotal, LonStakingContract, getStakingRecord, StakeType_Staked, StakeType_Cooldown, StakeType_Redeem } from './helper'
 
 export function handleStaked(event: StakedEvent): void {
-
   // update staked change
-  let stakedChange = getStakedChange(event)
+  const stakedChange = getStakedChange(event)!
   stakedChange.stakedAmount = event.params.amount
   stakedChange.added = true
   stakedChange.save()
@@ -13,7 +12,7 @@ export function handleStaked(event: StakedEvent): void {
   // update staked
   let dayID = event.block.timestamp.toI32() / 86400
   let dayStartTimestamp = dayID * 86400
-  let staked = getStaked(event)
+  const staked = getStaked(event)!
   staked.user = event.params.user
   staked.amount = event.params.amount
   staked.share = event.params.share
@@ -21,11 +20,11 @@ export function handleStaked(event: StakedEvent): void {
   staked.date = dayStartTimestamp
   staked.save()
 
-  let stakedTotal = getStakedTotal()
+  const stakedTotal = getStakedTotal()!
   stakedTotal.txCount = stakedTotal.txCount.plus(ONE)
   stakedTotal.save()
 
-  let stakingRecord = getStakingRecord(event)
+  const stakingRecord = getStakingRecord(event)!
   stakingRecord.user = event.params.user
   stakingRecord.date = dayStartTimestamp
   stakingRecord.blockHash = event.block.hash.toHex()
@@ -37,13 +36,12 @@ export function handleStaked(event: StakedEvent): void {
 
   updateStakedData(event)
 
-  log.info(staked.transactionHash, null)
+  log.info('StakedEvent transaction hash: {}', [staked.transactionHash])
 }
 
 export function handleRedeem(event: RedeemEvent): void {
-
   // update staked change
-  let stakedChange = getStakedChange(event)
+  const stakedChange = getStakedChange(event)!
   stakedChange.stakedAmount = event.params.redeemAmount
   stakedChange.added = false
   stakedChange.save()
@@ -51,7 +49,7 @@ export function handleRedeem(event: RedeemEvent): void {
   // update redeem
   let dayID = event.block.timestamp.toI32() / 86400
   let dayStartTimestamp = dayID * 86400
-  let redeem = getRedeem(event)
+  const redeem = getRedeem(event)!
   redeem.user = event.params.user
   redeem.amount = event.params.redeemAmount
   redeem.share = event.params.share
@@ -59,11 +57,11 @@ export function handleRedeem(event: RedeemEvent): void {
   redeem.date = dayStartTimestamp
   redeem.save()
 
-  let stakedTotal = getStakedTotal()
+  const stakedTotal = getStakedTotal()!
   stakedTotal.txCount = stakedTotal.txCount.plus(ONE)
   stakedTotal.save()
 
-  let stakingRecord = getStakingRecord(event)
+  const stakingRecord = getStakingRecord(event)!
   stakingRecord.user = event.params.user
   stakingRecord.date = dayStartTimestamp
   stakingRecord.stakeType = StakeType_Redeem
@@ -75,25 +73,24 @@ export function handleRedeem(event: RedeemEvent): void {
 
   updateStakedData(event)
 
-  log.info(redeem.transactionHash, null)
+  log.info('RedeemEvent transaction hash: {}', [redeem.transactionHash])
 }
 
 export function handleCooldown(event: CooldownEvent): void {
-
   // update cooldown
   let dayID = event.block.timestamp.toI32() / 86400
   let dayStartTimestamp = dayID * 86400
-  let cooldown = getCooldown(event)
+  const cooldown = getCooldown(event)!
   cooldown.user = event.params.user
   cooldown.cooldownSeconds = LonStakingContract.COOLDOWN_SECONDS()
   cooldown.date = dayStartTimestamp
   cooldown.save()
 
-  let stakedTotal = getStakedTotal()
+  const stakedTotal = getStakedTotal()!
   stakedTotal.txCount = stakedTotal.txCount.plus(ONE)
   stakedTotal.save()
 
-  let stakingRecord = getStakingRecord(event)
+  const stakingRecord = getStakingRecord(event)!
   stakingRecord.user = event.params.user
   stakingRecord.date = dayStartTimestamp
   stakingRecord.stakeType = StakeType_Cooldown
@@ -102,5 +99,5 @@ export function handleCooldown(event: CooldownEvent): void {
   stakingRecord.txNumber = stakedTotal.txCount
   stakingRecord.save()
 
-  log.info(cooldown.transactionHash, null)
+  log.info('CooldownEvent transaction hash: {}', [cooldown.transactionHash])
 }
