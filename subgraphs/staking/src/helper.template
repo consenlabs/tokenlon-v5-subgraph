@@ -119,11 +119,11 @@ export function updateStakedData(event: ethereum.Event): void {
   let entityID = getEventID(event)
   let stakedChange = StakedChange.load(entityID)
   if (stakedChange == null) {
-    log.info('should log staked change first {}', [entityID])
+    log.info(`should log staked change first ${entityID}`, null)
     return
   }
 
-  const stakedTotal = getStakedTotal()!
+  let stakedTotal = getStakedTotal()
 
   // staked day data
   let timestamp = event.block.timestamp.toI32()

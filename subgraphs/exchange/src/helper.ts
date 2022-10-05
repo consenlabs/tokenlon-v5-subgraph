@@ -1,8 +1,9 @@
 /* eslint-disable prefer-const */
 import { BigInt, BigDecimal, ethereum, Address, Bytes } from '@graphprotocol/graph-ts'
-import { ERC20 } from '../generated/PMM/ERC20'
-import { ERC20Bytes } from '../generated/PMM/ERC20Bytes'
-import { TradedToken, User } from '../generated/schema'
+import { log } from '@graphprotocol/graph-ts'
+import { ERC20 } from "../generated/PMM/ERC20"
+import { ERC20Bytes } from "../generated/PMM/ERC20Bytes"
+import { TradedToken, User } from "../generated/schema"
 
 export let ZERO = BigInt.fromI32(0)
 export let ZERO_BD = BigDecimal.fromString('0')
@@ -10,14 +11,13 @@ export let ONE = BigInt.fromI32(1)
 export let ONE_BD = BigDecimal.fromString('1')
 export let ZERO_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000')
 export let ETH_ADDRESS = Address.fromString('0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE')
-export let WETH_ADDRESS = Address.fromString('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2')
+export let WETH_ADDRESS = Address.fromString("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
 
-export let isETH = (assetAddr: Address): boolean => {
-  return assetAddr == ZERO_ADDRESS || assetAddr == ETH_ADDRESS || assetAddr == WETH_ADDRESS
+export let isETH = (assetAddr: Bytes): boolean => {
+  return (assetAddr == ZERO_ADDRESS) || (assetAddr == ETH_ADDRESS) || (assetAddr == WETH_ADDRESS)
 }
 
-export const addTradedToken = (tokenAddrBytes: Bytes, startDate: BigInt): TradedToken | null => {
-  const tokenAddr: Address = Address.fromBytes(tokenAddrBytes)
+export const addTradedToken = (tokenAddr: Address, startDate: i32): TradedToken | null => {
   let tokenAddrStr = tokenAddr.toHex()
   if (isETH(tokenAddr)) {
     tokenAddrStr = WETH_ADDRESS.toHex()
@@ -53,8 +53,8 @@ export const addTradedToken = (tokenAddrBytes: Bytes, startDate: BigInt): Traded
         symbol = symbolCall.value
       }
       tradedToken = new TradedToken(tokenAddrStr)
-      tradedToken.address = tokenAddrBytes
-      tradedToken.startDate = startDate.toI32()
+      tradedToken.address = tokenAddr
+      tradedToken.startDate = startDate
       tradedToken.decimals = decimals.value
       tradedToken.name = name
       tradedToken.symbol = symbol

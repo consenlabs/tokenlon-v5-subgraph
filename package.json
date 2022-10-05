@@ -11,16 +11,16 @@
     "codegen": "yarn workspaces run codegen",
     "deploy": "yarn workspaces run deploy",
     "deploy-staging:mainnet": "yarn workspaces run deploy-staging:mainnet",
-    "deploy-staging:goerli": "yarn workspaces run deploy-staging:goerli",
+    "deploy-staging:goerli": "yarn workspaces run deploy-staging:goerli",    
     "prepare:mainnet": "yarn workspaces run prepare:mainnet",
     "prepare:goerli": "yarn workspaces run prepare:goerli"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.33.1",
-    "@graphprotocol/graph-ts": "0.27.0"
+    "@graphprotocol/graph-cli": "^0.20.0",
+    "@graphprotocol/graph-ts": "0.20.1"
   },
   "devDependencies": {
     "mustache": "^4.2.0",
-    "yargs-parser": "^21.1.1"
+    "yargs-parser": "^18.1.2"
   }
 }

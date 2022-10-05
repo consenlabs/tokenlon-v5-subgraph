@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.3
 description: Exchange
 repository: https://github.com/consenlabs/tokenlon-v5-subgraph
 schema:
@@ -14,7 +14,7 @@ dataSources:
       startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - FillOrder
@@ -40,7 +40,7 @@ dataSources:
       startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - FillOrder
@@ -66,7 +66,7 @@ dataSources:
       startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - Swapped
@@ -92,7 +92,7 @@ dataSources:
       startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - Swapped
