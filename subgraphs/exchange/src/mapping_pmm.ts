@@ -1,8 +1,8 @@
-import { BigInt, Bytes, Address } from '@graphprotocol/graph-ts'
+import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
 import { log } from '@graphprotocol/graph-ts'
-import { FillOrder as FillOrderEvent } from '../generated/PMM/PMM'
-import { addTradedToken, getUser, getEventID } from './helper'
-import { FillOrder, FillOrderTotal, TradedToken } from '../generated/schema'
+import { FillOrder as FillOrderEvent } from "../generated/PMM/PMM"
+import { addTradedToken, getUser, getEventID } from "./helper"
+import { FillOrder, FillOrderTotal, TradedToken } from "../generated/schema"
 
 export function handleFillOrder(event: FillOrderEvent): void {
   let fillTotalEntity = FillOrderTotal.load('1')
@@ -41,15 +41,16 @@ export function handleFillOrder(event: FillOrderEvent): void {
   entity.gasPrice = event.transaction.gasPrice
   entity.timestamp = event.block.timestamp.toI32()
 
-  log.info('FillOrderEvent transaction hash: {}', [entity.transactionHash])
+  log.info(entity.transactionHash, null)
 
+  // Entities can be written to the store with `.save()`
   entity.save()
   fillTotalEntity.save()
 
-  addTradedToken(entity.takerAssetAddr, event.block.timestamp)
-  addTradedToken(entity.makerAssetAddr, event.block.timestamp)
+  addTradedToken(entity.takerAssetAddr as Address, event.block.timestamp.toI32())
+  addTradedToken(entity.makerAssetAddr as Address, event.block.timestamp.toI32())
 
-  const user = getUser(event.params.userAddr, event)!
+  let user = getUser(event.params.userAddr, event)
   user.tradeCount += 1
   user.lastSeen = event.block.timestamp.toI32()
   user.save()
