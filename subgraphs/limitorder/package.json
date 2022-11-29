@@ -1,0 +1,17 @@
+{
+  "name": "limitorder",
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": "consenlabs",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ limitorder",
+    "create-local": "graph create --node http://localhost:8020/ limitorder",
+    "remove-local": "graph remove --node http://localhost:8020/ limitorder",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 limitorder",
+    "test": "graph test",
+    "prepare:mainnet": "echo ${NotUse}",
+    "prepare:goerli": "echo ${NotUse}"
+  }
+}
