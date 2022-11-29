@@ -1,0 +1,799 @@
+[
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_operator", "type": "address" },
+      { "internalType": "address", "name": "_coordinator", "type": "address" },
+      { "internalType": "address", "name": "_userProxy", "type": "address" },
+      {
+        "internalType": "contract ISpender",
+        "name": "_spender",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IPermanentStorage",
+        "name": "_permStorage",
+        "type": "address"
+      },
+      { "internalType": "contract IWETH", "name": "_weth", "type": "address" },
+      {
+        "internalType": "address",
+        "name": "_uniswapV3RouterAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_sushiswapRouterAddress",
+        "type": "address"
+      },
+      { "internalType": "address", "name": "_feeCollector", "type": "address" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "spender",
+        "type": "address"
+      }
+    ],
+    "name": "AllowTransfer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "ethBalance",
+        "type": "uint256"
+      }
+    ],
+    "name": "DepositETH",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "spender",
+        "type": "address"
+      }
+    ],
+    "name": "DisallowTransfer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "makerFeeFactor",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "takerFeeFactor",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "profitFeeFactor",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "profitCapFactor",
+        "type": "uint16"
+      }
+    ],
+    "name": "FactorsUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "orderHash",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "maker",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "taker",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "allowFillHash",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "relayer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "profitRecipient",
+        "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "makerToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "takerToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "makerTokenFilledAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "takerTokenFilledAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "remainingAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "makerTokenFee",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "takerTokenFee",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ILimitOrder.FillReceipt",
+        "name": "fillReceipt",
+        "type": "tuple"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "takerTokenProfit",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "takerTokenProfitFee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "takerTokenProfitBackToMaker",
+        "type": "uint256"
+      }
+    ],
+    "name": "LimitOrderFilledByProtocol",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "orderHash",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "maker",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "taker",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "allowFillHash",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "makerToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "takerToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "makerTokenFilledAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "takerTokenFilledAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "remainingAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "makerTokenFee",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "takerTokenFee",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ILimitOrder.FillReceipt",
+        "name": "fillReceipt",
+        "type": "tuple"
+      }
+    ],
+    "name": "LimitOrderFilledByTrader",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "orderHash",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "maker",
+        "type": "address"
+      }
+    ],
+    "name": "OrderCancelled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newFeeCollector",
+        "type": "address"
+      }
+    ],
+    "name": "SetFeeCollector",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newOperator",
+        "type": "address"
+      }
+    ],
+    "name": "TransferOwnership",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newCoordinator",
+        "type": "address"
+      }
+    ],
+    "name": "UpgradeCoordinator",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newSpender",
+        "type": "address"
+      }
+    ],
+    "name": "UpgradeSpender",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "EIP191_HEADER",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "EIP712_DOMAIN_NAME",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "EIP712_DOMAIN_SEPARATOR",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "EIP712_DOMAIN_VERSION",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "contract IERC20",
+            "name": "makerToken",
+            "type": "address"
+          },
+          {
+            "internalType": "contract IERC20",
+            "name": "takerToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "makerTokenAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "takerTokenAmount",
+            "type": "uint256"
+          },
+          { "internalType": "address", "name": "maker", "type": "address" },
+          { "internalType": "address", "name": "taker", "type": "address" },
+          { "internalType": "uint256", "name": "salt", "type": "uint256" },
+          { "internalType": "uint64", "name": "expiry", "type": "uint64" }
+        ],
+        "internalType": "struct LimitOrderLibEIP712.Order",
+        "name": "_order",
+        "type": "tuple"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_cancelOrderMakerSig",
+        "type": "bytes"
+      }
+    ],
+    "name": "cancelLimitOrder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_tokenList",
+        "type": "address[]"
+      },
+      { "internalType": "address", "name": "_spender", "type": "address" }
+    ],
+    "name": "closeAllowance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "coordinator",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "depositETH",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feeCollector",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "contract IERC20",
+            "name": "makerToken",
+            "type": "address"
+          },
+          {
+            "internalType": "contract IERC20",
+            "name": "takerToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "makerTokenAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "takerTokenAmount",
+            "type": "uint256"
+          },
+          { "internalType": "address", "name": "maker", "type": "address" },
+          { "internalType": "address", "name": "taker", "type": "address" },
+          { "internalType": "uint256", "name": "salt", "type": "uint256" },
+          { "internalType": "uint64", "name": "expiry", "type": "uint64" }
+        ],
+        "internalType": "struct LimitOrderLibEIP712.Order",
+        "name": "_order",
+        "type": "tuple"
+      },
+      { "internalType": "bytes", "name": "_orderMakerSig", "type": "bytes" },
+      {
+        "components": [
+          {
+            "internalType": "enum ILimitOrder.Protocol",
+            "name": "protocol",
+            "type": "uint8"
+          },
+          { "internalType": "bytes", "name": "data", "type": "bytes" },
+          {
+            "internalType": "address",
+            "name": "profitRecipient",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "takerTokenAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "protocolOutMinimum",
+            "type": "uint256"
+          },
+          { "internalType": "uint64", "name": "expiry", "type": "uint64" }
+        ],
+        "internalType": "struct ILimitOrder.ProtocolParams",
+        "name": "_params",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          { "internalType": "bytes", "name": "sig", "type": "bytes" },
+          { "internalType": "uint256", "name": "salt", "type": "uint256" },
+          { "internalType": "uint64", "name": "expiry", "type": "uint64" }
+        ],
+        "internalType": "struct ILimitOrder.CoordinatorParams",
+        "name": "_crdParams",
+        "type": "tuple"
+      }
+    ],
+    "name": "fillLimitOrderByProtocol",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "contract IERC20",
+            "name": "makerToken",
+            "type": "address"
+          },
+          {
+            "internalType": "contract IERC20",
+            "name": "takerToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "makerTokenAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "takerTokenAmount",
+            "type": "uint256"
+          },
+          { "internalType": "address", "name": "maker", "type": "address" },
+          { "internalType": "address", "name": "taker", "type": "address" },
+          { "internalType": "uint256", "name": "salt", "type": "uint256" },
+          { "internalType": "uint64", "name": "expiry", "type": "uint64" }
+        ],
+        "internalType": "struct LimitOrderLibEIP712.Order",
+        "name": "_order",
+        "type": "tuple"
+      },
+      { "internalType": "bytes", "name": "_orderMakerSig", "type": "bytes" },
+      {
+        "components": [
+          { "internalType": "address", "name": "taker", "type": "address" },
+          { "internalType": "address", "name": "recipient", "type": "address" },
+          {
+            "internalType": "uint256",
+            "name": "takerTokenAmount",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "salt", "type": "uint256" },
+          { "internalType": "uint64", "name": "expiry", "type": "uint64" },
+          { "internalType": "bytes", "name": "takerSig", "type": "bytes" }
+        ],
+        "internalType": "struct ILimitOrder.TraderParams",
+        "name": "_params",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          { "internalType": "bytes", "name": "sig", "type": "bytes" },
+          { "internalType": "uint256", "name": "salt", "type": "uint256" },
+          { "internalType": "uint64", "name": "expiry", "type": "uint64" }
+        ],
+        "internalType": "struct ILimitOrder.CoordinatorParams",
+        "name": "_crdParams",
+        "type": "tuple"
+      }
+    ],
+    "name": "fillLimitOrderByTrader",
+    "outputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_signerAddress",
+        "type": "address"
+      },
+      { "internalType": "bytes32", "name": "_hash", "type": "bytes32" },
+      { "internalType": "bytes", "name": "_data", "type": "bytes" },
+      { "internalType": "bytes", "name": "_sig", "type": "bytes" }
+    ],
+    "name": "isValidSignature",
+    "outputs": [{ "internalType": "bool", "name": "isValid", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "makerFeeFactor",
+    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "operator",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "permStorage",
+    "outputs": [
+      {
+        "internalType": "contract IPermanentStorage",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "profitCapFactor",
+    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "profitFeeFactor",
+    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_tokenList",
+        "type": "address[]"
+      },
+      { "internalType": "address", "name": "_spender", "type": "address" }
+    ],
+    "name": "setAllowance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint16", "name": "_makerFeeFactor", "type": "uint16" },
+      { "internalType": "uint16", "name": "_takerFeeFactor", "type": "uint16" },
+      {
+        "internalType": "uint16",
+        "name": "_profitFeeFactor",
+        "type": "uint16"
+      },
+      { "internalType": "uint16", "name": "_profitCapFactor", "type": "uint16" }
+    ],
+    "name": "setFactors",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_newFeeCollector",
+        "type": "address"
+      }
+    ],
+    "name": "setFeeCollector",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "spender",
+    "outputs": [
+      { "internalType": "contract ISpender", "name": "", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "sushiswapRouterAddress",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "takerFeeFactor",
+    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_newOperator", "type": "address" }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "uniswapV3RouterAddress",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_newCoordinator",
+        "type": "address"
+      }
+    ],
+    "name": "upgradeCoordinator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_newSpender", "type": "address" }
+    ],
+    "name": "upgradeSpender",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "userProxy",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "version",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "weth",
+    "outputs": [
+      { "internalType": "contract IWETH", "name": "", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "stateMutability": "payable", "type": "receive" }
+]

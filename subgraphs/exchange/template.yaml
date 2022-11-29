@@ -110,3 +110,35 @@ dataSources:
           handler: handleSwappedTupple
       file: ./src/mapping_ammwrapper.ts
   {{/AMMV2}}
+  {{#LIMITORDERV1}}
+  - kind: ethereum/contract
+    name: {{ name }}
+    network: {{ network }}
+    source:
+      address: "{{ address }}"
+      abi: LimitOrder
+      startBlock: {{ startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - LimitOrderFilledByProtocol
+        - LimitOrderFilledByTrader
+        - OrderCancelled
+      abis:
+        - name: LimitOrder
+          file: ./abis/LimitOrder.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC20Bytes
+          file: ./abis/ERC20Bytes.json
+      eventHandlers:
+        - event: LimitOrderFilledByProtocol(indexed bytes32,indexed address,indexed address,bytes32,address,address,(address,address,uint256,uint256,uint256,uint256,uint256),uint256,uint256,uint256)
+          handler: handleLimitOrderFilledByProtocol
+        - event: LimitOrderFilledByTrader(indexed bytes32,indexed address,indexed address,bytes32,address,(address,address,uint256,uint256,uint256,uint256,uint256))
+          handler: handleLimitOrderFilledByTrader
+        - event: OrderCancelled(bytes32,address)
+          handler: handleOrderCancelled
+      file: ./src/mapping_limitorder.ts
+  {{/LIMITORDERV1}}
