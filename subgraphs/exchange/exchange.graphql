@@ -164,7 +164,8 @@ type Order @entity(immutable: false) {
   makerToken: Bytes! # address
   takerToken: Bytes! # address
   firstFilledTime: BigInt!
-  lastFilledOrCancelledTime: BigInt!
+  lastFilledTime: BigInt!
+  cancelledTime: BigInt!
 }
 
 type LimitOrder @entity(immutable: true) {

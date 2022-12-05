@@ -3,6 +3,18 @@ import { LimitOrderFilledByProtocol as LimitOrderFilledByProtocolEvent, LimitOrd
 import { LimitOrderFilledByProtocol as LimitOrderFilledByProtocolEntity, LimitOrderFilledByTrader as LimitOrderFilledByTraderEntity, OrderCancelled as OrderCancelledEntity, Order as OrderEntity, LimitOrder as LimitOrderEntity } from '../generated/schema'
 import { addTradedToken, getEventID } from './helper'
 
+// Define the enumeration content of the subgraph to avoid string input errors,
+// these errors only occur after deploying to Subgraph Studio and indexing.
+namespace OrderStatus {
+  export const Normal = 'Normal'
+  export const Cancelled = 'Cancelled'
+  export const FullyFilled = 'FullyFilled'
+}
+namespace LimitOrderTypes {
+  export const ByProtocol = 'ByProtocol'
+  export const ByTrader = 'ByTrader'
+}
+
 // Handling function when the LimitOrderFilledByProtocol event occurs
 export function handleLimitOrderFilledByProtocol(event: LimitOrderFilledByProtocolEvent): void {
   // Record the data of this LimitOrderFilledByProtocol event
@@ -41,33 +53,25 @@ export function handleLimitOrderFilledByProtocol(event: LimitOrderFilledByProtoc
   let orderEntity = OrderEntity.load(orderId)
   if (orderEntity == null) {
     orderEntity = new OrderEntity(orderId)
-    orderEntity.orderStatus = 'Normal'
+    orderEntity.orderStatus = OrderStatus.Normal
     orderEntity.maker = event.params.maker
     orderEntity.makerToken = event.params.fillReceipt.makerToken
     orderEntity.takerToken = event.params.fillReceipt.takerToken
     orderEntity.firstFilledTime = event.block.timestamp
-    orderEntity.lastFilledOrCancelledTime = event.block.timestamp
+    orderEntity.cancelledTime = BigInt.fromI32(0)
     // Set the relationship of the first LimitOrderFilled entity under the same orderHash
-    const limitOrderFilledArray = new Array<string>(0)
-    limitOrderFilledArray.push(eventId)
-    orderEntity.limitOrderFilledId = limitOrderFilledArray
+    orderEntity.limitOrderFilledId = new Array<string>(0)
     log.info('Order entity created at transaction hash: {}, this entity id: {}.', [event.transaction.hash.toHex(), orderEntity.id])
-    // If the order is filled all for the first time
-    if (event.params.fillReceipt.remainingAmount.equals(BigInt.fromI32(0))) {
-      orderEntity.orderStatus = 'FullyFilled'
-      log.info('Order is filled all, the order hash: {}.', [orderEntity.id])
-    }
-  } else {
-    // Set the relationship of this LimitOrderFilled entity under the same orderHash
-    const limitOrderFilledArray = orderEntity.limitOrderFilledId
-    limitOrderFilledArray.push(eventId)
-    orderEntity.limitOrderFilledId = limitOrderFilledArray
-    orderEntity.lastFilledOrCancelledTime = event.block.timestamp
-    // If the order is filled all for this time
-    if (event.params.fillReceipt.remainingAmount.equals(BigInt.fromI32(0))) {
-      orderEntity.orderStatus = 'FullyFilled'
-      log.info('Order is filled all, the order hash: {}.', [orderEntity.id])
-    }
+  }
+  orderEntity.lastFilledTime = event.block.timestamp
+  // Set the relationship of this LimitOrderFilled entity under the same orderHash
+  const limitOrderFilledArray = orderEntity.limitOrderFilledId
+  limitOrderFilledArray.push(eventId)
+  orderEntity.limitOrderFilledId = limitOrderFilledArray
+  // If the order is filled all for this time
+  if (event.params.fillReceipt.remainingAmount.equals(BigInt.fromI32(0))) {
+    orderEntity.orderStatus = OrderStatus.FullyFilled
+    log.info('Order is filled all, the order hash: {}.', [orderEntity.id])
   }
   // Entity must be saved after setting
   orderEntity.save()
@@ -77,7 +81,7 @@ export function handleLimitOrderFilledByProtocol(event: LimitOrderFilledByProtoc
   if (limitOrderEntity == null) {
     limitOrderEntity = new LimitOrderEntity(eventId)
     limitOrderEntity.orderId = orderId
-    limitOrderEntity.limitOrderType = 'ByProtocol'
+    limitOrderEntity.limitOrderType = LimitOrderTypes.ByProtocol
     limitOrderEntity.maker = event.params.maker as Bytes
     limitOrderEntity.taker = event.params.taker as Bytes
     limitOrderEntity.makerToken = event.params.fillReceipt.makerToken as Bytes
@@ -138,33 +142,25 @@ export function handleLimitOrderFilledByTrader(event: LimitOrderFilledByTraderEv
   let orderEntity = OrderEntity.load(orderId)
   if (orderEntity == null) {
     orderEntity = new OrderEntity(orderId)
-    orderEntity.orderStatus = 'Normal'
+    orderEntity.orderStatus = OrderStatus.Normal
     orderEntity.maker = event.params.maker
     orderEntity.makerToken = event.params.fillReceipt.makerToken
     orderEntity.takerToken = event.params.fillReceipt.takerToken
     orderEntity.firstFilledTime = event.block.timestamp
-    orderEntity.lastFilledOrCancelledTime = event.block.timestamp
+    orderEntity.cancelledTime = BigInt.fromI32(0)
     // Set the relationship of the first LimitOrderFilled entity under the same orderHash
-    const limitOrderFilledArray = new Array<string>(0)
-    limitOrderFilledArray.push(eventId)
-    orderEntity.limitOrderFilledId = limitOrderFilledArray
+    orderEntity.limitOrderFilledId = new Array<string>(0)
     log.info('Order entity created at transaction hash: {}, this entity id: {}.', [event.transaction.hash.toHex(), orderEntity.id])
-    // If the order is filled all for the first time
-    if (event.params.fillReceipt.remainingAmount.equals(BigInt.fromI32(0))) {
-      orderEntity.orderStatus = 'FullyFilled'
-      log.info('Order is filled all, the order hash: {}.', [orderEntity.id])
-    }
-  } else {
-    // Set the relationship of this LimitOrderFilled entity under the same orderHash
-    const limitOrderFilledArray = orderEntity.limitOrderFilledId
-    limitOrderFilledArray.push(eventId)
-    orderEntity.limitOrderFilledId = limitOrderFilledArray
-    orderEntity.lastFilledOrCancelledTime = event.block.timestamp
-    // If the order is filled all for this time
-    if (event.params.fillReceipt.remainingAmount.equals(BigInt.fromI32(0))) {
-      orderEntity.orderStatus = 'FullyFilled'
-      log.info('Order is filled all, the order hash: {}.', [orderEntity.id])
-    }
+  }
+  orderEntity.lastFilledTime = event.block.timestamp
+  // Set the relationship of this LimitOrderFilled entity under the same orderHash
+  const limitOrderFilledArray = orderEntity.limitOrderFilledId
+  limitOrderFilledArray.push(eventId)
+  orderEntity.limitOrderFilledId = limitOrderFilledArray
+  // If the order is filled all for this time
+  if (event.params.fillReceipt.remainingAmount.equals(BigInt.fromI32(0))) {
+    orderEntity.orderStatus = OrderStatus.FullyFilled
+    log.info('Order is filled all, the order hash: {}.', [orderEntity.id])
   }
   // Entity must be saved after setting
   orderEntity.save()
@@ -174,7 +170,7 @@ export function handleLimitOrderFilledByTrader(event: LimitOrderFilledByTraderEv
   if (limitOrderEntity == null) {
     limitOrderEntity = new LimitOrderEntity(eventId)
     limitOrderEntity.orderId = orderId
-    limitOrderEntity.limitOrderType = 'ByTrader'
+    limitOrderEntity.limitOrderType = LimitOrderTypes.ByTrader
     limitOrderEntity.maker = event.params.maker as Bytes
     limitOrderEntity.taker = event.params.taker as Bytes
     limitOrderEntity.makerToken = event.params.fillReceipt.makerToken as Bytes
@@ -219,7 +215,7 @@ export function handleOrderCancelled(event: OrderCancelledEvent): void {
   let orderEntity = OrderEntity.load(event.params.orderHash.toHex())
   if (orderEntity != null) {
     orderEntity.orderStatus = 'Cancelled'
-    orderEntity.lastFilledOrCancelledTime = event.block.timestamp
+    orderEntity.cancelledTime = event.block.timestamp
     log.info('Order cancelled by maker at transaction hash: {}.', [event.transaction.hash.toHex()])
     // Entity must be saved after setting
     orderEntity.save()
