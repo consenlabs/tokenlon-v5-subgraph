@@ -14,13 +14,13 @@ export function handleLimitOrderFilledByProtocol(event: LimitOrderFilledByProtoc
   entity.allowFillHash = event.params.allowFillHash
   entity.relayer = event.params.relayer
   entity.profitRecipient = event.params.profitRecipient
-  entity.fillReceipt_makerToken = event.params.fillReceipt.makerToken
-  entity.fillReceipt_takerToken = event.params.fillReceipt.takerToken
-  entity.fillReceipt_makerTokenFilledAmount = event.params.fillReceipt.makerTokenFilledAmount
-  entity.fillReceipt_takerTokenFilledAmount = event.params.fillReceipt.takerTokenFilledAmount
-  entity.fillReceipt_remainingAmount = event.params.fillReceipt.remainingAmount
-  entity.fillReceipt_makerTokenFee = event.params.fillReceipt.makerTokenFee
-  entity.fillReceipt_takerTokenFee = event.params.fillReceipt.takerTokenFee
+  entity.fillReceiptMakerToken = event.params.fillReceipt.makerToken
+  entity.fillReceiptTakerToken = event.params.fillReceipt.takerToken
+  entity.fillReceiptMakerTokenFilledAmount = event.params.fillReceipt.makerTokenFilledAmount
+  entity.fillReceiptTakerTokenFilledAmount = event.params.fillReceipt.takerTokenFilledAmount
+  entity.fillReceiptRemainingAmount = event.params.fillReceipt.remainingAmount
+  entity.fillReceiptMakerTokenFee = event.params.fillReceipt.makerTokenFee
+  entity.fillReceiptTakerTokenFee = event.params.fillReceipt.takerTokenFee
   entity.takerTokenProfit = event.params.takerTokenProfit
   entity.takerTokenProfitFee = event.params.takerTokenProfitFee
   entity.takerTokenProfitBackToMaker = event.params.takerTokenProfitBackToMaker
@@ -32,8 +32,8 @@ export function handleLimitOrderFilledByProtocol(event: LimitOrderFilledByProtoc
   entity.save()
 
   // Record the tokens data of this LimitOrderFilledByProtocol event
-  addTradedToken(entity.fillReceipt_makerToken, event.block.timestamp)
-  addTradedToken(entity.fillReceipt_takerToken, event.block.timestamp)
+  addTradedToken(entity.fillReceiptMakerToken, event.block.timestamp)
+  addTradedToken(entity.fillReceiptTakerToken, event.block.timestamp)
 
   // Get the order hash as order entity id
   const orderId = event.params.orderHash.toHex()
@@ -114,13 +114,13 @@ export function handleLimitOrderFilledByTrader(event: LimitOrderFilledByTraderEv
   entity.taker = event.params.taker
   entity.allowFillHash = event.params.allowFillHash
   entity.recipient = event.params.recipient
-  entity.fillReceipt_makerToken = event.params.fillReceipt.makerToken
-  entity.fillReceipt_takerToken = event.params.fillReceipt.takerToken
-  entity.fillReceipt_makerTokenFilledAmount = event.params.fillReceipt.makerTokenFilledAmount
-  entity.fillReceipt_takerTokenFilledAmount = event.params.fillReceipt.takerTokenFilledAmount
-  entity.fillReceipt_remainingAmount = event.params.fillReceipt.remainingAmount
-  entity.fillReceipt_makerTokenFee = event.params.fillReceipt.makerTokenFee
-  entity.fillReceipt_takerTokenFee = event.params.fillReceipt.takerTokenFee
+  entity.fillReceiptMakerToken = event.params.fillReceipt.makerToken
+  entity.fillReceiptTakerToken = event.params.fillReceipt.takerToken
+  entity.fillReceiptMakerTokenFilledAmount = event.params.fillReceipt.makerTokenFilledAmount
+  entity.fillReceiptTakerTokenFilledAmount = event.params.fillReceipt.takerTokenFilledAmount
+  entity.fillReceiptRemainingAmount = event.params.fillReceipt.remainingAmount
+  entity.fillReceiptMakerTokenFee = event.params.fillReceipt.makerTokenFee
+  entity.fillReceiptTakerTokenFee = event.params.fillReceipt.takerTokenFee
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
@@ -129,8 +129,8 @@ export function handleLimitOrderFilledByTrader(event: LimitOrderFilledByTraderEv
   entity.save()
 
   // Record the tokens data of this LimitOrderFilledByProtocol event
-  addTradedToken(entity.fillReceipt_makerToken, event.block.timestamp)
-  addTradedToken(entity.fillReceipt_takerToken, event.block.timestamp)
+  addTradedToken(entity.fillReceiptMakerToken, event.block.timestamp)
+  addTradedToken(entity.fillReceiptTakerToken, event.block.timestamp)
 
   // Get the order hash as order entity id
   const orderId = event.params.orderHash.toHex()

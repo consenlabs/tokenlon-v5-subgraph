@@ -102,13 +102,13 @@ type LimitOrderFilledByProtocol @entity(immutable: true) {
   allowFillHash: Bytes! # bytes32
   relayer: Bytes! # address
   profitRecipient: Bytes! # address
-  fillReceipt_makerToken: Bytes! # address
-  fillReceipt_takerToken: Bytes! # address
-  fillReceipt_makerTokenFilledAmount: BigInt! # uint256
-  fillReceipt_takerTokenFilledAmount: BigInt! # uint256
-  fillReceipt_remainingAmount: BigInt! # uint256
-  fillReceipt_makerTokenFee: BigInt! # uint256
-  fillReceipt_takerTokenFee: BigInt! # uint256
+  fillReceiptMakerToken: Bytes! # address
+  fillReceiptTakerToken: Bytes! # address
+  fillReceiptMakerTokenFilledAmount: BigInt! # uint256
+  fillReceiptTakerTokenFilledAmount: BigInt! # uint256
+  fillReceiptRemainingAmount: BigInt! # uint256
+  fillReceiptMakerTokenFee: BigInt! # uint256
+  fillReceiptTakerTokenFee: BigInt! # uint256
   takerTokenProfit: BigInt! # uint256
   takerTokenProfitFee: BigInt! # uint256
   takerTokenProfitBackToMaker: BigInt! # uint256
@@ -124,13 +124,13 @@ type LimitOrderFilledByTrader @entity(immutable: true) {
   taker: Bytes! # address
   allowFillHash: Bytes! # bytes32
   recipient: Bytes! # address
-  fillReceipt_makerToken: Bytes! # address
-  fillReceipt_takerToken: Bytes! # address
-  fillReceipt_makerTokenFilledAmount: BigInt! # uint256
-  fillReceipt_takerTokenFilledAmount: BigInt! # uint256
-  fillReceipt_remainingAmount: BigInt! # uint256
-  fillReceipt_makerTokenFee: BigInt! # uint256
-  fillReceipt_takerTokenFee: BigInt! # uint256
+  fillReceiptMakerToken: Bytes! # address
+  fillReceiptTakerToken: Bytes! # address
+  fillReceiptMakerTokenFilledAmount: BigInt! # uint256
+  fillReceiptTakerTokenFilledAmount: BigInt! # uint256
+  fillReceiptRemainingAmount: BigInt! # uint256
+  fillReceiptMakerTokenFee: BigInt! # uint256
+  fillReceiptTakerTokenFee: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
