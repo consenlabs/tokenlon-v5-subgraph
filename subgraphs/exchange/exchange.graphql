@@ -109,9 +109,8 @@ type LimitOrderFilledByProtocol @entity(immutable: true) {
   fillReceiptRemainingAmount: BigInt! # uint256
   fillReceiptMakerTokenFee: BigInt! # uint256
   fillReceiptTakerTokenFee: BigInt! # uint256
-  takerTokenProfit: BigInt! # uint256
-  takerTokenProfitFee: BigInt! # uint256
-  takerTokenProfitBackToMaker: BigInt! # uint256
+  relayerTakerTokenProfit: BigInt! # uint256
+  relayerTakerTokenProfitFee: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -185,9 +184,8 @@ type LimitOrder @entity(immutable: true) {
   recipient: Bytes! # address # Only used by LimitOrderFilledByTrader event
   relayer: Bytes! # address # Only used by LimitOrderFilledByProtocol event
   profitRecipient: Bytes! # address # Only used by LimitOrderFilledByProtocol event
-  takerTokenProfit: BigInt! # uint256 # Only used by LimitOrderFilledByProtocol event
-  takerTokenProfitFee: BigInt! # uint256 # Only used by LimitOrderFilledByProtocol event
-  takerTokenProfitBackToMaker: BigInt! # uint256 # Only used by LimitOrderFilledByProtocol event
+  relayerTakerTokenProfit: BigInt! # uint256 # Only used by LimitOrderFilledByProtocol event
+  relayerTakerTokenProfitFee: BigInt! # uint256 # Only used by LimitOrderFilledByProtocol event
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

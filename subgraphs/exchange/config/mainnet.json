@@ -41,9 +41,10 @@
         {
             "name": "LimitOrder",
             "network": "mainnet",
-            "address": "0x0000000000000000000000000000000000000000",
-            "startBlock": "16066333",
-            "// comment": "The contract has not yet been deployed to the mainnet."
+            "address": "0x623a6B3424f3d5E2eC677D5bb92BA12A9dc4f71A",
+            "startBlock": "16525456",
+            "eventLimitOrderFilledByProtocol": "LimitOrderFilledByProtocol(indexed bytes32,indexed address,indexed address,bytes32,address,address,(address,address,uint256,uint256,uint256,uint256,uint256),uint256,uint256)",
+            "handleLimitOrderFilledByProtocol": "handleLimitOrderFilledByProtocol"
         }
     ]
 }

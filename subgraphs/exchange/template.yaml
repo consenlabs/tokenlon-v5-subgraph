@@ -134,8 +134,8 @@ dataSources:
         - name: ERC20Bytes
           file: ./abis/ERC20Bytes.json
       eventHandlers:
-        - event: LimitOrderFilledByProtocol(indexed bytes32,indexed address,indexed address,bytes32,address,address,(address,address,uint256,uint256,uint256,uint256,uint256),uint256,uint256,uint256)
-          handler: handleLimitOrderFilledByProtocol
+        - event: {{ eventLimitOrderFilledByProtocol }}
+          handler: {{ handleLimitOrderFilledByProtocol }}
         - event: LimitOrderFilledByTrader(indexed bytes32,indexed address,indexed address,bytes32,address,(address,address,uint256,uint256,uint256,uint256,uint256))
           handler: handleLimitOrderFilledByTrader
         - event: OrderCancelled(bytes32,address)
