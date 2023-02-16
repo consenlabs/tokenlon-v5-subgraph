@@ -30,5 +30,15 @@
             "address": "0xfD474E4809e690626C67ECb7A908de4b9c464b99",
             "startBlock": "4851367"
         }
+    ],
+    "LIMITORDERV1": [
+        {
+            "name": "LimitOrder",
+            "network": "goerli",
+            "address": "0x7B955545428B3a0E7520EEfF0DC30D740F290e4b",
+            "startBlock": "7497880",
+            "eventLimitOrderFilledByProtocol": "LimitOrderFilledByProtocol(indexed bytes32,indexed address,indexed address,bytes32,address,address,(address,address,uint256,uint256,uint256,uint256,uint256),uint256,uint256,uint256)",
+            "handleLimitOrderFilledByProtocol": "handleLimitOrderFilledByProtocolGoerli"
+        }
     ]
 }
