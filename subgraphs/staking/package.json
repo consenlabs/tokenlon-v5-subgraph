@@ -8,8 +8,10 @@
     "build": "graph build staking.yaml",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ consenlabs/tokenlon-v5-staking staking.yaml",
     "deploy-staging:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ $SUBGRAPH_USER/tokenlon-v5-staking staking.yaml",
+    "deploy-staging:arbitrum": "echo ${NotUse}",
     "deploy-staging:goerli": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ $SUBGRAPH_USER/tokenlon-v5-goerli-staking staking.yaml",
     "prepare:mainnet": "mustache config/mainnet.json template.yaml > staking.yaml && mustache config/mainnet.json src/helper.template > src/helper.ts",
+    "prepare:arbitrum": "echo ${NotUse}",
     "prepare:goerli": "mustache config/goerli.json template.yaml > staking.yaml && mustache config/goerli.json src/helper.template > src/helper.ts"
   }
 }
