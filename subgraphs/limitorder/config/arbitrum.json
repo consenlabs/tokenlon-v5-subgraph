@@ -1,0 +1,12 @@
+{
+  "LIMITORDERV1": [
+    {
+      "name": "LimitOrder",
+      "network": "arbitrum-one",
+      "address": "0xdC842f306d05Fc0e3A2469976ab860B453Af2D1A",
+      "startBlock": "16959165",
+      "eventLimitOrderFilledByProtocol": "LimitOrderFilledByProtocol(indexed bytes32,indexed address,indexed address,bytes32,address,address,(address,address,uint256,uint256,uint256,uint256,uint256),uint256,uint256,uint256)",
+      "handleLimitOrderFilledByProtocol": "handleLimitOrderFilledByProtocol"
+    }
+  ]
+}

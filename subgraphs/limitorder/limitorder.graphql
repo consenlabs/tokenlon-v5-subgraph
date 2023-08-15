@@ -1,0 +1,131 @@
+###############################
+### For LimitOrder contract ###
+###############################
+
+type LimitOrderFilledByProtocol @entity(immutable: true) {
+  id: ID!
+  orderHash: Bytes! # bytes32
+  maker: Bytes! # address
+  taker: Bytes! # address
+  allowFillHash: Bytes! # bytes32
+  relayer: Bytes! # address
+  profitRecipient: Bytes! # address
+  fillReceiptMakerToken: Bytes! # address
+  fillReceiptTakerToken: Bytes! # address
+  fillReceiptMakerTokenFilledAmount: BigInt! # uint256
+  fillReceiptTakerTokenFilledAmount: BigInt! # uint256
+  fillReceiptRemainingAmount: BigInt! # uint256
+  fillReceiptMakerTokenFee: BigInt! # uint256
+  fillReceiptTakerTokenFee: BigInt! # uint256
+  takerTokenProfit: BigInt! # uint256
+  takerTokenProfitFee: BigInt! # uint256
+  takerTokenProfitBackToMaker: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type LimitOrderFilledByTrader @entity(immutable: true) {
+  id: ID!
+  orderHash: Bytes! # bytes32
+  maker: Bytes! # address
+  taker: Bytes! # address
+  allowFillHash: Bytes! # bytes32
+  recipient: Bytes! # address
+  fillReceiptMakerToken: Bytes! # address
+  fillReceiptTakerToken: Bytes! # address
+  fillReceiptMakerTokenFilledAmount: BigInt! # uint256
+  fillReceiptTakerTokenFilledAmount: BigInt! # uint256
+  fillReceiptRemainingAmount: BigInt! # uint256
+  fillReceiptMakerTokenFee: BigInt! # uint256
+  fillReceiptTakerTokenFee: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OrderCancelled @entity(immutable: true) {
+  id: ID!
+  orderHash: Bytes! # bytes32
+  maker: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+enum OrderStatus {
+  Normal
+  Cancelled
+  FullyFilled
+}
+
+enum LimitOrderFilledTypes {
+  ByProtocol
+  ByTrader
+}
+
+# The Order Entity records information for all encountered Limit Order
+# requests, along with the current status of the active Limit Order,
+# which can be one of the following: Normal, Cancelled, FullyFilled.
+# The latest status update can override the Order Entity's current status.
+type Order @entity(immutable: false) {
+  id: ID! # orderHash
+  limitOrderFilledId: [String!]! # One-to-many relationship
+  orderStatus: OrderStatus!
+  maker: Bytes! # address
+  makerToken: Bytes! # address
+  takerToken: Bytes! # address
+  firstFilledTime: BigInt!
+  lastFilledTime: BigInt!
+  cancelledTime: BigInt!
+}
+
+# The LimitOrderFilled Entity aggregates all LimitOrderFilledByProtocol and
+# LimitOrderFilledByTrader events for analyzing all LimitOrderFilled
+# events within a specific time interval.
+type LimitOrderFilled @entity(immutable: true) {
+  id: ID!
+  orderId: String! # Order! # orderHash
+  limitOrderFilledType: LimitOrderFilledTypes!
+  maker: Bytes! # address
+  taker: Bytes! # address
+  makerToken: Bytes! # address
+  takerToken: Bytes! # address
+  allowFillHash: Bytes! # bytes32
+  makerTokenFilledAmount: BigInt! # uint256
+  takerTokenFilledAmount: BigInt! # uint256
+  remainingAmount: BigInt! # uint256
+  makerTokenFee: BigInt! # uint256
+  takerTokenFee: BigInt! # uint256
+  recipient: Bytes! # address # Only used by LimitOrderFilledByTrader event
+  relayer: Bytes! # address # Only used by LimitOrderFilledByProtocol event
+  profitRecipient: Bytes! # address # Only used by LimitOrderFilledByProtocol event
+  takerTokenProfit: BigInt! # uint256 # Only used by LimitOrderFilledByProtocol event
+  takerTokenProfitFee: BigInt! # uint256 # Only used by LimitOrderFilledByProtocol event
+  takerTokenProfitBackToMaker: BigInt! # uint256 # Only used by LimitOrderFilledByProtocol event
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+###############################
+####### Shared entities #######
+###############################
+
+type TradedToken @entity {
+  id: ID!
+  address: Bytes! # bytes32
+  decimals: Int!
+  startDate: Int!
+  symbol: String!
+  name: String!
+}
+
+type User @entity {
+  id: ID!
+  tradeCount: Int!
+  lastSeen: Int!
+  firstSeen: Int!
+  firstTx: String!
+  firstBlock: BigInt!
+}
