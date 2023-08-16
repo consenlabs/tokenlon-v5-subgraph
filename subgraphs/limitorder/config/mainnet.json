@@ -1,0 +1,12 @@
+{
+  "LIMITORDERV1": [
+    {
+      "name": "LimitOrder",
+      "network": "mainnet",
+      "address": "0x623a6B3424f3d5E2eC677D5bb92BA12A9dc4f71A",
+      "startBlock": "16525456",
+      "eventLimitOrderFilledByProtocol": "LimitOrderFilledByProtocol(indexed bytes32,indexed address,indexed address,bytes32,address,address,(address,address,uint256,uint256,uint256,uint256,uint256),uint256,uint256)",
+      "handleLimitOrderFilledByProtocol": "handleLimitOrderFilledByProtocolMainnet"
+    }
+  ]
+}

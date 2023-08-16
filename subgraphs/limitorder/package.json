@@ -1,0 +1,17 @@
+{
+  "name": "limitorder",
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": "consenlabs",
+  "scripts": {
+    "codegen": "graph codegen limitorder.yaml",
+    "build": "graph build limitorder.yaml",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ consenlabs/tokenlon-v5-limitorder limitorder.yaml",
+    "deploy-staging:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ $SUBGRAPH_USER/tokenlon-v5-limitorder limitorder.yaml",
+    "deploy-staging:arbitrum": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ $SUBGRAPH_USER/tokenlon-v5-arbitrum-limitorder limitorder.yaml",
+    "deploy-staging:goerli": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ $SUBGRAPH_USER/tokenlon-v5-goerli-limitorder limitorder.yaml",
+    "prepare:mainnet": "mustache config/mainnet.json template.yaml > limitorder.yaml",
+    "prepare:arbitrum": "mustache config/arbitrum.json template.yaml > limitorder.yaml",
+    "prepare:goerli": "mustache config/goerli.json template.yaml > limitorder.yaml"
+  }
+}

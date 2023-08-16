@@ -6,4 +6,5 @@ build/
 generated/
 exchange.yaml
 staking.yaml
+limitorder.yaml
 subgraphs/staking/src/helper.ts
