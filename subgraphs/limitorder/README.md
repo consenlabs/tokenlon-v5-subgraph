@@ -77,7 +77,7 @@ Queries (HTTP):     https://api.studio.thegraph.com/query/34764/limitorder/v0.0.
 
 ```graphql
 query MyQuery {
-  orders(orderBy: firstFilledTime, first: 3) {
+  orders(orderBy: lastFilledTime, first: 3, orderDirection: desc) {
     id
     maker
     makerToken
@@ -87,7 +87,7 @@ query MyQuery {
     cancelledTime
     orderStatus
   }
-  limitOrderFilleds(orderBy: blockTimestamp, first: 3) {
+  limitOrderFilleds(orderBy: blockTimestamp, first: 3, orderDirection: desc) {
     id
     limitOrderFilledType
     makerTokenFilledAmount
@@ -95,9 +95,12 @@ query MyQuery {
     recipient
     relayer
     profitRecipient
+    takerTokenProfit
+    takerTokenProfitFee
+    takerTokenProfitBackToMaker
     blockTimestamp
   }
-  limitOrderFilledByProtocols(orderBy: blockTimestamp, first: 3) {
+  limitOrderFilledByProtocols(orderBy: blockTimestamp, first: 3, orderDirection: desc) {
     id
     relayer
     profitRecipient
@@ -109,7 +112,7 @@ query MyQuery {
     takerTokenProfitBackToMaker
     blockTimestamp
   }
-  limitOrderFilledByTraders(first: 3) {
+  limitOrderFilledByTraders(first: 3, orderDirection: desc, orderBy: blockTimestamp) {
     id
     recipient
     fillReceiptMakerTokenFilledAmount
